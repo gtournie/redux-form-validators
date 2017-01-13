@@ -87,31 +87,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _email2 = _interopRequireDefault(_email);
 
-	var _exclusion = __webpack_require__(13);
-
-	var _exclusion2 = _interopRequireDefault(_exclusion);
-
 	var _format = __webpack_require__(4);
 
 	var _format2 = _interopRequireDefault(_format);
 
-	var _inclusion = __webpack_require__(14);
+	var _inclusionExclusion = __webpack_require__(13);
 
-	var _inclusion2 = _interopRequireDefault(_inclusion);
-
-	var _length = __webpack_require__(15);
+	var _length = __webpack_require__(14);
 
 	var _length2 = _interopRequireDefault(_length);
 
-	var _numericality = __webpack_require__(16);
+	var _numericality = __webpack_require__(15);
 
 	var _numericality2 = _interopRequireDefault(_numericality);
 
-	var _presence = __webpack_require__(17);
+	var _presence = __webpack_require__(16);
 
 	var _presence2 = _interopRequireDefault(_presence);
 
-	var _url = __webpack_require__(18);
+	var _url = __webpack_require__(17);
 
 	var _url2 = _interopRequireDefault(_url);
 
@@ -127,9 +121,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.confirmation = _confirmation2.default;
 	exports.email = _email2.default;
 	exports.REG_EMAIL = _email.REG_EMAIL;
-	exports.exclusion = _exclusion2.default;
+	exports.exclusion = _inclusionExclusion.exclusion;
 	exports.format = _format2.default;
-	exports.inclusion = _inclusion2.default;
+	exports.inclusion = _inclusionExclusion.inclusion;
 	exports.length = _length2.default;
 	exports.numericality = _numericality2.default;
 	exports.presence = _presence2.default;
@@ -140,7 +134,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// TODO:
 	// credit card
-	// Case sensitive for confirmation, acceptance, inclusion, exclusion
 
 /***/ },
 /* 1 */
@@ -164,13 +157,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-	var allLocaleData = _interopDefault(__webpack_require__(38));
+	var allLocaleData = _interopDefault(__webpack_require__(37));
 	var IntlMessageFormat = _interopDefault(__webpack_require__(5));
-	var IntlRelativeFormat = _interopDefault(__webpack_require__(29));
+	var IntlRelativeFormat = _interopDefault(__webpack_require__(28));
 	var React = __webpack_require__(1);
 	var React__default = _interopDefault(React);
-	var invariant = _interopDefault(__webpack_require__(35));
-	var memoizeIntlConstructor = _interopDefault(__webpack_require__(19));
+	var invariant = _interopDefault(__webpack_require__(34));
+	var memoizeIntlConstructor = _interopDefault(__webpack_require__(18));
 
 	// GENERATED FILE
 	var defaultLocaleData = { "locale": "en", "pluralRuleFunction": function pluralRuleFunction(n, ord) {
@@ -2375,11 +2368,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var IntlMessageFormat = __webpack_require__(28)['default'];
+	var IntlMessageFormat = __webpack_require__(27)['default'];
 
 	// Add all locale data to `IntlMessageFormat`. This module will be ignored when
 	// bundling for the browser with Browserify/Webpack.
-	__webpack_require__(36);
+	__webpack_require__(35);
 
 	// Re-export `IntlMessageFormat` as the CommonJS default exports with all the
 	// locale data registered, and with English set as the default locale. Define
@@ -2760,9 +2753,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var DEFAULT_CASE_SENSITIVE = true;
+
 	function confirmation(_ref) {
 	  var field = _ref.field,
 	      fieldLabel = _ref.fieldLabel,
+	      caseSensitive = _ref.caseSensitive,
 	      message = _ref.message,
 	      msg = _ref.msg,
 	      ifCond = _ref['if'],
@@ -2770,8 +2766,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	  msg = (0, _helpers.formatMessage)(msg || message);
 
+	  caseSensitive = null != caseSensitive ? caseSensitive : DEFAULT_CASE_SENSITIVE;
+
 	  return (0, _helpers.prepare)(ifCond, unless, false, function (value, allValues) {
-	    if (value !== '' + allValues[field]) {
+	    var check = caseSensitive ? value !== '' + allValues[field] : value.toLowerCase() !== ('' + allValues[field]).toLowerCase();
+
+	    if (check) {
 	      return msg || _react2.default.createElement(_reactIntl.FormattedMessage, { id: 'form.errors.confirmation',
 	        defaultMessage: 'doesn\'t match `{fieldLabel}`',
 	        values: { fieldLabel: fieldLabel || field } });
@@ -2819,7 +2819,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = exclusion;
+	exports.inclusion = inclusion;
+	exports.exclusion = exclusion;
 
 	var _react = __webpack_require__(1);
 
@@ -2831,9 +2832,20 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function exclusion(_ref) {
+	var DEFAULT_CASE_SENSITIVE = true;
+
+	function inclusion(options) {
+	  return inclusionExclusion(true, options);
+	}
+
+	function exclusion(options) {
+	  return inclusionExclusion(false, options);
+	}
+
+	function inclusionExclusion(inclusion, _ref) {
 	  var inc = _ref['in'],
 	      within = _ref.within,
+	      caseSensitive = _ref.caseSensitive,
 	      message = _ref.message,
 	      msg = _ref.msg,
 	      ifCond = _ref['if'],
@@ -2842,58 +2854,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	      allowBlank = _ref$allowBlank === undefined ? _helpers.DEFAULT_ALLOW_BLANK : _ref$allowBlank;
 
 	  msg = (0, _helpers.formatMessage)(msg || message);
-	  within = [].concat(within || inc).map(String);
+
+	  caseSensitive = null != caseSensitive ? caseSensitive : DEFAULT_CASE_SENSITIVE;
+
+	  within = [].concat(within || inc).map(function (val) {
+	    return caseSensitive ? '' + val : ('' + val).toLowerCase();
+	  });
 
 	  return (0, _helpers.prepare)(ifCond, unless, allowBlank, function (value) {
-	    if (within.indexOf(value) >= 0) {
-	      return msg || _react2.default.createElement(_reactIntl.FormattedMessage, { id: 'form.errors.exclusion', defaultMessage: 'is reserved' });
+	    if (!caseSensitive) {
+	      value = value.toLowerCase();
+	    }
+	    if (inclusion) {
+	      if (within.indexOf(value) < 0) {
+	        return msg || _react2.default.createElement(_reactIntl.FormattedMessage, { id: 'form.errors.inclusion', defaultMessage: 'is not included in the list' });
+	      }
+	    } else {
+	      if (within.indexOf(value) >= 0) {
+	        return msg || _react2.default.createElement(_reactIntl.FormattedMessage, { id: 'form.errors.exclusion', defaultMessage: 'is reserved' });
+	      }
 	    }
 	  });
 	}
 
 /***/ },
 /* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = inclusion;
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactIntl = __webpack_require__(2);
-
-	var _helpers = __webpack_require__(3);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function inclusion(_ref) {
-	  var inc = _ref['in'],
-	      within = _ref.within,
-	      message = _ref.message,
-	      msg = _ref.msg,
-	      ifCond = _ref['if'],
-	      unless = _ref.unless,
-	      _ref$allowBlank = _ref.allowBlank,
-	      allowBlank = _ref$allowBlank === undefined ? _helpers.DEFAULT_ALLOW_BLANK : _ref$allowBlank;
-
-	  msg = (0, _helpers.formatMessage)(msg || message);
-
-	  within = [].concat(within || inc).map(String);
-	  return (0, _helpers.prepare)(ifCond, unless, allowBlank, function (value) {
-	    if (within.indexOf(value) < 0) {
-	      return msg || _react2.default.createElement(_reactIntl.FormattedMessage, { id: 'form.errors.inclusion', defaultMessage: 'is not included in the list' });
-	    }
-	  });
-	}
-
-/***/ },
-/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2960,7 +2945,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3062,7 +3047,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3099,7 +3084,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3130,17 +3115,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	exports = module.exports = __webpack_require__(21)['default'];
+	exports = module.exports = __webpack_require__(20)['default'];
 	exports['default'] = exports;
 
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3224,11 +3209,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=es5.js.map
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var src$es5$$ = __webpack_require__(20);
+	var src$es5$$ = __webpack_require__(19);
 	exports["default"] = createFormatCache;
 
 	// -----------------------------------------------------------------------------
@@ -3304,17 +3289,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=memoizer.js.map
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	exports = module.exports = __webpack_require__(23)['default'];
+	exports = module.exports = __webpack_require__(22)['default'];
 	exports['default'] = exports;
 
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4678,7 +4663,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=parser.js.map
 
 /***/ },
-/* 24 */
+/* 23 */
 /***/ function(module, exports) {
 
 	/*
@@ -4892,7 +4877,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=compiler.js.map
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -4904,7 +4889,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* jslint esnext: true */
 
 	"use strict";
-	var src$utils$$ = __webpack_require__(6), src$es5$$ = __webpack_require__(27), src$compiler$$ = __webpack_require__(24), intl$messageformat$parser$$ = __webpack_require__(22);
+	var src$utils$$ = __webpack_require__(6), src$es5$$ = __webpack_require__(26), src$compiler$$ = __webpack_require__(23), intl$messageformat$parser$$ = __webpack_require__(21);
 	exports["default"] = MessageFormat;
 
 	// -- MessageFormat --------------------------------------------------------
@@ -5161,7 +5146,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=core.js.map
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports) {
 
 	// GENERATED FILE
@@ -5171,7 +5156,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=en.js.map
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -5225,13 +5210,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=es5.js.map
 
 /***/ },
-/* 28 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* jslint esnext: true */
 
 	"use strict";
-	var src$core$$ = __webpack_require__(25), src$en$$ = __webpack_require__(26);
+	var src$core$$ = __webpack_require__(24), src$en$$ = __webpack_require__(25);
 
 	src$core$$["default"].__addLocaleData(src$en$$["default"]);
 	src$core$$["default"].defaultLocale = 'en';
@@ -5241,18 +5226,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=main.js.map
 
 /***/ },
-/* 29 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* jshint node:true */
 
 	'use strict';
 
-	var IntlRelativeFormat = __webpack_require__(34)['default'];
+	var IntlRelativeFormat = __webpack_require__(33)['default'];
 
 	// Add all locale data to `IntlRelativeFormat`. This module will be ignored when
 	// bundling for the browser with Browserify/Webpack.
-	__webpack_require__(37);
+	__webpack_require__(36);
 
 	// Re-export `IntlRelativeFormat` as the CommonJS default exports with all the
 	// locale data registered, and with English set as the default locale. Define
@@ -5262,7 +5247,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 30 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -5274,7 +5259,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* jslint esnext: true */
 
 	"use strict";
-	var intl$messageformat$$ = __webpack_require__(5), src$diff$$ = __webpack_require__(31), src$es5$$ = __webpack_require__(33);
+	var intl$messageformat$$ = __webpack_require__(5), src$diff$$ = __webpack_require__(30), src$es5$$ = __webpack_require__(32);
 	exports["default"] = RelativeFormat;
 
 	// -----------------------------------------------------------------------------
@@ -5564,7 +5549,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=core.js.map
 
 /***/ },
-/* 31 */
+/* 30 */
 /***/ function(module, exports) {
 
 	/*
@@ -5615,7 +5600,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=diff.js.map
 
 /***/ },
-/* 32 */
+/* 31 */
 /***/ function(module, exports) {
 
 	// GENERATED FILE
@@ -5625,7 +5610,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=en.js.map
 
 /***/ },
-/* 33 */
+/* 32 */
 /***/ function(module, exports) {
 
 	/*
@@ -5705,13 +5690,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=es5.js.map
 
 /***/ },
-/* 34 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* jslint esnext: true */
 
 	"use strict";
-	var src$core$$ = __webpack_require__(30), src$en$$ = __webpack_require__(32);
+	var src$core$$ = __webpack_require__(29), src$en$$ = __webpack_require__(31);
 
 	src$core$$["default"].__addLocaleData(src$en$$["default"]);
 	src$core$$["default"].defaultLocale = 'en';
@@ -5721,7 +5706,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	//# sourceMappingURL=main.js.map
 
 /***/ },
-/* 35 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -5779,6 +5764,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ },
+/* 35 */
+/***/ function(module, exports) {
+
+	/* (ignored) */
+
+/***/ },
 /* 36 */
 /***/ function(module, exports) {
 
@@ -5786,12 +5777,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 37 */
-/***/ function(module, exports) {
-
-	/* (ignored) */
-
-/***/ },
-/* 38 */
 /***/ function(module, exports) {
 
 	/* (ignored) */

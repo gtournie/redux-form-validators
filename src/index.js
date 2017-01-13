@@ -6,9 +6,8 @@ import acceptance from './acceptance';
 import addValidator from './add-validator';
 import confirmation from './confirmation';
 import email, { REG_EMAIL } from './email';
-import exclusion from './exclusion';
 import format from './format';
-import inclusion from './inclusion';
+import { inclusion, exclusion } from './inclusion-exclusion';
 import length from './length';
 import numericality from './numericality';
 import presence from './presence';
@@ -37,5 +36,4 @@ export {
 
 // TODO:
 // credit card
-// Case sensitive for confirmation, acceptance, inclusion, exclusion
 

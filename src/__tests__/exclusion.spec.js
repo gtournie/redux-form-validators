@@ -13,10 +13,14 @@ describe('Validator: exclusion', function() {
     assert.equal(ERROR_ID, test(1,     { in: [9, 8, '1'] }));
     assert.equal(ERROR_ID, test('1',   { in: [9, 8, 1] }));
     assert.equal(ERROR_ID, test('foo', { within: 'foo' }));
+    assert.equal(ERROR_ID, test('foo', { within: ['foo'], caseSensitive: true }));
+    assert.equal(ERROR_ID, test('FOO', { within: ['foo'], caseSensitive: false }));
   });
   it('should be valid when `value` is not in the list', function() {
     assert.ok(!test(1,     { in: [] }));
     assert.ok(!test('1',   { in: [2, 3, 4] }));
     assert.ok(!test('foo', { within: 'foobar' }));
+    assert.ok(!test('foo', { within: ['FOO'], caseSensitive: true }));
+    assert.ok(!test('FOO', { within: ['bar'], caseSensitive: false }));
   });
 });

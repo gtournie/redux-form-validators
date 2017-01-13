@@ -2,7 +2,6 @@
 [![Build Status](https://travis-ci.org/gtournie/redux-form-validators.svg?branch=master)](https://travis-ci.org/gtournie/redux-form-validators)
 [![Coverage Status](https://coveralls.io/repos/github/gtournie/redux-form-validators/badge.svg?branch=master)](https://coveralls.io/github/gtournie/redux-form-validators?branch=master)
 [![npm version](https://img.shields.io/npm/v/redux-form-validators.svg?style=flat-square)](https://www.npmjs.com/package/redux-form-validators)
-[![npm downloads](https://img.shields.io/npm/dm/redux-form-validators.svg?style=flat-square)](https://www.npmjs.com/package/redux-form-validators)
 
 
 # redux-form-validators
@@ -171,7 +170,8 @@ You should use this validator when you have two text fields that should receive 
     validate={confirmation({ field: 'pass', fieldLabel: 'Password' })} />
 ```
 
-The confirmation constraint is case sensitive. 
+There is also a `caseSensitive` option that you can use to define whether the confirmation constraint will be case sensitive or not. This option defaults to true.
+
 The default error message for this validator is "doesn't match ${fieldLabel || field}".
 
 
@@ -221,6 +221,8 @@ Validates that the value is included in a given set.
 
 The inclusion validator has an option `in` that receives the set of values that will be accepted. The `in` option has an alias called `within` that you can use for the same purpose, if you'd like to.
 
+There is also a `caseSensitive` option that you can use to define whether the match will be case sensitive or not. This option defaults to true.
+
 The default error message for this validator is "is not included in the list".
 
 
@@ -234,6 +236,8 @@ Validates that the value is not included in a given set.
 ```
 
 The exclusion validator has an option `in` that receives the set of values that will not be accepted for the validated attributes. The `in` option has an alias called `within` that you can use for the same purpose, if you'd like to.
+
+There is also a `caseSensitive` option that you can use to define whether the match will be case sensitive or not. This option defaults to true.
 
 The default error message is "${value} is reserved".
 
