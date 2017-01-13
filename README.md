@@ -1,5 +1,6 @@
 
 [![Build Status](https://travis-ci.org/gtournie/redux-form-validators.svg?branch=master)](https://travis-ci.org/gtournie/redux-form-validators)
+[![Coverage Status](https://coveralls.io/repos/github/gtournie/redux-form-validators/badge.svg?branch=master)](https://coveralls.io/github/gtournie/redux-form-validators?branch=master)
 [![npm version](https://img.shields.io/npm/v/redux-form-validators.svg?style=flat-square)](https://www.npmjs.com/package/redux-form-validators)
 [![npm downloads](https://img.shields.io/npm/dm/redux-form-validators.svg?style=flat-square)](https://www.npmjs.com/package/redux-form-validators)
 
@@ -80,7 +81,7 @@ Validators
 * [url](#url)
 
 More
-* [custom validator](#adding-a-validator)
+* [adding a validator](#adding-a-validator)
 * [common validation options](#common-validation-options)
 * [conditional validation](#conditional-validation)
 
