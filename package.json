@@ -1,0 +1,97 @@
+{
+  "name": "redux-form-validators",
+  "version": "0.0.1",
+  "description": "Simple validations with redux-form",
+  "main": "lib/index.js",
+  "jsnext:main": "./src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gtournie/redux-form-validators.git"
+  },
+  "keywords": [
+    "react",
+    "redux",
+    "redux-form",
+    "validation",
+    "validators",
+    "redux-form-validators",
+    "react-component"
+  ],
+  "author": "Tournier Guillaume <tournier.guillaume@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gtournie/redux-form-validators/issues"
+  },
+  "homepage": "https://github.com/gtournie/redux-form-validators#readme",
+  "peerDependencies": {
+    "react-redux": "^3.0.0 || ^4.0.0 || ^5.0.0",
+    "redux": "^3.3.1",
+    "redux-form": "^6.0.0"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --config ./webpack/example.js",
+    "check:src": "npm run test",
+    "build": "npm run build:lib && npm run build:umd && npm run build:umd:min",
+    "build:lib": "babel src --out-dir lib",
+    "build:umd": "webpack src/index.js dist/redux-form-validator.js --config webpack/development.js",
+    "build:umd:min": "webpack src/index.js dist/redux-form-validators.min.js --config webpack/production.js",
+    "clean": "rimraf dist lib",
+    "manage:i18n": "node ./translationRunner.js",
+    "prepublish": "npm run clean && npm run test && npm run build",
+    "test": "mocha --compilers js:babel-core/register --recursive src/__tests__/*.spec.js --require src/__tests__/setup.js"
+  },
+  "devDependencies": {
+    "autoprefixer-loader": "^3.1.0",
+    "babel-cli": "^6.18.0",
+    "babel-core": "^6.21.0",
+    "babel-loader": "^6.2.10",
+    "babel-plugin-react-intl": "^2.3.0",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-preset-stage-2": "^6.18.0",
+    "bootstrap": "^4.0.0-alpha.4",
+    "bootstrap-loader": "^1.3.3",
+    "css-loader": "^0.23.1",
+    "expect": "^1.11.1",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.9.0",
+    "html-loader": "^0.4.0",
+    "jsdom": "^7.0.1",
+    "json-loader": "^0.5.4",
+    "mocha": "^2.3.3",
+    "node-sass": "^3.7.0",
+    "postcss-loader": "^0.9.1",
+    "react": "^15.4.2",
+    "react-addons-css-transition-group": "^15.4.2",
+    "react-addons-test-utils": "^15.4.2",
+    "react-addons-transition-group": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-hot-loader": "^1.3.0",
+    "react-intl-translations-manager": "^4.0.1",
+    "react-redux": "^5.0.2",
+    "reactstrap": "^4.0.1",
+    "redux": "^3.6.0",
+    "redux-form": "^6.4.3",
+    "resolve-url-loader": "^1.6.1",
+    "rifraf": "^2.0.2",
+    "rimraf": "^2.4.3",
+    "sass-loader": "^3.2.0",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7",
+    "webpack": "^1.12.3",
+    "webpack-dev-server": "^1.14.0"
+  },
+  "npmName": "redux-form-validators",
+  "npmFileMap": [
+    {
+      "basePath": "/dist/",
+      "files": [
+        "*.js"
+      ]
+    }
+  ],
+  "dependencies": {
+    "react-intl": "~2.2.0"
+  }
+}
