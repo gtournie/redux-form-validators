@@ -4,6 +4,7 @@ import getErrorId from './helper';
 
 const ERROR_NOT_A_NUMBER_ID       = 'form.errors.notANumber';
 const ERROR_EQUAL_TO_ID           = 'form.errors.equalTo';
+const ERROR_OTHER_THAN_ID         = 'form.errors.otherThan';
 const ERROR_GREATER_THAN_ID       = 'form.errors.greaterThan';
 const ERROR_GREATER_THAN_OR_EQ_ID = 'form.errors.greaterThanOrEqualTo';
 const ERROR_LESS_THAN_ID          = 'form.errors.lessThan';
@@ -35,6 +36,13 @@ describe('Validator: numericality', function () {
     assert.equal(ERROR_EQUAL_TO_ID, test('18',               { '=': 12 }));
     assert.equal(ERROR_EQUAL_TO_ID, test('12.345',           { '=': 12.34 }));
     assert.equal(ERROR_EQUAL_TO_ID, test('0.01',             { 'equalTo': '12.34' }));
+  });
+  it('should be invalid when `value` is = to otherThan', function() {
+    assert.equal(ERROR_OTHER_THAN_ID, test(1,                { '!=': 1 }));
+    assert.equal(ERROR_OTHER_THAN_ID, test('1',              { '!=': 1 }));
+    assert.equal(ERROR_OTHER_THAN_ID, test('18',             { '!=': 18 }));
+    assert.equal(ERROR_OTHER_THAN_ID, test('12.345',         { '!=': 12.345 }));
+    assert.equal(ERROR_OTHER_THAN_ID, test('0.01',           { 'otherThan': '0.01' }));
   });
   it('should be invalid when `value` is not > to greaterThan', function() {
     assert.equal(ERROR_GREATER_THAN_ID, test(-1,             { '>': 0 }));
@@ -94,6 +102,13 @@ describe('Validator: numericality', function () {
     assert.ok(!test('1',      { '=': 1 }));
     assert.ok(!test('12.345', { '=': 12.345 }));
     assert.ok(!test('0.01',   { 'equalTo': 0.01 }));
+  });
+  it('should be invalid when `value` is != to otherThan', function() {
+    assert.ok(!test(1,        { '!=': 0 }));
+    assert.ok(!test('1',      { '!=': 0 }));
+    assert.ok(!test('18',     { '!=': 12 }));
+    assert.ok(!test('12.345', { '!=': 12.34 }));
+    assert.ok(!test('0.01',   { 'otherThan': '12.34' }));
   });
   it('should be valid when `value` is > to greaterThan', function() {
     assert.ok(!test(0.01,     { '>': 0 }));

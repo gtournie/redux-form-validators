@@ -1,0 +1,6 @@
+[
+  {
+    "id": "form.errors.confirmation",
+    "defaultMessage": "doesn't match `{fieldLabel}`"
+  }
+]

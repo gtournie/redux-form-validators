@@ -1,3 +1,5 @@
+
+[![Build Status](https://travis-ci.org/gtournie/redux-form-validators.svg?branch=master)](https://travis-ci.org/gtournie/redux-form-validators)
 [![npm version](https://img.shields.io/npm/v/redux-form-validators.svg?style=flat-square)](https://www.npmjs.com/package/redux-form-validators)
 [![npm downloads](https://img.shields.io/npm/dm/redux-form-validators.svg?style=flat-square)](https://www.npmjs.com/package/redux-form-validators)
 
@@ -18,7 +20,7 @@ If you're already familiar with [redux-form](http://redux-form.com/) it should b
 ### Field validation
 
 [This example](http://redux-form.com/6.4.3/examples/fieldLevelValidation/) shows you how to set field level validation with redux-form.
-Thanks to `redux-form-validators`, you only have to pass the validators needed:
+Thanks to `redux-form-validators`, you'll only have to pass the validators needed:
 
 ```
 import { required, email } from 'redux-form-validators';
@@ -31,7 +33,7 @@ That's it! =)
 
 ### Sync validation
 
-Let's replace the validate function of [this redux-form example](http://redux-form.com/6.4.3/examples/syncValidation/):
+Now let's replace the validate function of [this redux-form example](http://redux-form.com/6.4.3/examples/syncValidation/):
 
 
 ```
@@ -64,79 +66,47 @@ validate = (values) => {
 
 ## Documentation
 
-### acceptance
+Validators
+* [required](#required-alias-presence)
+* [email](#email)
+* [length](#length)
+* [numericality](#numericality)
+* [confirmation](#confirmation)
+* [format](#format)
+* [acceptance](#acceptance)
+* [inclusion](#inclusion)
+* [exclusion](#exclusion)
+* [absence](#absence)
+* [url](#url)
 
-This method validates that a checkbox on the user interface was checked. This is typically used when the user needs to agree to your application's terms of service, confirm that some text is read, or any similar concept.
-
-```
-<Field name="terms" type="checkbox" label="I accept the terms of service" 
-    component={renderField} validate={acceptance()} />
-```
-
-The default error message for this helper is "must be accepted". You can also pass custom message via the message option.
-
-It can also receive an `accept` option, which determines the allowed values that will be considered as accepted. It defaults to ['1', 'true'] and can be easily changed (via the `msg` or `message` parameter).
-
-```
-acceptance({ accept: 'yes' })
-acceptance({ accept: ['TRUE', 'accepted'] })
-```
-
-### confirmation
-
-You should use this helper when you have two text fields that should receive exactly the same content. For example, you may want to confirm an email address or a password.
-
-```
-<Field name="pass" type="password" label="Password" component={renderField} />
-<Field name="confirmation" type="password" label="Confirmation" component={renderField} 
-    validate={confirmation({ field: 'pass', fieldLabel: 'Password' })} />
-```
-
-The confirmation constraint is case sensitive. 
-The default error message for this helper is "doesn't match ${fieldLabel || field}".
+More
+* [custom validator](#adding-a-validator)
+* [common validation options](#common-validation-options)
+* [conditional validation](#conditional-validation)
 
 
-### exclusion
+### required (alias: presence)
 
-Validates that the value is not included in a given set.
+Validates that the specified value is not empty. It uses the `trim()` method to check if the value is a blank string, that is, a string that is either empty or consists of whitespace.
 
 ```
-<Field name="subdomain" type="text" label="Subdomain" component={renderField} 
-    validate={exclusion({ in: ['www', 'us', 'ca'] })} />
+<Field name="login" type="text" label="Login" component={renderField} 
+    validate={required()} />
 ```
 
-The exclusion helper has an option `in` that receives the set of values that will not be accepted for the validated attributes. The `in` option has an alias called `within` that you can use for the same purpose, if you'd like to.
-
-The default error message is "${value} is reserved".
+The default error message is "is required".
 
 
-### format
+### email
 
-Validates the value by testing whether it match a given regular expression, which is specified using the `with` option.
+Validates that the specified value is a valid email address. It uses the `REG_EMAIL` regexp to check the value.
 
 ```
-const ALPHA_ERROR = <FormattedMessage id="form.errors.alpha"
-      defaultMessage="Only allows letters">
- 
-<Field name="legacyCode" type="text" label="Legacy Code" component={renderField} 
-    validate={format({ with: /^[a-z]+$/i, message: ALPHA_ERROR })} />
+<Field name="email" type="email" label="Email" component={renderField} 
+    validate={email()} />
 ```
 
-The default error message is "is invalid".
-
-
-### inclusion
-
-Validates that the value is included in a given set.
-
-```
-<Field name="size" type="text" label="Size" component={renderField} 
-    validate={inclusion({ in: ['small', 'medium', 'large'] })} />
-```
-
-The inclusion helper has an option `in` that receives the set of values that will be accepted. The `in` option has an alias called `within` that you can use for the same purpose, if you'd like to.
-
-The default error message for this helper is "is not included in the list".
+The default error message is "is not a valid email".
 
 
 ### length
@@ -158,6 +128,7 @@ The possible length constraint options are:
 
 * `min` (or `minimum`) - The value cannot have less than the specified length.
 * `max` (or `maximum`) - The value cannot have more than the specified length.
+* `in` (or `within`) - The value length must be included in a given interval. The value for this option must be an array.
 * `is` (or `=`) - The value length must be equal to the given value.
 
 The default error messages depend on the type of length validation being performed. You can personalize these messages using the `wrongLength`, `tooLong`, and `tooShort` options and ${count} as a placeholder for the number corresponding to the length constraint being used. You can still use the `msg` (or `message`) option to specify an error message (don't forget to pluralize it).
@@ -177,28 +148,93 @@ Validates that your value have only numeric values. By default, it will match an
 
 Besides `int`, this validator also accepts the following options to add constraints to acceptable values:
 
-* `>` (or `greaterThan`) - Specifies the value must be greater than the supplied value. The default error message for this option is "must be greater than %{count}".
-* `>=` (or `greaterThanOrEqualTo`) - Specifies the value must be greater than or equal to the supplied value. The default error message for this option is "must be greater than or equal to %{count}".
-* `=` (or `equalTo`) - Specifies the value must be equal to the supplied value. The default error message for this option is "must be equal to %{count}".
-* `<` (or `lessThan`) - Specifies the value must be less than the supplied value. The default error message for this option is "must be less than %{count}".
-* `<=` (or `lessThanOrEqualTo`) - Specifies the value must be less than or equal to the supplied value. The default error message for this option is "must be less than or equal to %{count}".
+* `>` (or `greaterThan`) - Specifies the value must be greater than the supplied value. The default error message for this option is "must be greater than ${count}".
+* `>=` (or `greaterThanOrEqualTo`) - Specifies the value must be greater than or equal to the supplied value. The default error message for this option is "must be greater than or equal to ${count}".
+* `=` (or `equalTo`) - Specifies the value must be equal to the supplied value. The default error message for this option is "must be equal to ${count}".
+* `!=` (or `otherThan`) - Specifies the value must be other than the supplied value. The default error message for this option is "must be other than 4{count}".
+* `<` (or `lessThan`) - Specifies the value must be less than the supplied value. The default error message for this option is "must be less than ${count}".
+* `<=` (or `lessThanOrEqualTo`) - Specifies the value must be less than or equal to the supplied value. The default error message for this option is "must be less than or equal to ${count}".
 * `odd` - Specifies the value must be an odd number if set to true. The default error message for this option is "must be odd".
 * `even` - Specifies the value must be an even number if set to true. The default error message for this option is "must be even".
 
 The default error message is "is not a number".
 
 
-### required (alias: presence)
+### confirmation
 
-Validates that the specified value is not empty. It uses the `trim()` method to check if the value is a blank string, that is, a string that is either empty or consists of whitespace.
+You should use this validator when you have two text fields that should receive exactly the same content. For example, you may want to confirm an email address or a password.
 
 ```
-<Field name="login" type="text" label="Login" component={renderField} 
-    validate={required()} />
+<Field name="pass" type="password" label="Password" component={renderField} />
+<Field name="confirmation" type="password" label="Confirmation" component={renderField} 
+    validate={confirmation({ field: 'pass', fieldLabel: 'Password' })} />
 ```
 
-The default error message is "is required".
+The confirmation constraint is case sensitive. 
+The default error message for this validator is "doesn't match ${fieldLabel || field}".
 
+
+### format
+
+Validates the value by testing whether it match a given regular expression, which is specified using the `with` option.
+
+```
+const ALPHA_ERROR = <FormattedMessage id="form.errors.alpha"
+      defaultMessage="Only allows letters">
+ 
+<Field name="legacyCode" type="text" label="Legacy Code" component={renderField} 
+    validate={format({ with: /^[a-z]+$/i, message: ALPHA_ERROR })} />
+```
+
+Alternatively, you can require that the specified value does not match the regular expression by using the `without` option.
+
+The default error message is "is invalid".
+
+
+### acceptance
+
+This method validates that a checkbox on the user interface was checked. This is typically used when the user needs to agree to your application's terms of service, confirm that some text is read, or any similar concept.
+
+```
+<Field name="terms" type="checkbox" label="I accept the terms of service" 
+    component={renderField} validate={acceptance()} />
+```
+
+The default error message for this validator is "must be accepted". You can also pass custom message via the message option.
+
+It can also receive an `accept` option, which determines the allowed values that will be considered as accepted. It defaults to ['1', 'true'] and can be easily changed (via the `msg` or `message` parameter).
+
+```
+acceptance({ accept: 'yes' })
+acceptance({ accept: ['TRUE', 'accepted'] })
+```
+
+### inclusion
+
+Validates that the value is included in a given set.
+
+```
+<Field name="size" type="text" label="Size" component={renderField} 
+    validate={inclusion({ in: ['small', 'medium', 'large'] })} />
+```
+
+The inclusion validator has an option `in` that receives the set of values that will be accepted. The `in` option has an alias called `within` that you can use for the same purpose, if you'd like to.
+
+The default error message for this validator is "is not included in the list".
+
+
+### exclusion
+
+Validates that the value is not included in a given set.
+
+```
+<Field name="subdomain" type="text" label="Subdomain" component={renderField} 
+    validate={exclusion({ in: ['www', 'us', 'ca'] })} />
+```
+
+The exclusion validator has an option `in` that receives the set of values that will not be accepted for the validated attributes. The `in` option has an alias called `within` that you can use for the same purpose, if you'd like to.
+
+The default error message is "${value} is reserved".
 
 ### absence
 
@@ -210,6 +246,17 @@ Validates that the specified value are absent. It uses the `!trim()` method to c
 ```
 
 The default error message is "must be blank".
+
+### url
+
+Validates that the specified value is a valid URL. It uses the `REG_URL` regexp to check the value.
+
+```
+<Field name="url" type="text" label="URL" component={renderField} 
+    validate={url()} />
+```
+
+The default error message is "is not a valid URL".
 
 
 ### Common validation options
@@ -247,6 +294,8 @@ format({ with: /^[a-z]+$/i, message: 'Letters only' })
 
 This will be wrapped in a FormattedMessage (with the message as id), look for a message with this id and will finally fallback to the id.
 
+[See all default messages](https://github.com/gtournie/redux-form-validators/blob/master/examples/src/locales/en.json).
+
 
 ### Conditional validation
 
@@ -261,7 +310,6 @@ Finally, it's possible to associate `if` and `unless` with a function which will
 
 
 ### Adding a validator
-
 
 ```
 const ALPHA_ERROR = <FormattedMessage id="form.errors.alpha"

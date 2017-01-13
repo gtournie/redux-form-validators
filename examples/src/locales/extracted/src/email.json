@@ -1,0 +1,6 @@
+[
+  {
+    "id": "form.errors.email",
+    "defaultMessage": "is not a valid email"
+  }
+]
