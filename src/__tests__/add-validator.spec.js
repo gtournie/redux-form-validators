@@ -34,6 +34,9 @@ describe('Validator: addValidator', function() {
   });
   it('should be valid', function() {
     assert.ok(!test(fooValidator, 'foo'));
+    assert.ok(!test(fooValidator, '', { allowBlank: true }));
+    assert.ok(!test(fooValidator, 'bar', { if: function() { return false; } }));
+    assert.ok(!test(fooValidator, 'bar', { unless: function() { return true; } }));
     assert.ok(!test(barValidator, 'bar', {}, { foobar: 'foobar' }));
     assert.ok(!test(invalidValidator, '', { invalid: 'valid' }));
   });

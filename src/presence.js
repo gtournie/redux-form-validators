@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { formatMessage, prepare, DEFAULT_ALLOW_BLANK } from './helpers';
+import { formatMessage, prepare } from './helpers';
 
 
 export default function presence({ message, msg, 'if': ifCond, unless }={}) {

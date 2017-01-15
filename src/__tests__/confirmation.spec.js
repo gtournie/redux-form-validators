@@ -21,6 +21,7 @@ describe('Validator: confirmation', function() {
     assert.equal(ERROR_ID, test('validator', { field: 'passwordconfirmation' }));
   });
   it('should be valid when `value` = confirmation', function() {
+    assert.ok(!test('', { field: 'foo' }, {}));
     assert.ok(!test('validator'));
     assert.ok(!test('VALIDATOR', { caseSensitive: false }));
     assert.ok(!test('valiDator', { caseSensitive: false }));

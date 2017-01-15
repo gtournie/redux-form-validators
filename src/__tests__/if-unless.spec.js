@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { absence, acceptance, confirmation, email, exclusion,
+import { absence, date, acceptance, confirmation, email, exclusion,
   format, inclusion, length, numericality, presence, url } from '../index';
 import getErrorId from './helper';
 
@@ -27,8 +27,9 @@ describe('Validator option: if & unless', function() {
       // All these tests normally return an error
       assert.ok(!test(type, absence, 'foo'));
       assert.ok(!test(type, acceptance));
-      assert.ok(!test(type, confirmation, 'foo', { field: 'bar' }));
+      assert.ok(!test(type, confirmation, 'foo', { field: 'bar' }, {}));
       assert.ok(!test(type, email, blank));
+      assert.ok(!test(type, date, blank, { format: 'mm/dd/yyyy' }));
       assert.ok(!test(type, exclusion, blank, { in: [blank] }));
       assert.ok(!test(type, format, blank, { with: /^foo$/ }));
       assert.ok(!test(type, inclusion, blank, { in: [] }));

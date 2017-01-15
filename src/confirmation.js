@@ -17,11 +17,9 @@ export default function confirmation({
   caseSensitive = (null != caseSensitive ? caseSensitive : DEFAULT_CASE_SENSITIVE);
 
   return prepare(ifCond, unless, false, function(value, allValues) {
-    let check = caseSensitive
-      ? value !== ('' + allValues[field])
-      : value.toLowerCase() !== ('' + allValues[field]).toLowerCase();
+    let fieldValue = '' + (allValues[field] || '');
 
-    if (check) {
+    if (caseSensitive ? value !== fieldValue : value.toLowerCase() !== fieldValue.toLowerCase()) {
       return msg || (
         <FormattedMessage id="form.errors.confirmation"
           defaultMessage="doesn't match `{fieldLabel}`"

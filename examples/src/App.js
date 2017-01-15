@@ -9,7 +9,7 @@ export default class App extends Component {
     return (
       <Container>
         <Row>
-          <Col xs={{ size: 6, offset: 3 }}>
+          <Col xs={{ size: 8, offset: 2 }}>
             <h2>Field validation example</h2>
             <FieldValidationForm />
           </Col>

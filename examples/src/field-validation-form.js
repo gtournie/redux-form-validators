@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
-import { acceptance, required, email, length, numericality, confirmation } from 'redux-form-validators';
+import { FormattedMessage } from 'react-intl';
+import { acceptance, date, required, email, length, numericality, confirmation } from 'redux-form-validators';
 
-import { Button, Input, Form, FormFeedback, FormGroup, FormText, Label } from 'reactstrap';
+import { Col, Row, Button, Input, Form, FormFeedback, FormGroup, FormText, Label } from 'reactstrap';
 
 
 function renderInputField({ hint, input, label, type, meta: { touched, error }={}, ...inputProps }) {
@@ -41,6 +42,12 @@ function renderCheckField({ hint, input, label, type, meta: { touched, error, wa
 }
 
 
+let twentyYearsAgo = function() {
+  let d = new Date();
+  d.setFullYear(d.getFullYear() - 20);
+  return d;
+};
+
 
 class FieldValidationForm extends Component {
   static contextTypes = {
@@ -55,18 +62,46 @@ class FieldValidationForm extends Component {
     return (
       <div>
         <Form onSubmit={this.handleSubmit} noValidate>
-          <Field name="email" type="email" label="Email" component={renderInputField}
-            validate={[required(), email()]} />
-
-          <Field name="password" type="password" label="Password" component={renderInputField}
-            validate={[required(), length({ min: 8 })]} />
-
-          <Field name="password_confirmation" type="password" label="Password confirmation" component={renderInputField}
-            validate={[confirmation({ field: 'password', fieldLabel: 'Password' })]} />
-
-          <Field name="age" type="text" label="Age" component={renderInputField}
-            validate={[numericality({ int: true, '>': 0, '<': 100, allowBlank: true })]} />
-
+          <Row>
+            <Col sm="6">
+              <Field name="name" type="text" label="Name" component={renderInputField}
+                  validate={[required(), length({ in: [6, 20] })]} />
+            </Col>
+            <Col sm="6">
+              <Field name="email" type="email" label="Email" component={renderInputField}
+                  validate={[required(), email()]} />
+            </Col>
+          </Row>
+          <Row>
+            <Col sm="6">
+              <Field name="password" type="password" label="Password" component={renderInputField}
+                validate={[required(), length({ min: 8 })]} />
+            </Col>
+            <Col sm="6">
+              <Field name="password_confirmation" type="password" label="Password confirmation" component={renderInputField}
+                validate={[confirmation({ field: 'password', fieldLabel: 'Password' })]} />
+            </Col>
+            </Row>
+          <Row>
+            <Col sm="6">
+              <Field name="bday" type="text" label="Birthday" component={renderInputField}
+                placeholder="mm/dd/yy"
+                validate={date({ format: 'mm/dd/yy', '<=': twentyYearsAgo,
+                    msg: "Sorry, you must be at least 20 years old", allowBlank: true })} />
+            </Col>
+            <Col sm="6">
+              <Field name="date" type="text" label="Date" component={renderInputField}
+                placeholder="YYYY-MM-DD"
+                validate={[date({ format: 'YYYY-MM-DD', ymd: 'YMD',
+                    '>': new Date(2000, 0, 1), '<': 'today', allowBlank: true })]} />
+            </Col>
+          </Row>
+          <Row>
+            <Col sm="6">
+              <Field name="age" type="text" label="Age" component={renderInputField}
+                validate={[numericality({ int: true, '>': 0, '<': 100, msg: "form.errors.invalid", allowBlank: true })]} />
+            </Col>
+          </Row>
           {/*<Button type="submit">Submit</Button>*/}
         </Form>
       </div>

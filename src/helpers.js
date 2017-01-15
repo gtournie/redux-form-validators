@@ -36,5 +36,5 @@ export function isNumber(num) {
 
 export function formatMessage(msg) {
   if (null == msg) return null;
-  return 'string' === typeof msg ? <FormattedMessage id={msg} /> : <FormattedMessage {...msg} />
+  return 'string' === typeof msg ? <FormattedMessage id={msg} /> : <FormattedMessage {...(msg.props || msg)} />
 }

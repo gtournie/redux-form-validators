@@ -5,6 +5,7 @@ import absence from './absence';
 import acceptance from './acceptance';
 import addValidator from './add-validator';
 import confirmation from './confirmation';
+import date from './date';
 import email, { REG_EMAIL } from './email';
 import format from './format';
 import { inclusion, exclusion } from './inclusion-exclusion';
@@ -22,6 +23,7 @@ export {
   acceptance,
   addValidator,
   confirmation,
+  date,
   email, REG_EMAIL,
   exclusion,
   format,
