@@ -2723,13 +2723,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return function () {
 	    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-	    options = Object.assign({}, options);
-	    var blankAllowed = null == options.allowBlank ? _helpers.DEFAULT_ALLOW_BLANK : options.allowBlank;
-	    delete options.allowBlank;
-
 	    var msg = (0, _helpers.formatMessage)(options.msg || options.message) || defaultMsg;
 
-	    return (0, _helpers.prepare)(options.if, options.unless, blankAllowed, function (value, allValues) {
+	    return (0, _helpers.prepare)(options.if, options.unless, options.allowBlank, function (value, allValues) {
 	      if (!validator(options, value, allValues)) {
 	        return msg;
 	      }
@@ -2845,7 +2841,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      allowBlank = _ref$allowBlank === undefined ? _helpers.DEFAULT_ALLOW_BLANK : _ref$allowBlank;
 
 	  msg = (0, _helpers.formatMessage)(msg || message);
-
 	  ymd = ymd || 'ymd';
 	  var reverseMapping = (_reverseMapping = {}, _defineProperty(_reverseMapping, ymd.charAt(0), 'y'), _defineProperty(_reverseMapping, ymd.charAt(1), 'm'), _defineProperty(_reverseMapping, ymd.charAt(2), 'd'), _reverseMapping);
 	  var normFormat = format.replace(new RegExp('[' + ymd + ']', 'g'), function (sym) {
