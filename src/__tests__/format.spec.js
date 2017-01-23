@@ -1,32 +1,32 @@
-import assert from 'assert';
-import { format } from '../index';
-import getErrorId from './helper';
+import assert from 'assert'
+import { format } from '../index'
+import getErrorId from './helper'
 
-const ERROR_ID = 'form.errors.invalid';
+const ERROR_ID = 'form.errors.invalid'
 
-function test(value, params) {
-  return getErrorId(format(params)(value));
+function test (value, params) {
+  return getErrorId(format(params)(value))
 }
 
 describe('Validator: format', function() {
   it('should be invalid when `value` doesn\'t match the with option', function() {
-    assert.equal(ERROR_ID, test('',     { with: /123/ }));
-    assert.equal(ERROR_ID, test(12,     { with: /123/ }));
-    assert.equal(ERROR_ID, test('foo',  { with: /bar/ }));
-  });
+    assert.equal(ERROR_ID, test('',     { with: /123/ }))
+    assert.equal(ERROR_ID, test(12,     { with: /123/ }))
+    assert.equal(ERROR_ID, test('foo',  { with: /bar/ }))
+  })
   it('should be invalid when `value` doesn\'t match the without option', function() {
-    assert.equal(ERROR_ID, test('',     { without: /.?/ }));
-    assert.equal(ERROR_ID, test(123,    { without: /\d+/ }));
-    assert.equal(ERROR_ID, test('foo',  { without: /\w+/ }));
-  });
+    assert.equal(ERROR_ID, test('',     { without: /.?/ }))
+    assert.equal(ERROR_ID, test(123,    { without: /\d+/ }))
+    assert.equal(ERROR_ID, test('foo',  { without: /\w+/ }))
+  })
   it('should be valid when `value` match the with option', function() {
-    assert.ok(!test('',                 { with: /.?/ }));
-    assert.ok(!test(123,                { with: /\d+/ }));
-    assert.ok(!test('foo',              { with: /\w+/ }));
-  });
+    assert.ok(!test('',                 { with: /.?/ }))
+    assert.ok(!test(123,                { with: /\d+/ }))
+    assert.ok(!test('foo',              { with: /\w+/ }))
+  })
   it('should be valid when `value` match the without option', function() {
-    assert.ok(!test('',                 { without: /123/ }));
-    assert.ok(!test(12,                 { without: /123/ }));
-    assert.ok(!test('foo',              { without: /bar/ }));
-  });
-});
+    assert.ok(!test('',                 { without: /123/ }))
+    assert.ok(!test(12,                 { without: /123/ }))
+    assert.ok(!test('foo',              { without: /bar/ }))
+  })
+})

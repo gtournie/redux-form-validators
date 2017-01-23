@@ -29,7 +29,7 @@ If you're already familiar with [redux-form](http://redux-form.com/) it should b
 Thanks to `redux-form-validators`, you'll only have to pass the validators needed:
 
 ```
-import { required, email } from 'redux-form-validators';
+import { required, email } from 'redux-form-validators'
 
 <Field name="email" type="email" label="Email" component={renderField} 
     validate={[required(), email()]} />
@@ -44,9 +44,9 @@ Now let's replace the validate function of [this redux-form example](http://redu
 
 ```
 const TOO_YOUNG_ERROR = (
-  <FormattedMessage id="form.errors.tooYoug"
+  <FormattedMessage id="form.errors.tooYoung"
       defaultMessage="Sorry, you must be at least 18 years old">
-);
+)
 
 validations = {
   username: [required(), length({ max: 15 })],
@@ -60,10 +60,10 @@ validations = {
 
 // Reusable with any other form
 validate = (values) => {
-  const errors = {};
+  const errors = {}
   for (let field of validations) {
-    let value = values[field];
-    errors[field] = validations[field].find(validateField => validateField(value));
+    let value = values[field]
+    errors[field] = validations[field].find(validateField => validateField(value))
   }
   return errors;
 }
@@ -73,7 +73,7 @@ validate = (values) => {
 ## Documentation
 
 Validators
-* [required](#required-alias-presence)
+* [required / presence](#required-alias-presence)
 * [email](#email)
 * [numericality](#numericality)
 * [date](#date)
@@ -157,7 +157,7 @@ Very simple date validator. Limited to year, month and day validation (but it sh
 ```
 
 Accepts the following options:
-* `format` - Specifies the format that should match the date string. Accepts only the current flags: `y`, `m` & `d`. The number of flag used represents the number of digits expected (e.g. `yyyy` will expect 4 digits and `yy` will expect 2). Format examples: `mm/dd/yyyy`, `dd/mm/yyyy`, `yyyy-mm-dd`, `mm/dd/yy`, `yyyy/mm`, `mm/dd`...
+* `format` - Specifies the format that should match the date string. Accepts only the current flags: `y`, `m` & `d`. The number of flags used represents the number of digits expected (e.g. `yyyy` expects 4 digits while `yy` expects 2). Format examples: `mm/dd/yyyy`, `dd/mm/yyyy`, `yyyy-mm-dd`, `mm/dd/yy`, `yyyy/mm`, `mm/dd`...
 * `ymd` - Allows you to customize the format, to be more readable in case you're using i18n. For instance, you could use `{ format: 'jj/mm/aaaa', ymd: 'amj' }` for a French format.
 
 And the comparable options:
@@ -172,10 +172,10 @@ date({ format: 'dd/mm/yyyy', '<': new Date(2020, 0, 1), '>=': new Date(1980, 0, 
 date({ format: 'mm/dd/yyyy', '>': 'today', msg: "must be in the future" })
 date({ format: 'mm/dd/yyyy', '<=': twentyYearsAgo, msg: "you must be at least 20 years old" })
 
-function twentyYearsAgo() {
-  let d = new Date();
-  d.setFullYear(d.getFullYear() - 20);
-  return d;
+function twentyYearsAgo () {
+  let d = new Date()
+  d.setFullYear(d.getFullYear() - 20)
+  return d
 }
 ```
 
@@ -368,9 +368,9 @@ const ALPHA_ERROR = <FormattedMessage id="form.errors.alpha"
       defaultMessage="Letters only">
  
 format({ with: /^[a-z]+$/i, message: ALPHA_ERROR })
-format({ with: /^[a-z]+$/i, message: { id: 'form.errors' } })
-format({ with: /^[a-z]+$/i, message: 'form.errors' })
-format({ with: /^[a-z]+$/i, message: { id: 'form.errors', defaultMessage: 'Letters only' } })
+format({ with: /^[a-z]+$/i, message: { id: 'form.errors.alpha' } })
+format({ with: /^[a-z]+$/i, message: 'form.errors.alpha' })
+format({ with: /^[a-z]+$/i, message: { id: 'form.errors.alpha', defaultMessage: 'Letters only' } })
 ```
 
 Or alternatively, if you don't care about i18n:
@@ -407,7 +407,7 @@ const alphaValidator = addValidator({
   validator:  function(options, value, allValues) {
     return (options.lowerCase ? /^[a-z]+$/ : /^[a-z]+$/i).test(value);
   }
-});
+})
 
 <Field name="name" type="text" label="Name" component={renderField} 
     validate={alphaValidator({ lowerCase: true, allowBlank: true })} />

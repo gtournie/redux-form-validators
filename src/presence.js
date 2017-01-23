@@ -1,17 +1,17 @@
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import { formatMessage, prepare } from './helpers';
+import React from 'react'
+import { FormattedMessage } from 'react-intl'
+import { formatMessage, prepare } from './helpers'
 
 
-export default function presence({ message, msg, 'if': ifCond, unless }={}) {
+export default function presence ({ message, msg, 'if': ifCond, unless }={}) {
   msg = formatMessage(msg || message)
-    || <FormattedMessage id="form.errors.presence" defaultMessage="is required" />;
+    || <FormattedMessage id="form.errors.presence" defaultMessage="is required" />
 
-  return prepare(ifCond, unless, false, function(value) {
+  return prepare(ifCond, unless, false, function (value) {
     if (!value.trim()) {
-      return msg;
+      return msg
     }
-  });
+  })
 }
 
 

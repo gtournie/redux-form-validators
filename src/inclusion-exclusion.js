@@ -1,46 +1,46 @@
-import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import { formatMessage, prepare, DEFAULT_ALLOW_BLANK } from './helpers';
+import React from 'react'
+import { FormattedMessage } from 'react-intl'
+import { formatMessage, prepare, DEFAULT_ALLOW_BLANK } from './helpers'
 
 
-const DEFAULT_CASE_SENSITIVE = true;
+const DEFAULT_CASE_SENSITIVE = true
 
 
-export function inclusion(options) {
-  return inclusionExclusion(true, options);
+export function inclusion (options) {
+  return inclusionExclusion(true, options)
 }
 
-export function exclusion(options) {
-  return inclusionExclusion(false, options);
+export function exclusion (options) {
+  return inclusionExclusion(false, options)
 }
 
-function inclusionExclusion(inclusion, {
+function inclusionExclusion (inclusion, {
       'in': inc, within,
       caseSensitive,
       message, msg,
       'if': ifCond, unless,
       allowBlank=DEFAULT_ALLOW_BLANK
     }) {
-  msg = formatMessage(msg || message);
+  msg = formatMessage(msg || message)
 
-  caseSensitive = (null != caseSensitive ? caseSensitive : DEFAULT_CASE_SENSITIVE);
+  caseSensitive = (null != caseSensitive ? caseSensitive : DEFAULT_CASE_SENSITIVE)
 
   within = [].concat(within || inc).map(function(val) {
-    return caseSensitive ? ('' + val) : ('' + val).toLowerCase();
-  });
+    return caseSensitive ? ('' + val) : ('' + val).toLowerCase()
+  })
 
-  return prepare(ifCond, unless, allowBlank, function(value) {
+  return prepare(ifCond, unless, allowBlank, function (value) {
     if (!caseSensitive) {
-      value = value.toLowerCase();
+      value = value.toLowerCase()
     }
     if (inclusion) {
       if (within.indexOf(value) < 0) {
-        return msg || (<FormattedMessage id="form.errors.inclusion" defaultMessage="is not included in the list" />);
+        return msg || (<FormattedMessage id="form.errors.inclusion" defaultMessage="is not included in the list" />)
       }
     } else {
       if (within.indexOf(value) >= 0) {
-        return msg || (<FormattedMessage id="form.errors.exclusion" defaultMessage="is reserved" />);
+        return msg || (<FormattedMessage id="form.errors.exclusion" defaultMessage="is reserved" />)
       }
     }
-  });
+  })
 }
