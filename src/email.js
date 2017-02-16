@@ -8,5 +8,6 @@ export var REG_EMAIL = /^[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_
 let EMAIL_ERROR = (<FormattedMessage id="form.errors.email" defaultMessage="is not a valid email" />)
 
 export default function email (options) {
+  options = Object.assign({}, options)
   return regFormat(options, REG_EMAIL, "form.errors.email")
 }

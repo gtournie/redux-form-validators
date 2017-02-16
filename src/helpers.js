@@ -7,7 +7,6 @@ export var DEFAULT_ALLOW_BLANK = false;
 
 
 export function regFormat (options, reg, messageId) {
-  options = Object.assign({}, options)
   options.msg = options.msg || options.message || messageId
   options.with = reg
   return format(options)

@@ -341,6 +341,15 @@ Validates that the specified value is a valid URL. It uses the internal `REG_URL
     validate={url()} />
 ```
 
+The url validator has an option `protocol` (or its alias `protocols`) that receives the set of protocols that will be accepted. This option default to ['http', 'https', 'ftp'].
+
+Examples
+```
+url({ protocol: 'http' })
+url({ protocol: 'ftp' })
+url({ protocols: ['http', 'https'] })
+```
+
 The default error message is "is not a valid URL".
 
 

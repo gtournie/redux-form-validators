@@ -8,5 +8,11 @@ export var REG_URL = /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10
 const URL_ERROR = (<FormattedMessage id="form.errors.url" defaultMessage="is not a valid URL" />)
 
 export default function url (options) {
-  return regFormat(options, REG_URL, "form.errors.url")
+  options = Object.assign({}, options)
+  var reg = REG_URL
+  var protocols = options.protocols || options.protocol
+  if (protocols) {
+    reg = new RegExp(REG_URL.source.replace('https?|ftp', [].concat(protocols).join('|')), REG_URL.flags)
+  }
+  return regFormat(options, reg, "form.errors.url")
 }
