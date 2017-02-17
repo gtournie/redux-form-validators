@@ -171,7 +171,7 @@ date({ format: 'mm/yyyy' })
 date({ format: 'YYYY-MM-DD', ymd: 'YMD' })
 date({ format: 'dd/mm/yyyy', '<': new Date(2020, 0, 1), '>=': new Date(1980, 0, 1) })
 date({ format: 'mm/dd/yyyy', '>': 'today', msg: "must be in the future" })
-date({ format: 'mm/dd/yyyy', '<=': twentyYearsAgo, msg: "you must be at least 20 years old" })
+date({ format: 'mm/dd/yyyy', '>': twentyYearsAgo, msg: "you must be at least 20 years old" })
 
 function twentyYearsAgo () {
   let d = new Date()
