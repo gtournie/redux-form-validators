@@ -55,7 +55,7 @@ validations = {
   age:      [
     required(), 
     numericality({ int: true }), 
-    numericality({ '<': 18, msg: TOO_YOUNG_ERROR })
+    numericality({ '>=': 18, msg: TOO_YOUNG_ERROR })
   ]
 }
 
