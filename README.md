@@ -171,7 +171,7 @@ date({ format: 'mm/yyyy' })
 date({ format: 'YYYY-MM-DD', ymd: 'YMD' })
 date({ format: 'dd/mm/yyyy', '<': new Date(2020, 0, 1), '>=': new Date(1980, 0, 1) })
 date({ format: 'mm/dd/yyyy', '>': 'today', msg: "must be in the future" })
-date({ format: 'mm/dd/yyyy', '>': twentyYearsAgo, msg: "you must be at least 20 years old" })
+date({ format: 'mm/dd/yyyy', '<=': twentyYearsAgo, msg: "you must be at least 20 years old" })
 
 function twentyYearsAgo () {
   let d = new Date()
@@ -415,7 +415,7 @@ const ALPHA_ERROR = <FormattedMessage id="form.errors.alpha"
 const alphaValidator = addValidator({
   defaultMessage: ALPHA_ERROR,
   validator:  function(options, value, allValues) {
-    return (options.lowerCase ? /^[a-z]+$/ : /^[a-z]+$/i).test(value);
+    return (options.lowerCase ? /^[a-z]+$/ : /^[a-z]+$/i).test(value)
   }
 })
 
@@ -423,9 +423,9 @@ const alphaValidator = addValidator({
     validate={alphaValidator({ lowerCase: true, allowBlank: true })} />
 ```
 
-`defaultMessage` accepts a String, a Hash or a [FormattedMessage](https://github.com/yahoo/react-intl/wiki/Components#string-formatting-components). See the `message` option. Its default value is `is not valid`;
+`defaultMessage` accepts a String, a Hash or a [FormattedMessage](https://github.com/yahoo/react-intl/wiki/Components#string-formatting-components). See the `message` option. Its default value is `is not valid`.
 
-> Note: you'll still be able to use the common options (`message` & `allowBlank`) and the conditional validation (`if` and `unless`);
+> Note: you'll still be able to use the common options (`message` & `allowBlank`) and the conditional validation (`if` and `unless`).
 
 
 
