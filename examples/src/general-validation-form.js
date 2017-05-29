@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { connect } from 'react-redux';
@@ -81,7 +82,7 @@ let validate = (values) => {
 
 class GeneralValidationForm extends Component {
   static contextTypes = {
-    intl: React.PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired
   };
 
   handleSubmit(e) {
