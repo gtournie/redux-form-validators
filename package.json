@@ -95,6 +95,6 @@
     }
   ],
   "dependencies": {
-    "react-intl": "~2.2.0"
+    "react-intl": "~2.3.0"
   }
 }
