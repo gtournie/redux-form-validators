@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './app';
+import App from './App';
 
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';

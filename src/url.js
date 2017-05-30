@@ -14,5 +14,5 @@ export default function url (options) {
   if (protocols) {
     reg = new RegExp(REG_URL.source.replace('https?|ftp', [].concat(protocols).join('|')), REG_URL.flags)
   }
-  return regFormat(options, reg, "form.errors.url")
+  return regFormat(options, reg, URL_ERROR)
 }

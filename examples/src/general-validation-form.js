@@ -75,7 +75,7 @@ let validate = (values) => {
   const errors = {}
   for (let field in validations) {
     let value = values[field]
-    errors[field] = validations[field].map(validateField => validateField(value)).find(x => x)
+    errors[field] = validations[field].map(validateField => validateField(value, values)).find(x => x)
   }
   return errors
 }

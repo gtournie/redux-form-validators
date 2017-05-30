@@ -1,6 +1,6 @@
 {
   "name": "redux-form-validators",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simple validations with redux-form",
   "main": "lib/index.js",
   "jsnext:main": "./src/index.js",
@@ -65,6 +65,7 @@
     "mocha": "^3.2.0",
     "node-sass": "^3.7.0",
     "postcss-loader": "^0.9.1",
+    "prop-types": "^15.5.10",
     "react": "^15.4.2",
     "react-addons-css-transition-group": "^15.4.2",
     "react-addons-test-utils": "^15.4.2",

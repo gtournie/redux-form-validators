@@ -9,5 +9,5 @@ let EMAIL_ERROR = (<FormattedMessage id="form.errors.email" defaultMessage="is n
 
 export default function email (options) {
   options = Object.assign({}, options)
-  return regFormat(options, REG_EMAIL, "form.errors.email")
+  return regFormat(options, REG_EMAIL, EMAIL_ERROR)
 }
