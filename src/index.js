@@ -5,10 +5,11 @@ import absence from './absence'
 import acceptance from './acceptance'
 import addValidator from './add-validator'
 import confirmation from './confirmation'
-import date from './date'
+import date, { parseDate, formatDate } from './date'
 import email, { REG_EMAIL } from './email'
 import format from './format'
-import { inclusion, exclusion } from './inclusion-exclusion'
+import inclusion from './inclusion'
+import exclusion from './exclusion'
 import length from './length'
 import numericality from './numericality'
 import presence from './presence'
@@ -23,7 +24,7 @@ export {
   acceptance,
   addValidator,
   confirmation,
-  date,
+  date, parseDate, formatDate,
   email, REG_EMAIL,
   exclusion,
   format,

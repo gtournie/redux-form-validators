@@ -51,10 +51,6 @@ let twentyYearsAgo = function() {
 
 
 class FieldValidationForm extends Component {
-  static contextTypes = {
-    intl: PropTypes.object.isRequired
-  };
-
   handleSubmit(e) {
     e.preventDefault();
   }

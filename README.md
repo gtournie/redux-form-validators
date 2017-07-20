@@ -93,6 +93,7 @@ More
 * [adding a validator](#adding-a-validator)
 * [common validation options](#common-validation-options)
 * [conditional validation](#conditional-validation)
+* [date helpers](#date-helpers)
 
 
 ### required (alias: presence)
@@ -186,6 +187,8 @@ The default error messages are:
 * "expected format: {format}"
 * "is not a valid date" (e.g. Feb 29 2017)
 * "should be {op} {date}" (e.g. 'should be > 01/14/2017')
+
+See also [parseDate](#parsedate) & [formatDate](#formatdate)
 
 
 ### length
@@ -430,7 +433,47 @@ const alphaValidator = addValidator({
 > Note: you'll still be able to use the common options (`message` & `allowBlank`) and the conditional validation (`if` and `unless`).
 
 
+### Date helpers
 
+#### parseDate
+
+parser used to validate dates.
+
+Signature: `parseDate(dateString, format[, ymd])`
+
+Examples:
+```
+parseDate('12/31/2017', 'mm/dd/yyyy')        => new Date(2017, 11, 31)
+parseDate('2016/01',    'yyyy/mm'))          => new Date(2016,  1,  1)
+parseDate('12/01',      'mm/dd'))            => new Date(1970, 11,  1)
+
+// Custom ymd
+parseDate('12/31/2017', 'mm/jj/aaaa', 'amj') => new Date(2017, 11, 31)
+
+// Error
+parseDate('12122016',   'mm/dd/yyyy')        => Invalid date
+```
+
+#### formatDate
+
+formatter used to display dates.
+
+Signature: `formatDate(date, format[, ymd])`
+
+Examples:
+```
+formatDate(new Date(2017, 11, 31), 'mm/dd/yyyy')        => '12/31/2017'
+formatDate(new Date(2016,  1,  1), 'yyyy/mm'))          => '2016/01'   
+formatDate(new Date(1970, 11,  1), 'mm/dd'))            => '12/01'     
+
+// Custom ymd
+formatDate(new Date(2017, 11, 31), 'mm/jj/aaaa', 'amj') => '12/31/2017'
+
+// Error
+formatDate(new Date(NaN), 'mm/dd/yyyy')                 => null
+formatDate(null,          'mm/dd/yyyy')                 => null
+formatDate({},            'mm/dd/yyyy')                 => null
+```
 
 
 

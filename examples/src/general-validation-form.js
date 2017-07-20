@@ -81,10 +81,6 @@ let validate = (values) => {
 }
 
 class GeneralValidationForm extends Component {
-  static contextTypes = {
-    intl: PropTypes.object.isRequired
-  };
-
   handleSubmit(e) {
     e.preventDefault();
   }

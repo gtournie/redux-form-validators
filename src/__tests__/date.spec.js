@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { date } from '../index'
+import { date, parseDate, formatDate } from '../index'
 import getErrorId from './helper'
 
 const ERROR_FORMAT_ID = 'form.errors.dateFormat'
@@ -8,6 +8,15 @@ const ERROR_RANGE_ID = 'form.errors.dateRange'
 
 function test (value, params) {
   return getErrorId(date(params)(value))
+}
+
+function testParse (date, strDate, format, ymd) {
+  let t = parseDate(strDate, format, ymd).getTime()
+  return date ? date.getTime() === t : t !== t // "t !== t" => invalid date (getTime returns NaN)
+}
+
+function testFormat (strDate, date, format, ymd) {
+  return strDate == formatDate(date, format, ymd)
 }
 
 describe('Validator: date', function() {
@@ -68,5 +77,93 @@ describe('Validator: date', function() {
     assert.ok(!test('01/01/2017',  { format: 'mm/dd/yyyy', '<=': new Date(2017, 0) }))
     assert.ok(!test('06/01/2016',  { format: 'mm/dd/yyyy', '>': new Date(2016, 0), '<=': new Date(2017, 0) }))
     assert.ok(!test('01/01/2017',  { format: 'mm/dd/yyyy', '>': new Date(2016, 0), '<=': new Date(2017, 0) }))
+  })
+})
+
+describe('parse date', function() {
+  it('should be valid', function() {
+    assert.ok(testParse(new Date(2017, 11, 31), '12/31/2017', 'mm/dd/yyyy'))
+    assert.ok(testParse(new Date(2016,  1, 29), '02/29/2016', 'mm/dd/yyyy'))
+    assert.ok(testParse(new Date(2017, 11, 31), '31/12/2017', 'dd/mm/yyyy'))
+    assert.ok(testParse(new Date(2016,  1, 29), '29/02/2016', 'dd/mm/yyyy'))
+    assert.ok(testParse(new Date(2016,  1, 20), '0020/0002/002016', 'dddd/mmmm/yyyyyy'))
+    assert.ok(testParse(new Date(2016, 11, 12), '12/12/16',    'mm/dd/yy'))
+    assert.ok(testParse(new Date(1980, 11, 12), '12/12/80',    'mm/dd/yy'))
+    assert.ok(testParse(new Date(2016,  0,  1), '2016/01',     'yyyy/mm'))
+    assert.ok(testParse(new Date(2016,  0,  1), '2016/01',     'yyyy/dd'))
+    assert.ok(testParse(new Date(1970, 11,  1), '12/01',       'mm/dd'))
+    
+    assert.ok(testParse(new Date(2017, 11, 31), '12/31/2017', 'xx/jj/aaaa', 'axj'))
+    assert.ok(testParse(new Date(2016,  1, 29), '02/29/2016', 'xx/jj/aaaa', 'axj'))
+    assert.ok(testParse(new Date(2017, 11, 31), '31/12/2017', 'jj/xx/aaaa', 'axj'))
+    assert.ok(testParse(new Date(2016,  1, 29), '29/02/2016', 'jj/xx/aaaa', 'axj'))
+    assert.ok(testParse(new Date(2016,  1, 20), '0020/0002/002016', 'jjjj/xxxx/aaaaaa', 'axj'))
+    assert.ok(testParse(new Date(2016, 11, 12), '12/12/16',    'xx/jj/aa', 'axj'))
+    assert.ok(testParse(new Date(1980, 11, 12), '12/12/80',    'xx/jj/aa', 'axj'))
+    assert.ok(testParse(new Date(2016,  0,  1), '2016/01',     'aaaa/xx',  'axj'))
+    assert.ok(testParse(new Date(2016,  0,  1), '2016/01',     'aaaa/jj',  'axj'))
+    assert.ok(testParse(new Date(1970, 11,  1), '12/01',       'xx/jj',    'axj'))
+  })
+  it('should be invalid', function() {
+    assert.ok(testParse(null, '',            'mm/dd/yyyy'))
+    assert.ok(testParse(null, '12122016',    'mm/dd/yyyy'))
+    assert.ok(testParse(null, '12-12-2016',  'mm/dd/yyyy'))
+    assert.ok(testParse(null, '12/12//2016', 'mm/dd/yyyy'))
+    assert.ok(testParse(null, '12/12//16',   'mm/dd/yyyy'))
+    assert.ok(testParse(null, '12/12//16',   'mm/dd'     ))
+    assert.ok(testParse(null, '02/29/2015',  'mm/dd/yyyy'))
+    assert.ok(testParse(null, '13/20/2015',  'mm/dd/yyyy'))
+    assert.ok(testParse(null, '00/10/2015',  'mm/dd/yyyy'))
+    assert.ok(testParse(null, '01/00/2015',  'mm/dd/yyyy'))
+
+    assert.ok(testParse(null, '',            'xx/jj/aaaa', 'axj'))
+    assert.ok(testParse(null, '12122016',    'xx/jj/aaaa', 'axj'))
+    assert.ok(testParse(null, '12-12-2016',  'xx/jj/aaaa', 'axj'))
+    assert.ok(testParse(null, '12/12//2016', 'xx/jj/aaaa', 'axj'))
+    assert.ok(testParse(null, '12/12//16',   'xx/jj/aaaa', 'axj'))
+    assert.ok(testParse(null, '12/12//16',   'xx/jj'     , 'axj'))
+    assert.ok(testParse(null, '02/29/2015',  'xx/jj/aaaa', 'axj'))
+    assert.ok(testParse(null, '13/20/2015',  'xx/jj/aaaa', 'axj'))
+    assert.ok(testParse(null, '00/10/2015',  'xx/jj/aaaa', 'axj'))
+    assert.ok(testParse(null, '01/00/2015',  'xx/jj/aaaa', 'axj'))
+  })
+})
+
+describe('format date', function() {
+  it('should be valid', function() {
+    assert.ok(testFormat('',                 new Date(2017, 11, 31), ''))
+    assert.ok(testFormat('12/31/2017',       new Date(2017, 11, 31), 'mm/dd/yyyy'))
+    assert.ok(testFormat('02/29/2016',       new Date(2016,  1, 29), 'mm/dd/yyyy'))
+    assert.ok(testFormat('31/12/2017',       new Date(2017, 11, 31), 'dd/mm/yyyy'))
+    assert.ok(testFormat('29/02/2016',       new Date(2016,  1, 29), 'dd/mm/yyyy'))
+    assert.ok(testFormat('0020/0002/002016', new Date(2016,  1, 20), 'dddd/mmmm/yyyyyy'))
+    assert.ok(testFormat('12/12/16',         new Date(2016, 11, 12), 'mm/dd/yy'))
+    assert.ok(testFormat('12/12/80',         new Date(1980, 11, 12), 'mm/dd/yy'))
+    assert.ok(testFormat('2016/01',          new Date(2016,  0,  1), 'yyyy/mm'))
+    assert.ok(testFormat('2016/01',          new Date(2016,  0,  1), 'yyyy/dd'))
+    assert.ok(testFormat('12/01',            new Date(1970, 11,  1), 'mm/dd'))
+
+    assert.ok(testFormat('',                 new Date(2017, 11, 31), '',                 'axj'))
+    assert.ok(testFormat('12/31/2017',       new Date(2017, 11, 31), 'xx/jj/aaaa',       'axj'))
+    assert.ok(testFormat('02/29/2016',       new Date(2016,  1, 29), 'xx/jj/aaaa',       'axj'))
+    assert.ok(testFormat('31/12/2017',       new Date(2017, 11, 31), 'jj/xx/aaaa',       'axj'))
+    assert.ok(testFormat('29/02/2016',       new Date(2016,  1, 29), 'jj/xx/aaaa',       'axj'))
+    assert.ok(testFormat('0020/0002/002016', new Date(2016,  1, 20), 'jjjj/xxxx/aaaaaa', 'axj'))
+    assert.ok(testFormat('12/12/16',         new Date(2016, 11, 12), 'xx/jj/aa',         'axj'))
+    assert.ok(testFormat('12/12/80',         new Date(1980, 11, 12), 'xx/jj/aa',         'axj'))
+    assert.ok(testFormat('2016/01',          new Date(2016,  0,  1), 'aaaa/xx',          'axj'))
+    assert.ok(testFormat('2016/01',          new Date(2016,  0,  1), 'aaaa/jj',          'axj'))
+    assert.ok(testFormat('12/01',            new Date(1970, 11,  1), 'xx/jj',            'axj'))
+  })
+  it('should be invalid', function() {
+    assert.ok(testFormat(null, new Date(NaN), ''))
+    assert.ok(testFormat(null, new Date(NaN), 'mm/dd/yyyy'))
+    assert.ok(testFormat(null, null, 'mm/dd/yyyy'))
+    assert.ok(testFormat(null, 0, 'mm/dd/yyyy'))
+    assert.ok(testFormat(null, 'new date', 'mm/dd/yyyy'))
+    assert.ok(testFormat(null, {}, 'mm/dd/yyyy'))
+
+    assert.ok(testFormat(null, new Date(NaN), '', 'axj'))
+    assert.ok(testFormat(null, new Date(NaN), 'xx/jj/aaaa', 'axj'))
   })
 })

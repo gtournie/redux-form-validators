@@ -15,6 +15,8 @@ const DATE_METHODS = {
 
 const PARSE_REG = /[ymd]+/g
 
+const TO_STRING = ({}).toString;
+
 export default function date ({
       format,
       ymd,
@@ -29,14 +31,10 @@ export default function date ({
       allowBlank=DEFAULT_ALLOW_BLANK
     }) {
   msg = formatMessage(msg || message)
-  ymd = ymd || 'ymd'
-  let reverseMapping = { [ymd.charAt(0)]: 'y', [ymd.charAt(1)]: 'm', [ymd.charAt(2)]: 'd' }
-  let normFormat = format.replace(new RegExp(`[${ymd}]`, 'g'), function(sym) {
-    return reverseMapping[sym]
-  })
+  let normFormat = normalizeFormat(format, ymd)
 
   return prepare(ifCond, unless, allowBlank, function(value) {
-    let date = checkDate(value, normFormat)
+    let date = normParseDate(value, normFormat, false)
     if ('wrongFormat' === date) {
       return msg || (
         <FormattedMessage id="form.errors.dateFormat"
@@ -50,26 +48,40 @@ export default function date ({
     if (date) {
       let date2
       if (eq && +date !== +(date2 = getDate(eq))) {
-        return msg || dateRangeError({ op: '=', date: formatDate(date2, normFormat) })
+        return msg || dateRangeError({ op: '=', date: normFormatDate(date2, normFormat) })
       }
       if (diff && +date === +(date2 = getDate(diff))) {
-        return msg || dateRangeError({ op: '!=', date: formatDate(date2, normFormat) })
+        return msg || dateRangeError({ op: '!=', date: normFormatDate(date2, normFormat) })
       }
       if (gt && date <= (date2 = getDate(gt))) {
-        return msg || dateRangeError({ op: '>', date: formatDate(date2, normFormat) })
+        return msg || dateRangeError({ op: '>', date: normFormatDate(date2, normFormat) })
       }
       if (gte && date < (date2 = getDate(gte))) {
-        return msg || dateRangeError({ op: '>=', date: formatDate(date2, normFormat) })
+        return msg || dateRangeError({ op: '>=', date: normFormatDate(date2, normFormat) })
       }
       if (lt && date >= (date2 = getDate(lt))) {
-        return msg || dateRangeError({ op: '<', date: formatDate(date2, normFormat) })
+        return msg || dateRangeError({ op: '<', date: normFormatDate(date2, normFormat) })
       }
       if (lte && date > (date2 = getDate(lte))) {
-        return msg || dateRangeError({ op: '<=', date: formatDate(date2, normFormat) })
+        return msg || dateRangeError({ op: '<=', date: normFormatDate(date2, normFormat) })
       }
     }
   })
 }
+
+export function parseDate (strDate, format, ymd) {
+  return normParseDate(strDate, normalizeFormat(format, ymd), true)
+}
+
+export function formatDate (date, format, ymd) {
+  if (!(date instanceof Date) && '[object Date]' !== TO_STRING.call(date)) {
+    return null;
+  }
+  let t = new Date(date).getTime();
+  return t !== t ? null : normFormatDate(date, normalizeFormat(format, ymd))
+}
+
+
 
 function dateRangeError (values) {
   return formatMessage({ id: 'form.errors.dateRange', values })
@@ -89,9 +101,21 @@ function getDate (d) {
 
 
 // FORMAT
-function formatDate (date, format) {
+function normFormatDate (date, format) {
   return format.replace(PARSE_REG, function(m) {
-    return padding(DATE_METHODS[m.charAt(0)](date), m.length)
+    let sym = m.charAt(0)
+    let len = m.length
+    let padded = padding(DATE_METHODS[sym](date), len)
+    return 'y' === sym ? padded.slice(padded.length - len, padded.length) : padded;
+  })
+}
+function normalizeFormat (format, ymd) {
+  if (!ymd) {
+    return format
+  }
+  let reverseMapping = { [ymd.charAt(0)]: 'y', [ymd.charAt(1)]: 'm', [ymd.charAt(2)]: 'd' }
+  return format.replace(new RegExp(`[${ymd}]`, 'g'), function(sym) {
+    return reverseMapping[sym]
   })
 }
 function padding (num, pad) {
@@ -100,7 +124,7 @@ function padding (num, pad) {
 
 
 // PARSE
-function checkDate (value, format) {
+function normParseDate (value, format, parse) {
   let order = []
   let reg = new RegExp('^' + format.replace(PARSE_REG, function(m) {
     order.push(m.charAt(0))
@@ -118,9 +142,9 @@ function checkDate (value, format) {
       flags.y = currentCentury(flags.y >= 69 ? -1 : 0) * 100 + flags.y
     }
     let date = new Date(flags.y, flags.m - 1, flags.d)
-    return checkFlags(date, flags) ? (comparable ? date : null) : 'invalid'
+    return checkFlags(date, flags) ? (comparable || parse ? date : null) : (parse ? new Date(NaN) : 'invalid')
   }
-  return 'wrongFormat'
+  return parse ? new Date(NaN) : 'wrongFormat'
 }
 
 function currentCentury (add) {

@@ -6,15 +6,11 @@ import { formatMessage, prepare, DEFAULT_ALLOW_BLANK } from './helpers'
 const DEFAULT_CASE_SENSITIVE = true
 
 
-export function inclusion (options) {
+export default function inclusion (options) {
   return inclusionExclusion(true, options)
 }
 
-export function exclusion (options) {
-  return inclusionExclusion(false, options)
-}
-
-function inclusionExclusion (inclusion, {
+export function inclusionExclusion (inclusion, {
       'in': inc, within,
       caseSensitive,
       message, msg,
