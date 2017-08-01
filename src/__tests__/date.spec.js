@@ -63,8 +63,9 @@ describe('Validator: date', function() {
     assert.ok(!test('29/02/2016',  { format: 'jj/mm/aaaa', ymd: 'amj' }))
 
     let d = new Date()
+    d.setDate(d.getDate() - 1)
     let yesterday = ('00' + (d.getMonth() + 1)).slice(-2) + '/' +
-        ('00' + (d.getDate() - 1)).slice(-2) + '/' +
+        ('00' + d.getDate()).slice(-2) + '/' +
         d.getFullYear()
 
     assert.ok(!test('01/01/2017',  { format: 'mm/dd/yyyy', '=': new Date(2017, 0, 1) }))
