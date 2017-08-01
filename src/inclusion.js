@@ -1,14 +1,16 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { formatMessage, prepare, DEFAULT_ALLOW_BLANK } from './helpers'
+import { formatMessage, prepare, memoize, DEFAULT_ALLOW_BLANK } from './helpers'
 
 
 const DEFAULT_CASE_SENSITIVE = true
 
 
-export default function inclusion (options) {
+let inclusion = memoize(function (options) {
   return inclusionExclusion(true, options)
-}
+})
+
+export default inclusion
 
 export function inclusionExclusion (inclusion, {
       'in': inc, within,

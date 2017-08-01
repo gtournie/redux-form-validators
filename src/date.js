@@ -1,6 +1,6 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { formatMessage, prepare, trunc, DEFAULT_ALLOW_BLANK } from './helpers'
+import { formatMessage, prepare, trunc, memoize, DEFAULT_ALLOW_BLANK } from './helpers'
 
 
 const DATE_RANGE_ERROR = (
@@ -17,7 +17,7 @@ const PARSE_REG = /(y+|m+|d+)/g
 
 const TO_STRING = ({}).toString;
 
-export default function date ({
+let date = memoize(function ({
       format,
       ymd,
       '=': eq,
@@ -67,7 +67,9 @@ export default function date ({
       }
     }
   })
-}
+})
+
+export default date
 
 export function parseDate (strDate, format, ymd) {
   return normParseDate(strDate, normalizeFormat(format, ymd), true)

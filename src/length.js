@@ -1,9 +1,9 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { formatMessage, prepare, isNumber, DEFAULT_ALLOW_BLANK } from './helpers'
+import { formatMessage, prepare, isNumber, memoize, DEFAULT_ALLOW_BLANK } from './helpers'
 
 
-export default function length ({
+let length = memoize(function ({
       '=': equal, is,
       max, maximum,
       min, minimum,
@@ -46,4 +46,6 @@ export default function length ({
       )
     }
   })
-}
+})
+
+export default length

@@ -7,7 +7,8 @@ export var REG_URL = /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10
 // To be extracted by react-intl
 const URL_ERROR = (<FormattedMessage id="form.errors.url" defaultMessage="is not a valid URL" />)
 
-export default function url (options) {
+// Uses "format" internally which is already memoized
+let url = function (options) {
   options = Object.assign({}, options)
   var reg = REG_URL
   var protocols = options.protocols || options.protocol
@@ -16,3 +17,5 @@ export default function url (options) {
   }
   return regFormat(options, reg, URL_ERROR)
 }
+
+export default url

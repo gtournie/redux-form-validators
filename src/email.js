@@ -7,7 +7,10 @@ export var REG_EMAIL = /^[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_
 // To be extracted by react-intl
 let EMAIL_ERROR = (<FormattedMessage id="form.errors.email" defaultMessage="is not a valid email" />)
 
-export default function email (options) {
+// Uses "format" internally which is already memoized
+let email = function (options) {
   options = Object.assign({}, options)
   return regFormat(options, REG_EMAIL, EMAIL_ERROR)
 }
+
+export default email

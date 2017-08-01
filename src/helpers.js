@@ -37,3 +37,33 @@ export function formatMessage (msg) {
   if (null == msg) return null
   return 'string' === typeof msg ? <FormattedMessage id={msg} /> : <FormattedMessage {...(msg.props || msg)} />
 }
+
+export function memoize (func) {
+  if (!func.cache) {
+    func.cache = {}
+  }
+  return function(options) {
+    let key = stringify(options)
+    return HAS_PROP.call(func.cache, key) ? func.cache[key] : (func.cache[key] = func(options))
+  }
+}
+
+// private
+const HAS_PROP = ({}).hasOwnProperty
+const TO_STRING = ({}).toString
+
+function stringify (options) {
+  let arr = []
+  let value
+  for (var k in options) {
+    if (HAS_PROP.call(options, k)) {
+      value = options[k]
+      arr.push(k, React.isValidElement(value) ? stringify(value.props) : isObject(value) ? stringify(value) :  value)
+    }
+  }
+  return arr.toString()
+}
+
+function isObject(obj) {
+  return 'object' === typeof obj && '[object Object]' === TO_STRING.call(obj) && null !== obj;
+}

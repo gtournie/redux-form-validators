@@ -1,5 +1,4 @@
 import React from 'react'
-import { FormattedMessage } from 'react-intl'
 
 import absence from './absence'
 import acceptance from './acceptance'
@@ -37,6 +36,4 @@ export {
   DEFAULT_ALLOW_BLANK
 }
 
-// TODO:
-// credit card
 

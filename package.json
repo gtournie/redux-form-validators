@@ -1,9 +1,8 @@
 {
   "name": "redux-form-validators",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Simple validations with redux-form",
-  "main": "lib/index.js",
-  "jsnext:main": "./src/index.js",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gtournie/redux-form-validators.git"
@@ -26,7 +25,7 @@
   "peerDependencies": {
     "react-redux": "^3.0.0 || ^4.0.0 || ^5.0.0",
     "redux": "^3.3.1",
-    "redux-form": "^6.0.0"
+    "redux-form": "^6.0.0 || ^7.0.0"
   },
   "scripts": {
     "start": "webpack-dev-server --config ./webpack/example.js",
@@ -76,7 +75,7 @@
     "react-redux": "^5.0.2",
     "reactstrap": "^4.0.1",
     "redux": "^3.6.0",
-    "redux-form": "^6.4.3",
+    "redux-form": "^7.0.0",
     "resolve-url-loader": "^1.6.1",
     "rifraf": "^2.0.2",
     "rimraf": "^2.4.3",

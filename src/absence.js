@@ -1,9 +1,9 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { formatMessage, prepare } from './helpers'
+import { formatMessage, prepare, memoize } from './helpers'
 
 
-export default function absence ({ message, msg, 'if': ifCond, unless }={}) {
+let absence = memoize(function ({ message, msg, 'if': ifCond, unless }={}) {
   msg = formatMessage(msg || message)
     || <FormattedMessage id="form.errors.absence" defaultMessage="must be blank" />
 
@@ -12,4 +12,6 @@ export default function absence ({ message, msg, 'if': ifCond, unless }={}) {
       return msg
     }
   })
-}
+})
+
+export default absence

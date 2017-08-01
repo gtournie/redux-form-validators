@@ -1,9 +1,9 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { formatMessage, prepare } from './helpers'
+import { formatMessage, prepare, memoize } from './helpers'
 
 
-export default function presence ({ message, msg, 'if': ifCond, unless }={}) {
+let presence = memoize(function ({ message, msg, 'if': ifCond, unless }={}) {
   msg = formatMessage(msg || message)
     || <FormattedMessage id="form.errors.presence" defaultMessage="is required" />
 
@@ -12,6 +12,7 @@ export default function presence ({ message, msg, 'if': ifCond, unless }={}) {
       return msg
     }
   })
-}
+})
 
+export default presence
 

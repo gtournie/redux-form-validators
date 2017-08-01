@@ -1,10 +1,10 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { formatMessage, prepare } from './helpers'
+import { formatMessage, prepare, memoize } from './helpers'
 
 const DEFAULT_CASE_SENSITIVE = true
 
-export default function confirmation ({
+let confirmation = memoize(function ({
       field,
       fieldLabel,
       caseSensitive,
@@ -27,4 +27,6 @@ export default function confirmation ({
       )
     }
   })
-}
+})
+
+export default confirmation

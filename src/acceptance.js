@@ -1,11 +1,11 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { formatMessage, prepare } from './helpers'
+import { formatMessage, prepare, memoize } from './helpers'
 
 export const ACCEPT = ['1', 'true']
 
 
-export default function acceptance ({ accept=ACCEPT, message, msg, 'if': ifCond, unless }={}) {
+let acceptance = memoize(function ({ accept=ACCEPT, message, msg, 'if': ifCond, unless }={}) {
   msg = formatMessage(msg || message)
      || <FormattedMessage id="form.errors.acceptance" defaultMessage="must be accepted" />
 
@@ -16,4 +16,6 @@ export default function acceptance ({ accept=ACCEPT, message, msg, 'if': ifCond,
       return msg
     }
   })
-}
+})
+
+export default acceptance

@@ -1,8 +1,10 @@
 import React from 'react'
 import { inclusionExclusion } from './inclusion'
+import { memoize } from './helpers'
 
 
-export default function exclusion (options) {
+let exclusion = memoize(function (options) {
   return inclusionExclusion(false, options)
-}
+})
 
+export default exclusion

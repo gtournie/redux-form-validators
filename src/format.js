@@ -1,11 +1,11 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { formatMessage, prepare, DEFAULT_ALLOW_BLANK } from './helpers'
+import { formatMessage, prepare, memoize, DEFAULT_ALLOW_BLANK } from './helpers'
 
 
 export const INVALID_MSG = (<FormattedMessage id="form.errors.invalid" defaultMessage="is invalid" />)
 
-export default function format ({ 'with': wit, without, message, msg, 'if': ifCond, unless, allowBlank=DEFAULT_ALLOW_BLANK }) {
+let format = memoize(function ({ 'with': wit, without, message, msg, 'if': ifCond, unless, allowBlank=DEFAULT_ALLOW_BLANK }) {
   msg = formatMessage(msg || message)
 
   return prepare(ifCond, unless, allowBlank, function (value) {
@@ -13,4 +13,6 @@ export default function format ({ 'with': wit, without, message, msg, 'if': ifCo
       return msg || INVALID_MSG
     }
   })
-}
+})
+
+export default format

@@ -1,9 +1,9 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { formatMessage, prepare, isNumber, trunc, DEFAULT_ALLOW_BLANK } from './helpers'
+import { formatMessage, prepare, isNumber, trunc, memoize, DEFAULT_ALLOW_BLANK } from './helpers'
 
 
-export default function numericality ({
+let numericality = memoize(function ({
       int, integer,
       even,
       odd,
@@ -84,6 +84,6 @@ export default function numericality ({
       return msg || (<FormattedMessage id="form.errors.odd" defaultMessage="must be odd" />)
     }
   })
-}
+})
 
-
+export default numericality
