@@ -140,6 +140,8 @@ describe('format date', function() {
     assert.ok(testFormat('12/12/16',         new Date(2016, 11, 12), 'mm/dd/yy'))
     assert.ok(testFormat('12/12/80',         new Date(1980, 11, 12), 'mm/dd/yy'))
     assert.ok(testFormat('2016/01',          new Date(2016,  0,  1), 'yyyy/mm'))
+    assert.ok(testFormat('1601',             new Date(2016,  0,  1), 'yymm'))
+    assert.ok(testFormat('0116',             new Date(2016,  0,  1), 'mmyy'))
     assert.ok(testFormat('2016/01',          new Date(2016,  0,  1), 'yyyy/dd'))
     assert.ok(testFormat('12/01',            new Date(1970, 11,  1), 'mm/dd'))
 
@@ -152,6 +154,8 @@ describe('format date', function() {
     assert.ok(testFormat('12/12/16',         new Date(2016, 11, 12), 'xx/jj/aa',         'axj'))
     assert.ok(testFormat('12/12/80',         new Date(1980, 11, 12), 'xx/jj/aa',         'axj'))
     assert.ok(testFormat('2016/01',          new Date(2016,  0,  1), 'aaaa/xx',          'axj'))
+    assert.ok(testFormat('1601',             new Date(2016,  0,  1), 'yymm',             'axj'))
+    assert.ok(testFormat('0116',             new Date(2016,  0,  1), 'mmyy',             'axj'))
     assert.ok(testFormat('2016/01',          new Date(2016,  0,  1), 'aaaa/jj',          'axj'))
     assert.ok(testFormat('12/01',            new Date(1970, 11,  1), 'xx/jj',            'axj'))
   })

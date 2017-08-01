@@ -13,7 +13,7 @@ const DATE_METHODS = {
   d: function(d) { return d.getDate() }
 }
 
-const PARSE_REG = /[ymd]+/g
+const PARSE_REG = /(y+|m+|d+)/g
 
 const TO_STRING = ({}).toString;
 
