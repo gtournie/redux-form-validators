@@ -1,17 +1,21 @@
-import React from 'react'
-import { formatMessage, prepare, memoize } from './helpers'
-import { INVALID_MSG } from './format'
+import messages from './messages'
+import Validators from './index'
+import { toObjectMsg, formatMsg, prepare, memoize } from './helpers'
 
 
 export default function addValidator ({ validator, defaultMessage, defaultMsg }) {
-  defaultMsg = formatMessage(defaultMsg || defaultMessage) || INVALID_MSG
+  defaultMsg = toObjectMsg(defaultMsg || defaultMessage) || messages.invalid
 
   return memoize(function (options={}) {
-    let msg = formatMessage(options.msg || options.message) || defaultMsg
+    let msg = toObjectMsg(options.msg || options.message) || defaultMsg
 
     return prepare(options.if, options.unless, options.allowBlank, function (value, allValues) {
-      if (!validator(options, value, allValues)) {
-        return msg
+      let result = validator(options, value, allValues)
+      if ('boolean' !== typeof result) {
+        return result
+      }
+      if (!result) {
+        return Validators.formatMessage(msg)
       }
     })
   })

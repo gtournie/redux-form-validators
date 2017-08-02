@@ -1,15 +1,14 @@
-import React from 'react'
-import { FormattedMessage } from 'react-intl'
-import { formatMessage, prepare, memoize } from './helpers'
+import messages from './messages'
+import Validators from './index'
+import { toObjectMsg, prepare, memoize } from './helpers'
 
 
 let presence = memoize(function ({ message, msg, 'if': ifCond, unless }={}) {
-  msg = formatMessage(msg || message)
-    || <FormattedMessage id="form.errors.presence" defaultMessage="is required" />
+  msg = toObjectMsg(msg || message) || messages.presence
 
   return prepare(ifCond, unless, false, function (value) {
     if (!value.trim()) {
-      return msg
+      return Validators.formatMessage(msg)
     }
   })
 })

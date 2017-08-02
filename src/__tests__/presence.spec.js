@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { presence, required } from '../index'
+import Validators, { presence, required } from '../index'
 import getErrorId from './helper'
 
 const ERROR_ID = 'form.errors.presence'
@@ -21,5 +21,15 @@ describe('Validator: presence', function() {
     assert.ok(!test('str'))
     assert.ok(!test(' abc '))
     assert.ok(!getErrorId(required()(' abc ')))
+  })
+  it('should use formatMessage', function() {
+    let defaultValue = Validators.formatMessage
+
+    Validators.formatMessage = function(msg) {
+      return Object.assign({}, msg, { id: msg.id + '2' })
+    }
+    assert.equal(ERROR_ID + '2', test(''))
+
+    Validators.formatMessage = defaultValue;
   })
 })

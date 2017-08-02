@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { length } from '../index'
+import Validators, { length } from '../index'
 import getErrorId from './helper'
 
 const ERROR_WRONG_LENGTH_ID = 'form.errors.wrongLength'
@@ -48,5 +48,17 @@ describe('Validator: length', function() {
     assert.ok(!test('',       { '=': 0 }))
     assert.ok(!test('foobar', { '=': 6 }))
     assert.ok(!test('foobar', { is: 6 }))
+  })
+  it('should use formatMessage', function() {
+    let defaultValue = Validators.formatMessage
+
+    Validators.formatMessage = function(msg) {
+      return Object.assign({}, msg, { id: msg.id + '2' })
+    }
+    assert.equal(ERROR_TOO_SHORT_ID + '2', test('foobar', { min: 7 }))
+    assert.equal(ERROR_TOO_LONG_ID + '2', test('f',       { max: 0 }))
+    assert.equal(ERROR_WRONG_LENGTH_ID + '2', test('foobar', { is: 7 }))
+
+    Validators.formatMessage = defaultValue;
   })
 })

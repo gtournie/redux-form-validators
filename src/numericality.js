@@ -1,6 +1,7 @@
-import React from 'react'
-import { FormattedMessage } from 'react-intl'
-import { formatMessage, prepare, isNumber, trunc, memoize, DEFAULT_ALLOW_BLANK } from './helpers'
+import messages from './messages'
+import Validators from './index'
+import { toObjectMsg, prepare, isNumber, trunc, memoize } from './helpers'
+import {addMsgValues} from "./helpers";
 
 
 let numericality = memoize(function ({
@@ -15,10 +16,10 @@ let numericality = memoize(function ({
       '<=': lessOrEqual, lessThanOrEqualTo,
       message, msg,
       'if': ifCond, unless,
-      allowBlank=DEFAULT_ALLOW_BLANK
+      allowBlank
     }={}) {
 
-  msg            = formatMessage(msg || message)
+  msg            = toObjectMsg(msg || message)
 
   int            = int || integer
   equal          = isNumber(equal)          ? equal          : equalTo
@@ -30,58 +31,34 @@ let numericality = memoize(function ({
 
   return prepare(ifCond, unless, allowBlank, function (value) {
     if (!isNumber(value)) {
-      return msg || (<FormattedMessage id="form.errors.notANumber" defaultMessage="is not a number" />)
+      return Validators.formatMessage(msg || messages.notANumber)
     }
     if (int && (+value % 1)) {
-      return msg || (<FormattedMessage id="form.errors.notANumber" />)
+      return Validators.formatMessage(msg || messages.notANumber)
     }
     if (isNumber(equal) && +value !== +equal) {
-      return msg || (
-        <FormattedMessage id="form.errors.equalTo"
-          defaultMessage="must be equal to {count, number}"
-          values={{ count: equal }} />
-      )
+      return Validators.formatMessage(msg || addMsgValues(messages.equalTo, { count: equal }))
     }
     if (isNumber(diff) && +value === +diff) {
-      return msg || (
-        <FormattedMessage id="form.errors.otherThan"
-          defaultMessage="must be other than {count, number}"
-          values={{ count: diff }} />
-      )
+      return Validators.formatMessage(msg || addMsgValues(messages.otherThan, { count: diff }))
     }
     if (isNumber(greater) && +value <= +greater) {
-      return msg || (
-        <FormattedMessage id="form.errors.greaterThan"
-          defaultMessage="must be greater than {count, number}"
-          values={{ count: greater }} />
-      )
+      return Validators.formatMessage(msg || addMsgValues(messages.greaterThan, { count: greater }))
     }
     if (isNumber(greaterOrEqual) && +value < +greaterOrEqual) {
-      return msg || (
-        <FormattedMessage id="form.errors.greaterThanOrEqualTo"
-          defaultMessage="must be greater than or equal to {count, number}"
-          values={{ count: greaterOrEqual }} />
-      )
+      return Validators.formatMessage(msg || addMsgValues(messages.greaterThanOrEqualTo, { count: greaterOrEqual }))
     }
     if (isNumber(less) && +value >= +less) {
-      return msg || (
-        <FormattedMessage id="form.errors.lessThan"
-          defaultMessage="must be less than {count, number}"
-          values={{ count: less }} />
-      )
+      return Validators.formatMessage(msg || addMsgValues(messages.lessThan, { count: less }))
     }
     if (isNumber(lessOrEqual) && +value > +lessOrEqual) {
-      return msg || (
-        <FormattedMessage id="form.errors.lessThanOrEqualTo"
-          defaultMessage="must be less than or equal to {count, number}"
-          values={{ count: lessOrEqual }} />
-      )
+      return Validators.formatMessage(msg || addMsgValues(messages.lessThanOrEqualTo, { count: lessOrEqual }))
     }
     if (even && (trunc(+value) % 2)) {
-      return msg || (<FormattedMessage id="form.errors.even" defaultMessage="must be even" />)
+      return Validators.formatMessage(msg || messages.even)
     }
     if (odd && !(trunc(+value) % 2)) {
-      return msg || (<FormattedMessage id="form.errors.odd" defaultMessage="must be odd" />)
+      return Validators.formatMessage(msg || messages.odd)
     }
   })
 })

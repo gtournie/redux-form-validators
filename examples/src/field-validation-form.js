@@ -1,18 +1,18 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form';
-import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
-import { acceptance, date, required, email, length, numericality, confirmation } from 'redux-form-validators';
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import { reduxForm, Field } from 'redux-form'
+import { connect } from 'react-redux'
+import { FormattedMessage } from 'react-intl'
+import { acceptance, date, required, email, length, numericality, confirmation, addValidator } from 'redux-form-validators'
 
-import { Col, Row, Button, Input, Form, FormFeedback, FormGroup, FormText, Label } from 'reactstrap';
+import { Col, Row, Button, Input, Form, FormFeedback, FormGroup, FormText, Label } from 'reactstrap'
 
 
-function renderInputField({ hint, input, label, type, meta: { touched, error }={}, ...inputProps }) {
-  inputProps = {...input, ...inputProps };
-  let feedback = touched && error;
-  let status   = touched && error ? 'danger' :  '';
-  let htmlId   = inputProps.id || inputProps.name;
+function renderInputField ({ hint, input, label, type, meta: { touched, error }={}, ...inputProps }) {
+  inputProps = {...input, ...inputProps }
+  let feedback = touched && error
+  let status   = touched && error ? 'danger' :  ''
+  let htmlId   = inputProps.id || inputProps.name
 
   return (
     <FormGroup color={status}>
@@ -24,11 +24,11 @@ function renderInputField({ hint, input, label, type, meta: { touched, error }={
   )
 }
 
-function renderCheckField({ hint, input, label, type, meta: { touched, error, warning }={}, ...inputProps }) {
-  inputProps = {...input, ...inputProps };
-  let feedback = touched && error;
-  let status   = touched && error ? 'danger' :  '';
-  let htmlId   = inputProps.id || inputProps.name;
+function renderCheckField ({ hint, input, label, type, meta: { touched, error, warning }={}, ...inputProps }) {
+  inputProps = {...input, ...inputProps }
+  let feedback = touched && error
+  let status   = touched && error ? 'danger' :  ''
+  let htmlId   = inputProps.id || inputProps.name
 
   return (
     <FormGroup color={status}>
@@ -44,15 +44,15 @@ function renderCheckField({ hint, input, label, type, meta: { touched, error, wa
 
 
 let twentyYearsAgo = function() {
-  let d = new Date();
-  d.setFullYear(d.getFullYear() - 20);
-  return d;
-};
+  let d = new Date()
+  d.setFullYear(d.getFullYear() - 20)
+  return d
+}
 
 
 class FieldValidationForm extends Component {
   handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
   }
 
   render() {
@@ -107,7 +107,7 @@ class FieldValidationForm extends Component {
 }
 
 
-FieldValidationForm = reduxForm({ form: 'fieldValidationForm' })(FieldValidationForm);
+FieldValidationForm = reduxForm({ form: 'fieldValidationForm' })(FieldValidationForm)
 
-export default FieldValidationForm;
+export default FieldValidationForm
 

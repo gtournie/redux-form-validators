@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { exclusion } from '../index'
+import Validators, { exclusion } from '../index'
 import getErrorId from './helper'
 
 const ERROR_ID = 'form.errors.exclusion'
@@ -22,5 +22,26 @@ describe('Validator: exclusion', function() {
     assert.ok(!test('foo', { within: 'foobar' }))
     assert.ok(!test('foo', { within: ['FOO'], caseSensitive: true }))
     assert.ok(!test('FOO', { within: ['bar'], caseSensitive: false }))
+  })
+  it('should use default caseSensitive option', function() {
+    let defaultValue = Validators.defaultOptions.caseSensitive
+
+    Validators.defaultOptions.caseSensitive = true
+    assert.ok(!test('foo', { within: 'FOO' }))
+
+    Validators.defaultOptions.caseSensitive = false
+    assert.ok(!test('foo', { within: 'fooo' }))
+
+    Validators.defaultOptions.caseSensitive = defaultValue;
+  })
+  it('should use formatMessage', function() {
+    let defaultValue = Validators.formatMessage
+
+    Validators.formatMessage = function(msg) {
+      return Object.assign({}, msg, { id: msg.id + '2' })
+    }
+    assert.equal(ERROR_ID + '2', test('foo', { within: 'foo' }))
+
+    Validators.formatMessage = defaultValue;
   })
 })

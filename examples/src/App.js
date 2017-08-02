@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { Container, Col, Row } from 'reactstrap';
+import React, { Component } from 'react'
+import { Container, Col, Row } from 'reactstrap'
 
-import FieldValidationForm from './field-validation-form';
-import GeneralValidationForm from './general-validation-form';
+import FieldValidationForm from './field-validation-form'
+import GeneralValidationForm from './general-validation-form'
 
 export default class App extends Component {
   render() {
@@ -19,6 +19,6 @@ export default class App extends Component {
           </Col>
         </Row>
       </Container>
-    );
+    )
   }
 }

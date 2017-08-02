@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { format } from '../index'
+import Validators, { format } from '../index'
 import getErrorId from './helper'
 
 const ERROR_ID = 'form.errors.invalid'
@@ -28,5 +28,15 @@ describe('Validator: format', function() {
     assert.ok(!test('',                 { without: /123/ }))
     assert.ok(!test(12,                 { without: /123/ }))
     assert.ok(!test('foo',              { without: /bar/ }))
+  })
+  it('should use formatMessage', function() {
+    let defaultValue = Validators.formatMessage
+
+    Validators.formatMessage = function(msg) {
+      return Object.assign({}, msg, { id: msg.id + '2' })
+    }
+    assert.equal(ERROR_ID + '2', test(123, { without: /\d+/ }))
+
+    Validators.formatMessage = defaultValue;
   })
 })

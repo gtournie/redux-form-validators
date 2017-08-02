@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { addValidator } from '../index'
+import Validators, { addValidator } from '../index'
 import getErrorId from './helper'
 
 
@@ -22,6 +22,14 @@ const invalidValidator = addValidator({
   }
 })
 
+const digitValidator = addValidator({
+  validator: function(options, value, allValues) {
+    if (options.digits !== value.replace(/[^0-9]/g, '').length) {
+      return { id: 'form.errors.digits' }
+    }
+  }
+})
+
 function test (validator, value, params, allValues) {
   return getErrorId(validator(params)(value, allValues))
 }
@@ -31,6 +39,7 @@ describe('Validator: addValidator', function() {
     assert.equal('form.errors.foo', test(fooValidator, 'bar'))
     assert.equal('form.errors.bar', test(barValidator, 'foo', { msg: 'form.errors.bar' }, { bar: 'foo' }))
     assert.equal('form.errors.invalid', test(invalidValidator, '', { invalid: 'invalid' }))
+    assert.equal('form.errors.digits', test(digitValidator, '1 23', { digits: 4 }))
   })
   it('should be valid', function() {
     assert.ok(!test(fooValidator, 'foo'))
@@ -39,5 +48,16 @@ describe('Validator: addValidator', function() {
     assert.ok(!test(fooValidator, 'bar', { unless: function() { return true } }))
     assert.ok(!test(barValidator, 'bar', {}, { foobar: 'foobar' }))
     assert.ok(!test(invalidValidator, '', { invalid: 'valid' }))
+    assert.ok(!test(digitValidator, '1 2 3 4', { digits: 4 }))
+  })
+  it('should use formatMessage', function() {
+    let defaultValue = Validators.formatMessage
+
+    Validators.formatMessage = function(msg) {
+      return Object.assign({}, msg, { id: msg.id + '2' })
+    }
+    assert.equal('form.errors.foo2', test(fooValidator, 'bar'))
+
+    Validators.formatMessage = defaultValue;
   })
 })

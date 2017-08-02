@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { confirmation } from '../index'
+import Validators, { confirmation } from '../index'
 import getErrorId from './helper'
 
 const ERROR_ID = 'form.errors.confirmation'
@@ -26,5 +26,26 @@ describe('Validator: confirmation', function() {
     assert.ok(!test('VALIDATOR', { caseSensitive: false }))
     assert.ok(!test('valiDator', { caseSensitive: false }))
     assert.ok(!test(123,         { field: 'foo' }, { foo: '123' }))
+  })
+  it('should use default caseSensitive option', function() {
+    let defaultValue = Validators.defaultOptions.caseSensitive
+
+    Validators.defaultOptions.caseSensitive = true
+    assert.ok(!test('validator'))
+
+    Validators.defaultOptions.caseSensitive = false
+    assert.ok(!test('VALIDATOR'))
+
+    Validators.defaultOptions.caseSensitive = defaultValue;
+  })
+  it('should use formatMessage', function() {
+    let defaultValue = Validators.formatMessage
+
+    Validators.formatMessage = function(msg) {
+      return Object.assign({}, msg, { id: msg.id + '2' })
+    }
+    assert.equal(ERROR_ID + '2', test('val'))
+
+    Validators.formatMessage = defaultValue;
   })
 })

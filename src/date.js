@@ -1,11 +1,8 @@
-import React from 'react'
-import { FormattedMessage } from 'react-intl'
-import { formatMessage, prepare, trunc, memoize, DEFAULT_ALLOW_BLANK } from './helpers'
+import messages from './messages'
+import Validators from './index'
+import { toObjectMsg, addMsgValues, prepare, trunc, memoize } from './helpers'
 
 
-const DATE_RANGE_ERROR = (
-  <FormattedMessage id="form.errors.dateRange" defaultMessage="shoud be {op} {date}" />
-)
 
 const DATE_METHODS = {
   y: function(d) { return d.getFullYear() },
@@ -28,54 +25,54 @@ let date = memoize(function ({
       '<=': lte,
       message, msg,
       'if': ifCond, unless,
-      allowBlank=DEFAULT_ALLOW_BLANK
-    }) {
-  msg = formatMessage(msg || message)
-  let normFormat = normalizeFormat(format, ymd)
+      allowBlank
+    }={}) {
+
+  msg = toObjectMsg(msg || message)
 
   return prepare(ifCond, unless, allowBlank, function(value) {
+    let normFormat = normalizeFormat(format, ymd)
     let date = normParseDate(value, normFormat, false)
     if ('wrongFormat' === date) {
-      return msg || (
-        <FormattedMessage id="form.errors.dateFormat"
-            defaultMessage="expected format: {format}"
-            values={{ format: format }} />
-      )
+      return Validators.formatMessage(msg || addMsgValues(messages.dateFormat, { format: format }))
     }
     if ('invalid' === date) {
-      return msg || (<FormattedMessage id="form.errors.dateInvalid" defaultMessage="is not a valid date"/>)
+      return Validators.formatMessage(msg || messages.dateInvalid)
     }
     if (date) {
       let date2
       if (eq && +date !== +(date2 = getDate(eq))) {
-        return msg || dateRangeError({ op: '=', date: normFormatDate(date2, normFormat) })
+        return Validators.formatMessage(msg || addMsgValues(messages.dateRange, values('=', date2, normFormat)))
       }
       if (diff && +date === +(date2 = getDate(diff))) {
-        return msg || dateRangeError({ op: '!=', date: normFormatDate(date2, normFormat) })
+        return Validators.formatMessage(msg || addMsgValues(messages.dateRange, values('!=', date2, normFormat)))
       }
       if (gt && date <= (date2 = getDate(gt))) {
-        return msg || dateRangeError({ op: '>', date: normFormatDate(date2, normFormat) })
+        return Validators.formatMessage(msg || addMsgValues(messages.dateRange, values('>', date2, normFormat)))
       }
       if (gte && date < (date2 = getDate(gte))) {
-        return msg || dateRangeError({ op: '>=', date: normFormatDate(date2, normFormat) })
+        return Validators.formatMessage(msg || addMsgValues(messages.dateRange, values('>=', date2, normFormat)))
       }
       if (lt && date >= (date2 = getDate(lt))) {
-        return msg || dateRangeError({ op: '<', date: normFormatDate(date2, normFormat) })
+        return Validators.formatMessage(msg || addMsgValues(messages.dateRange, values('<', date2, normFormat)))
       }
       if (lte && date > (date2 = getDate(lte))) {
-        return msg || dateRangeError({ op: '<=', date: normFormatDate(date2, normFormat) })
+        return Validators.formatMessage(msg || addMsgValues(messages.dateRange, values('<=', date2, normFormat)))
       }
     }
   })
 })
 
+date.parseDate = parseDate
+date.formatDate = formatDate
+
 export default date
 
-export function parseDate (strDate, format, ymd) {
+function parseDate (strDate, format, ymd) {
   return normParseDate(strDate, normalizeFormat(format, ymd), true)
 }
 
-export function formatDate (date, format, ymd) {
+function formatDate (date, format, ymd) {
   if (!(date instanceof Date) && '[object Date]' !== TO_STRING.call(date)) {
     return null;
   }
@@ -83,10 +80,8 @@ export function formatDate (date, format, ymd) {
   return t !== t ? null : normFormatDate(date, normalizeFormat(format, ymd))
 }
 
-
-
-function dateRangeError (values) {
-  return formatMessage({ id: 'form.errors.dateRange', values })
+function values (op, date, format) {
+  return { op: op, date: normFormatDate(date, format), dateObject: date }
 }
 
 function getDate (d) {
@@ -112,7 +107,13 @@ function normFormatDate (date, format) {
   })
 }
 function normalizeFormat (format, ymd) {
+  if (null == format) {
+    format = Validators.defaultOptions.dateFormat
+  }
   if (!ymd) {
+    ymd = Validators.defaultOptions.dateYmd
+  }
+  if (!ymd || 'ymd' === ymd) {
     return format
   }
   let reverseMapping = { [ymd.charAt(0)]: 'y', [ymd.charAt(1)]: 'm', [ymd.charAt(2)]: 'd' }

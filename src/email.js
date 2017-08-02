@@ -1,16 +1,13 @@
-import React from 'react'
-import { FormattedMessage } from 'react-intl'
+import messages from './messages'
 import { regFormat } from './helpers'
 
-export var REG_EMAIL = /^[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i
-
-// To be extracted by react-intl
-let EMAIL_ERROR = (<FormattedMessage id="form.errors.email" defaultMessage="is not a valid email" />)
+const REG_EMAIL = /^[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i
 
 // Uses "format" internally which is already memoized
 let email = function (options) {
-  options = Object.assign({}, options)
-  return regFormat(options, REG_EMAIL, EMAIL_ERROR)
+  return regFormat(Object.assign({}, options), REG_EMAIL, messages.email)
 }
+
+email.REG_EMAIL = REG_EMAIL
 
 export default email

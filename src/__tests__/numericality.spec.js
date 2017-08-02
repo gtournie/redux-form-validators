@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { numericality } from '../index'
+import Validators, { numericality } from '../index'
 import getErrorId from './helper'
 
 const ERROR_NOT_A_NUMBER_ID       = 'form.errors.notANumber'
@@ -146,5 +146,23 @@ describe('Validator: numericality', function () {
     assert.ok(!test('-1',     { odd: true }))
     assert.ok(!test('1.2',    { odd: true }))
     assert.ok(!test('-1.2',   { odd: true }))
+  })
+    it('should use formatMessage', function() {
+    let defaultValue = Validators.formatMessage
+
+    Validators.formatMessage = function(msg) {
+      return Object.assign({}, msg, { id: msg.id + '2' })
+    }
+    assert.equal(ERROR_NOT_A_NUMBER_ID + '2',       test('foobar'))
+    assert.equal(ERROR_EQUAL_TO_ID + '2',           test(1,   { '=': 0 }))
+    assert.equal(ERROR_OTHER_THAN_ID + '2',         test(1,   { '!=': 1 }))
+    assert.equal(ERROR_GREATER_THAN_ID + '2',       test(-1,  { '>': 0 }))
+    assert.equal(ERROR_GREATER_THAN_OR_EQ_ID + '2', test(-1,  { '>=': 0 }))
+    assert.equal(ERROR_LESS_THAN_ID + '2',          test(1,   { '<': 0 }))
+    assert.equal(ERROR_LESS_THAN_OR_EQ_ID + '2',    test(1,   { '<=': 0 }))
+    assert.equal(ERROR_EVEN_ID + '2',               test('1', { even: true }))
+    assert.equal(ERROR_ODD_ID + '2',                test('2', { odd: true }))
+
+    Validators.formatMessage = defaultValue;
   })
 })

@@ -1,8 +1,7 @@
-import React from 'react'
-import { FormattedMessage } from 'react-intl'
-import { formatMessage, prepare, memoize } from './helpers'
+import messages from './messages'
+import Validators from './index'
+import { toObjectMsg, addMsgValues, prepare, memoize } from './helpers'
 
-const DEFAULT_CASE_SENSITIVE = true
 
 let confirmation = memoize(function ({
       field,
@@ -12,18 +11,15 @@ let confirmation = memoize(function ({
       msg,
       'if': ifCond, unless
     }) {
-  msg = formatMessage(msg || message)
-
-  caseSensitive = (null != caseSensitive ? caseSensitive : DEFAULT_CASE_SENSITIVE)
+  msg = toObjectMsg(msg || message)
 
   return prepare(ifCond, unless, false, function (value, allValues) {
     let fieldValue = '' + (allValues[field] || '')
+    let cs = (null != caseSensitive ? caseSensitive : Validators.defaultOptions.caseSensitive)
 
-    if (caseSensitive ? value !== fieldValue : value.toLowerCase() !== fieldValue.toLowerCase()) {
-      return msg || (
-        <FormattedMessage id="form.errors.confirmation"
-          defaultMessage="doesn't match `{fieldLabel}`"
-          values={{ fieldLabel: fieldLabel || field }} />
+    if (cs ? value !== fieldValue : value.toLowerCase() !== fieldValue.toLowerCase()) {
+      return Validators.formatMessage(
+        msg || addMsgValues(messages.confirmation, { fieldLabel: fieldLabel || field })
       )
     }
   })

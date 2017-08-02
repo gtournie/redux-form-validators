@@ -1,8 +1,5 @@
 import assert from 'assert'
 
-import React from 'react'
-import { FormattedMessage } from 'react-intl'
-
 import { absence,
   acceptance,
   addValidator,
@@ -23,18 +20,17 @@ function test (func, options) {
 }
 
 let fooValidator = addValidator({
-  defaultMessage: <FormattedMessage id="errors.foo" defaultMessage="Foo"/>,
+  defaultMessage: { id: "errors.foo", defaultMessage: "Foo" },
   validator:
     /* istanbul ignore next */
     function(options, value) { return value === 'foo' }
 })
 
-describe('Memoize', function () {
+describe('memoize', function () {
   it('should return the same function when the options are the same', function() {
     assert.ok(test(absence))
     assert.ok(test(absence))
     assert.ok(test(absence, { msg: 'foobar' }))
-    assert.ok(test(absence, { msg: <FormattedMessage id="errors.test" defaultMessage="Test"/> }))
     assert.ok(test(absence, { message: { id: 'errors.test' } }))
     assert.ok(test(absence, { message: { id: 'errors.test', defaultMessage: 'Test' } }))
     assert.ok(test(absence, { if:
@@ -88,7 +84,7 @@ describe('Memoize', function () {
 
     assert.ok(test(fooValidator))
     assert.ok(test(fooValidator, { allowBlank: true }))
-    assert.ok(test(fooValidator, { msg: <FormattedMessage id="errors.test" defaultMessage="Test"/> }))
+    assert.ok(test(fooValidator, { msg: 'Test' }))
     assert.ok(test(fooValidator, { if:
       /* istanbul ignore next */
       (value, values) => { return false }

@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { url } from '../index'
+import Validators, { url } from '../index'
 import getErrorId from './helper'
 
 const ERROR_ID = 'form.errors.url'
@@ -18,7 +18,7 @@ describe('Validator: url', function() {
   it('should be valid when `value` is a valid url', function() {
     assert.ok(!test('http://google.com'))
     assert.ok(!test('https://www.google.com'))
-    assert.ok(!test('ftp://foo:bar@128.193.1.32:3000/foo?foo=bar'))
+    assert.ok(!test('http://foo:bar@128.193.1.32:3000/foo?foo=bar'))
   })
   it('should be invalid if the protocols don\'t match', function() {
     assert.equal(ERROR_ID, test('http://google.com', { protocol: 'ftp' }))
@@ -36,5 +36,32 @@ describe('Validator: url', function() {
     assert.ok(!test('http://google.com', { protocols: ['ftp', 'http', 'https'] }))
     assert.ok(!test('https://www.google.com', { protocol: 'https' }))
     assert.ok(!test('ftp://foo:bar@128.193.1.32:3000/foo?foo=bar', { protocol: 'ftp' }))
+  })
+  it('should use default urlProtocols option', function() {
+    let defaultValue = Validators.defaultOptions.urlProtocols
+
+    Validators.defaultOptions.urlProtocols = ['ftp']
+    assert.equal(ERROR_ID, test('http://google.com'))
+    assert.equal(ERROR_ID, test('https://www.google.com'))
+    assert.equal(ERROR_ID, test('http://foo:bar@128.193.1.32:3000/foo?foo=bar'))
+    assert.ok(!test('ftp://foo:bar@128.193.1.32:3000/foo?foo=bar'))
+
+    Validators.defaultOptions.urlProtocols = ['http', 'https']
+    assert.ok(!test('http://google.com'))
+    assert.ok(!test('https://www.google.com'))
+    assert.ok(!test('http://foo:bar@128.193.1.32:3000/foo?foo=bar'))
+    assert.equal(ERROR_ID, test('ftp://foo:bar@128.193.1.32:3000/foo?foo=bar'))
+
+    Validators.defaultOptions.urlProtocols = defaultValue
+  })
+  it('should use formatMessage', function() {
+    let defaultValue = Validators.formatMessage
+
+    Validators.formatMessage = function(msg) {
+      return Object.assign({}, msg, { id: msg.id + '2' })
+    }
+    assert.equal(ERROR_ID + '2', test('http:/:/'))
+
+    Validators.formatMessage = defaultValue;
   })
 })

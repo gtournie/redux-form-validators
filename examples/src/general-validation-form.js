@@ -1,18 +1,18 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form';
-import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
-import { acceptance, date, required, email, length, numericality, confirmation } from 'redux-form-validators';
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import { reduxForm, Field } from 'redux-form'
+import { connect } from 'react-redux'
+import { FormattedMessage } from 'react-intl'
+import { acceptance, date, required, email, length, numericality, confirmation } from 'redux-form-validators'
 
-import { Col, Row, Button, Input, Form, FormFeedback, FormGroup, FormText, Label } from 'reactstrap';
+import { Col, Row, Button, Input, Form, FormFeedback, FormGroup, FormText, Label } from 'reactstrap'
 
 
-function renderInputField({ hint, input, label, type, meta: { touched, error }={}, ...inputProps }) {
-  inputProps = {...input, ...inputProps };
-  let feedback = touched && error;
-  let status   = touched && error ? 'danger' :  '';
-  let htmlId   = inputProps.id || inputProps.name;
+function renderInputField ({ hint, input, label, type, meta: { touched, error }={}, ...inputProps }) {
+  inputProps = {...input, ...inputProps }
+  let feedback = touched && error
+  let status   = touched && error ? 'danger' :  ''
+  let htmlId   = inputProps.id || inputProps.name
 
   return (
     <FormGroup color={status}>
@@ -24,11 +24,11 @@ function renderInputField({ hint, input, label, type, meta: { touched, error }={
   )
 }
 
-function renderCheckField({ hint, input, label, type, meta: { touched, error, warning }={}, ...inputProps }) {
-  inputProps = {...input, ...inputProps };
-  let feedback = touched && error;
-  let status   = touched && error ? 'danger' :  '';
-  let htmlId   = inputProps.id || inputProps.name;
+function renderCheckField ({ hint, input, label, type, meta: { touched, error, warning }={}, ...inputProps }) {
+  inputProps = {...input, ...inputProps }
+  let feedback = touched && error
+  let status   = touched && error ? 'danger' :  ''
+  let htmlId   = inputProps.id || inputProps.name
 
   return (
     <FormGroup color={status}>
@@ -44,15 +44,15 @@ function renderCheckField({ hint, input, label, type, meta: { touched, error, wa
 
 
 let twentyYearsAgo = function() {
-  let d = new Date();
-  d.setFullYear(d.getFullYear() - 20);
-  return d;
+  let d = new Date()
+  d.setFullYear(d.getFullYear() - 20)
+  return d
 };
 
 const TOO_YOUNG_ERROR = (
   <FormattedMessage id="form.errors.tooYoung"
       defaultMessage="Sorry, you must be at least 18 years old" />
-);
+)
 
 let validations = {
   name:     [required(), length({ in: [6, 20] })],
@@ -68,7 +68,7 @@ let validations = {
     numericality({ int: true, msg: 'msg.fallback_to_text' }),
     numericality({ '>=': 18, msg: TOO_YOUNG_ERROR })
   ]
-};
+}
 
 // Reusable with any other form
 let validate = (values) => {
@@ -82,7 +82,7 @@ let validate = (values) => {
 
 class GeneralValidationForm extends Component {
   handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
   }
 
   render() {
@@ -126,9 +126,9 @@ class GeneralValidationForm extends Component {
 }
 
 
-GeneralValidationForm = reduxForm({ form: 'generalValidationForm', validate })(GeneralValidationForm);
+GeneralValidationForm = reduxForm({ form: 'generalValidationForm', validate })(GeneralValidationForm)
 
-export default GeneralValidationForm;
+export default GeneralValidationForm
 
 
 

@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { email } from '../index'
+import Validators, { email } from '../index'
 import getErrorId from './helper'
 
 const ERROR_ID = 'form.errors.email'
@@ -18,5 +18,15 @@ describe('Validator: email', function() {
   it('should be valid when `value` is a valid email', function() {
     assert.ok(!test('a@b.com'))
     assert.ok(!test('foo@bar.net'))
+  })
+  it('should use formatMessage', function() {
+    let defaultValue = Validators.formatMessage
+
+    Validators.formatMessage = function(msg) {
+      return Object.assign({}, msg, { id: msg.id + '2' })
+    }
+    assert.equal(ERROR_ID + '2', test('foo'))
+
+    Validators.formatMessage = defaultValue;
   })
 })

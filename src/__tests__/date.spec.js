@@ -1,10 +1,14 @@
 import assert from 'assert'
-import { date, parseDate, formatDate } from '../index'
+import Validators, { date } from '../index'
 import getErrorId from './helper'
+
 
 const ERROR_FORMAT_ID = 'form.errors.dateFormat'
 const ERROR_INVALID_ID = 'form.errors.dateInvalid'
 const ERROR_RANGE_ID = 'form.errors.dateRange'
+
+const parseDate = date.parseDate
+const formatDate = date.formatDate
 
 function test (value, params) {
   return getErrorId(date(params)(value))
@@ -93,7 +97,7 @@ describe('parse date', function() {
     assert.ok(testParse(new Date(2016,  0,  1), '2016/01',     'yyyy/mm'))
     assert.ok(testParse(new Date(2016,  0,  1), '2016/01',     'yyyy/dd'))
     assert.ok(testParse(new Date(1970, 11,  1), '12/01',       'mm/dd'))
-    
+
     assert.ok(testParse(new Date(2017, 11, 31), '12/31/2017', 'xx/jj/aaaa', 'axj'))
     assert.ok(testParse(new Date(2016,  1, 29), '02/29/2016', 'xx/jj/aaaa', 'axj'))
     assert.ok(testParse(new Date(2017, 11, 31), '31/12/2017', 'jj/xx/aaaa', 'axj'))
@@ -170,5 +174,39 @@ describe('format date', function() {
 
     assert.ok(testFormat(null, new Date(NaN), '', 'axj'))
     assert.ok(testFormat(null, new Date(NaN), 'xx/jj/aaaa', 'axj'))
+  })
+  it('should use default dateFormat option', function() {
+    let defaultValue = Validators.defaultOptions.dateFormat
+
+    Validators.defaultOptions.dateFormat = 'mm/dd/yyyy'
+    assert.ok(!test('12/31/2017'))
+
+    Validators.defaultOptions.dateFormat = 'yyyy/mm/dd'
+    assert.ok(!test('2017/12/31'))
+
+    Validators.defaultOptions.dateFormat = defaultValue
+  })
+  it('should use default dateYmd option', function() {
+    let defaultValue = Validators.defaultOptions.dateYmd
+
+    Validators.defaultOptions.dateYmd = 'xyz'
+    assert.ok(!test('12/31/2017', { format: 'yy/zz/xxxx' }))
+
+    Validators.defaultOptions.dateYmd = 'dym'
+    assert.ok(!test('12/31/2017', { format: 'yy/mm/dddd' }))
+
+    Validators.defaultOptions.dateYmd = defaultValue;
+  })
+  it('should use formatMessage', function() {
+    let defaultValue = Validators.formatMessage
+
+    Validators.formatMessage = function(msg) {
+      return Object.assign({}, msg, { id: msg.id + '2' })
+    }
+    assert.equal(ERROR_FORMAT_ID + '2', test('',            { format: 'mm/dd/yyyy' }))
+    assert.equal(ERROR_INVALID_ID + '2', test('01/00/2015', { format: 'mm/dd/yyyy' }))
+    assert.equal(ERROR_RANGE_ID + '2', test('01/01/2017',   { format: 'mm/dd/yyyy', '=': new Date(2017, 0, 2) }))
+
+    Validators.formatMessage = defaultValue;
   })
 })

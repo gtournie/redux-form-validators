@@ -1,9 +1,13 @@
-import React from 'react'
-import { FormattedMessage } from 'react-intl'
 import format from './format'
 
-
-export var DEFAULT_ALLOW_BLANK = false;
+export var DEFAULT_OPTIONS = {
+  allowBlank: false,
+  urlProtocols: ['http', 'https'],
+  dateFormat: 'yyyy-mm-dd', // ISO
+  dateYmd: 'ymd',
+  accept: ['1', 'true'],
+  caseSensitive: true       // confirmation, inclusion, exclusion
+};
 
 
 export function regFormat (options, reg, messageId) {
@@ -15,7 +19,8 @@ export function regFormat (options, reg, messageId) {
 export function prepare (ifCond, unlessCond, allowBlank, func) {
   return function (value='', allValues={}) {
     value = '' + value
-    if (allowBlank && !value.trim()) {
+
+    if ((null != allowBlank ? allowBlank : DEFAULT_OPTIONS.allowBlank) && !value.trim()) {
       return
     }
     if (('function' !== typeof ifCond || ifCond(allValues, value)) &&
@@ -33,9 +38,42 @@ export function isNumber (num) {
   return !isNaN(num) && '' !== ('' + num).trim()
 }
 
-export function formatMessage (msg) {
+let pluralRules = {
+  0:     /zero\s*\{(.*?)\}/,
+  1:     /one\s*\{(.*?)\}/,
+  other: /other\s*\{(.*?)\}/
+}
+
+let TEMPLATE_REG = /\{([^{}]*\{[^{}]*\}[^{}]*)+\}|\{(.*?)\}/g
+
+export function formatMsg (msg) {
+  if (msg.props) {
+    msg = msg.props
+  }
+  let text = msg.defaultMessage || msg.id;
+  return ((!msg.values ? text : text) || '').replace(TEMPLATE_REG, function(content) {
+    let parts = content.slice(1, -1).split(',')
+    let count = msg.values[parts[0]]
+    if (parts.length <= 2) {
+      return null == count ? '' : count
+    }
+    let plural = parts[2].trim()
+    let rules = pluralRules[+count]
+    let result
+    if (rules && (result = plural.match(rules))) {
+      return result[1]
+    }
+    return (plural.match(pluralRules.other) || [])[1] || ''
+  })
+}
+
+export function toObjectMsg (msg) {
   if (null == msg) return null
-  return 'string' === typeof msg ? <FormattedMessage id={msg} /> : <FormattedMessage {...(msg.props || msg)} />
+  return isObject(msg) ? msg : { id: msg, defaultMessage: msg }
+}
+
+export function addMsgValues (msg, values) {
+  return Object.assign({}, msg, { values: values })
 }
 
 export function memoize (func) {
@@ -58,10 +96,16 @@ function stringify (options) {
   for (var k in options) {
     if (HAS_PROP.call(options, k)) {
       value = options[k]
-      arr.push(k, React.isValidElement(value) ? stringify(value.props) : isObject(value) ? stringify(value) :  value)
+      arr.push(k, isReactElement(value)
+        ? stringify(value.props)
+        : isObject(value) ? stringify(value) : value.toString())
     }
   }
-  return arr.toString()
+  return JSON.stringify(arr)
+}
+
+function isReactElement(object) {
+  return typeof object === 'object' && object !== null && '$$typeof' in object;
 }
 
 function isObject(obj) {

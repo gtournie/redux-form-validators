@@ -1,6 +1,6 @@
-import React from 'react'
-import { FormattedMessage } from 'react-intl'
-import { formatMessage, prepare, isNumber, memoize, DEFAULT_ALLOW_BLANK } from './helpers'
+import messages from './messages'
+import Validators from './index'
+import { toObjectMsg, addMsgValues, prepare, isNumber, memoize } from './helpers'
 
 
 let length = memoize(function ({
@@ -10,9 +10,9 @@ let length = memoize(function ({
       'in': range, within,
       message, msg,
       'if': ifCond, unless,
-      allowBlank=DEFAULT_ALLOW_BLANK
+      allowBlank
     }) {
-  msg   = formatMessage(msg || message)
+  msg   = toObjectMsg(msg || message)
 
   equal = isNumber(equal) ? equal : is
   min   = isNumber(min)   ? min   : minimum
@@ -25,25 +25,13 @@ let length = memoize(function ({
 
   return prepare(ifCond, unless, allowBlank, function (value) {
     if (isNumber(equal) && value.length !== +equal) {
-      return msg || (
-        <FormattedMessage id="form.errors.wrongLength"
-          defaultMessage="is the wrong length (should be {count, number} {count, plural, one {character} other {characters}})"
-          values={{ count: equal }} />
-      )
+      return Validators.formatMessage(msg || addMsgValues(messages.wrongLength, { count: equal }))
     }
     if (isNumber(max) && value.length > +max) {
-      return msg || (
-        <FormattedMessage id="form.errors.tooLong"
-          defaultMessage="is too long (maximum is {count, number} {count, plural, one {character} other {characters}})"
-          values={{ count: max }} />
-      )
+      return Validators.formatMessage(msg || addMsgValues(messages.tooLong, { count: max }))
     }
     if (isNumber(min) && value.length < +min) {
-      return msg || (
-        <FormattedMessage id="form.errors.tooShort"
-          defaultMessage="is too short (minimum is {count, number} {count, plural, one {character} other {characters}})"
-          values={{ count: min }} />
-      )
+      return Validators.formatMessage(msg || addMsgValues(messages.tooShort, { count: min }))
     }
   })
 })

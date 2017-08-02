@@ -5,20 +5,24 @@
 [![npm version](https://img.shields.io/npm/v/redux-form-validators.svg?style=flat-square)](https://www.npmjs.com/package/redux-form-validators)
 [![npm downloads](https://img.shields.io/npm/dm/redux-form-validators.svg?style=flat-square)](https://www.npmjs.com/package/redux-form-validators)
 
+/!\ Version 2.0.0 is now dependency-free. If you're working with react-intl, look at the [i18n and react-intl](#i18n-and-react-intl) section.
+
 
 # redux-form-validators
 
 Simple validations with redux-form. Heavily inspired by the rails validations.
 
+[Installation](#installation) [Example](#example) [Documentation](#documentation)
+
 ## Installation
 ```npm install redux-form-validators```
 
-> Note: For internationalization purposes, this package depends on [react-intl](https://github.com/yahoo/react-intl).
+> Note: For internationalization purposes, this package is compatible with [react-intl](https://github.com/yahoo/react-intl).
 
 ## Example
 
 To run the example project you need to clone the repo and run `npm i -d && npm start`.
-Then go to [http://localhost:3003/]()
+Then go to [http://localhost:3003/](http://localhost:3003/)
 
 ## How to use
 
@@ -26,7 +30,7 @@ If you're already familiar with [redux-form](http://redux-form.com/) it should b
 
 ### Field validation
 
-[This example](http://redux-form.com/6.4.3/examples/fieldLevelValidation/) shows you how to set a field level validation with redux-form.
+[This example](http://redux-form.com/7.0.3/examples/fieldLevelValidation/) shows you how to set a field level validation with redux-form.
 Thanks to `redux-form-validators`, you'll only have to pass the validators needed:
 
 ```
@@ -40,22 +44,17 @@ That's it! =)
 
 ### Sync validation
 
-Now let's replace the validate function of [this redux-form example](http://redux-form.com/6.4.3/examples/syncValidation/):
+Now let's replace the validate function of [this redux-form example](http://redux-form.com/7.0.3/examples/syncValidation/):
 
 
 ```
-const TOO_YOUNG_ERROR = (
-  <FormattedMessage id="form.errors.tooYoung"
-      defaultMessage="Sorry, you must be at least 18 years old">
-)
-
 validations = {
   username: [required(), length({ max: 15 })],
   email:    [required(), email()],
   age:      [
     required(), 
     numericality({ int: true }), 
-    numericality({ '>=': 18, msg: TOO_YOUNG_ERROR })
+    numericality({ '>=': 18, msg: "You must be at least 18 years old" })
   ]
 }
 
@@ -90,7 +89,9 @@ Validators
 * [url](#url)
 
 More
+* [i18n and react-intl](#i18n-and-react-intl)
 * [adding a validator](#adding-a-validator)
+* [default options](#default-options)
 * [common validation options](#common-validation-options)
 * [conditional validation](#conditional-validation)
 * [date helpers](#date-helpers)
@@ -110,7 +111,7 @@ The default error message is "is required". You can also pass custom message via
 
 ### email
 
-Validates that the specified value is a valid email address. It uses the internal `REG_EMAIL` regexp to check the value.
+Validates that the specified value is a valid email address. It uses the `email.REG_EMAIL` regexp to check the value.
 
 ```
 <Field name="email" type="email" label="Email" component={renderField} 
@@ -163,6 +164,8 @@ Very simple date validator. Limited to year, month and day validation (but it sh
 Accepts the following options:
 * `format` - Specifies the format that should match the date string. Accepts only the current flags: `y`, `m` & `d`. The number of flags used represents the number of digits expected (e.g. `yyyy` expects 4 digits while `yy` expects 2). Format examples: `mm/dd/yyyy`, `dd/mm/yyyy`, `yyyy-mm-dd`, `mm/dd/yy`, `yyyy/mm`, `mm/dd`...
 * `ymd` - Allows you to customize the format, to be more readable in case you're using i18n. For instance, you could use `{ format: 'jj/mm/aaaa', ymd: 'amj' }` for a French format.
+
+(See [default options](#default-options) to set `format` and `ymd` globally)
 
 And the comparable options:
 * '=', '>', '>=', '<', '<='. All of these options accept either a Date object, a timestamp, or a function (which returns a Date or a timestamp). To avoid syncing issues, don't pass `new Date()` directly but wrap it in a function or just pass the string `'today'`. Note that these options are only available if these flags are present: `y` + `m` + `d` OR `y` + `m` OR just `y`)
@@ -228,7 +231,7 @@ You should use this validator when you have two text fields that should receive 
     validate={confirmation({ field: 'pass', fieldLabel: 'Password' })} />
 ```
 
-There is also a `caseSensitive` option that you can use to define whether the confirmation constraint will be case sensitive or not. This option defaults to true.
+There is also a `caseSensitive` option that you can use to define whether the confirmation constraint will be case sensitive or not. This option defaults to true (see [default options](#default-options)).
 
 Examples
 ```
@@ -245,11 +248,8 @@ The default error message for this validator is "doesn't match ${fieldLabel || f
 Validates the value by testing whether it match a given regular expression, which is specified using the `with` option.
 
 ```
-const ALPHA_ERROR = <FormattedMessage id="form.errors.alpha"
-      defaultMessage="Only allows letters">
- 
 <Field name="legacyCode" type="text" label="Legacy Code" component={renderField} 
-    validate={format({ with: /^[a-z]+$/i, message: ALPHA_ERROR })} />
+    validate={format({ with: /^[a-z]+$/i, message: "Only allows letters" })} />
 ```
 
 Alternatively, you can require that the specified value does not match the regular expression by using the `without` option.
@@ -272,7 +272,7 @@ This method validates that a checkbox on the user interface was checked. This is
     component={renderField} validate={acceptance()} />
 ```
 
-It can also receive an `accept` option, which determines the allowed values that will be considered as accepted. It defaults to ['1', 'true'] and can be easily changed (via the `msg` or `message` parameter).
+It can also receive an `accept` option, which determines the allowed values that will be considered as accepted. It defaults to ['1', 'true'] (see [default options](#default-options)).
 
 Examples
 ```
@@ -294,7 +294,7 @@ Validates that the value is included in a given set.
 
 The inclusion validator has an option `in` that receives the set of values that will be accepted. The `in` option has an alias called `within` that you can use for the same purpose, if you'd like to.
 
-There is also a `caseSensitive` option that you can use to define whether the match will be case sensitive or not. This option defaults to true.
+There is also a `caseSensitive` option that you can use to define whether the match will be case sensitive or not. This option defaults to true (see [default options](#default-options)).
 
 Examples
 ```
@@ -316,7 +316,7 @@ Validates that the value is not included in a given set.
 
 The exclusion validator has an option `in` that receives the set of values that will not be accepted for the validated attributes. The `in` option has an alias called `within` that you can use for the same purpose, if you'd like to.
 
-There is also a `caseSensitive` option that you can use to define whether the match will be case sensitive or not. This option defaults to true.
+There is also a `caseSensitive` option that you can use to define whether the match will be case sensitive or not. This option defaults to true (see [default options](#default-options)).
 
 Examples
 ```
@@ -339,14 +339,14 @@ The default error message is "must be blank".
 
 ### url
 
-Validates that the specified value is a valid URL. It uses the internal `REG_URL` regexp to check the value.
+Validates that the specified value is a valid URL. It uses the `url.REG_URL` regexp to check the value.
 
 ```
 <Field name="url" type="text" label="URL" component={renderField} 
     validate={url()} />
 ```
 
-The url validator has an option `protocol` (or its alias `protocols`) that receives the set of protocols that will be accepted. This option default to ['http', 'https', 'ftp'].
+The url validator has an option `protocol` (or its alias `protocols`) that receives the set of protocols that will be accepted. This option default to ['http', 'https'] (see [default options](#default-options)).
 
 Examples
 ```
@@ -357,6 +357,66 @@ url({ protocols: ['http', 'https'] })
 
 The default error message is "is not a valid URL".
 
+> Note: As of version 2.0.0, the default protocol value is now: ['http', 'https'] ('ftp' was previously included)
+
+
+### i18n and react-intl
+
+By default, all errors messages are in english and are pluralized if needed (basic support) but you can use [react-intl](https://github.com/yahoo/react-intl) to support different languages. All you need to do is to insert the following lines:
+```
+import Validators from 'redux-form-validators'
+import { FormattedMessage } from 'react-intl'
+
+Validators.formatMessage = function(msg) {
+  return <FormattedMessage {...(msg.props || msg)} />
+}
+```
+
+> Note: You can also implement your own i18n/pluralization module by overriding `Validators.formatMessage`. The first argument is a javascript object compatible with react-intl: 
+```
+{
+  id: "form.errors.greaterThan", 
+  defaultMessage: "must be greater than {count, number}",
+  values: { count: 10 }
+}
+```
+
+And if you're using [babel-plugin-react-intl](https://github.com/yahoo/babel-plugin-react-intl) to extract your application messages, you'll need to **add** a new plugin entry in your webpack config ([example](https://github.com/gtournie/redux-form-validators/blob/master/webpack/example.js)):
+```
+["react-intl", {
+  "messagesDir": ...,
+  "languages": ...,
+  // /!\ it's important to keep a relative path here
+  "moduleSourceName": "./redux-form-validators"
+}
+``` 
+
+
+### Default options
+
+redux-form-validators comes with default options:
+
+```
+{
+  allowBlank:    false, 
+  urlProtocols:  ['http', 'https'],
+  dateFormat:    'yyyy-mm-dd',
+  dateYmd:       'ymd',
+  accept:        ['1', 'true'],    
+  caseSensitive: true  // confirmation, inclusion, exclusion
+};
+```
+
+But you can easily change them:
+```
+import Validators from 'redux-validators'
+
+// Override dateFormat & urlProtocols
+Object.assign(Validators.defaultOptions, {
+  dateFormat: 'mm/dd/yyyy',
+  urlProtocols: ['http', 'https', 'ftp']
+})
+```
 
 ### Common validation options
 
@@ -379,22 +439,17 @@ Not available for: required, absence, acceptance & confirmation.
 As you've already seen, the `message` option lets you specify the message that will be added to the errors collection when validation fails. When this option is not used, `redux-form-validators` will use the respective default error message for each validator. The `message` option accepts a String, a Hash or a [FormattedMessage](https://github.com/yahoo/react-intl/wiki/Components#string-formatting-components).
 
 ```
-const ALPHA_ERROR = <FormattedMessage id="form.errors.alpha"
-      defaultMessage="Letters only">
- 
-format({ with: /^[a-z]+$/i, message: ALPHA_ERROR })
-format({ with: /^[a-z]+$/i, message: { id: 'form.errors.alpha' } })
-format({ with: /^[a-z]+$/i, message: 'form.errors.alpha' })
-format({ with: /^[a-z]+$/i, message: { id: 'form.errors.alpha', defaultMessage: 'Letters only' } })
-```
-
-Or alternatively, if you don't care about i18n:
-
-```
 format({ with: /^[a-z]+$/i, message: 'Letters only' })
+format({ with: /^[a-z]+$/i, message: { defaultMessage: 'Letters only' } })
+
+// I18n with react-intl
+format({ with: /^[a-z]+$/i, message: { id: 'form.errors.alpha', 
+  defaultMessage: 'Letters only' } })
+format({ with: /^[a-z]+$/i, message: <FormattedMessage id="form.errors.alpha"
+  defaultMessage="Letters only"/> })
 ```
 
-This will be wrapped in a FormattedMessage (with the message as id), will look for a message with this id and will finally fallback to the id.
+> Note: all messages are internally converted into javascript objects (see [i18n and react-intl](#i18n-and-react-intl)), so if you pass a FormattedMessage as an argument, don't expect it to be returned as it.  
 
 [See all default messages](https://github.com/gtournie/redux-form-validators/blob/master/examples/src/locales/en.json).
 
@@ -410,25 +465,40 @@ Finally, it's possible to associate `if` and `unless` with a function which will
     validate={presence({ if: (value, values) => { return '' !== values.name } })} />
 ```
 
-
 ### Adding a validator
 
 ```
-const ALPHA_ERROR = <FormattedMessage id="form.errors.alpha"
-      defaultMessage="Letters only">
-
 const alphaValidator = addValidator({
-  defaultMessage: ALPHA_ERROR,
-  validator:  function(options, value, allValues) {
+  defaultMessage: "Letters only",
+  validator: function(options, value, allValues) {
     return (options.lowerCase ? /^[a-z]+$/ : /^[a-z]+$/i).test(value)
   }
 })
 
 <Field name="name" type="text" label="Name" component={renderField} 
     validate={alphaValidator({ lowerCase: true, allowBlank: true })} />
+
+// Version >= 2.0.0 only
+const digitValidator = addValidator({
+  validator: function(options, value, allValues) {
+    if (options.digits !== value.replace(/[^0-9]/g, '').length) {
+      return { 
+        id: "form.errors.custom" 
+        defaultMessage: "must contain {count, number} {count, plural, one {digit} other {digits}})"
+        values: { count: options.digits }
+      }
+    }
+  }
+})
+
+<Field name="digits" type="text" label="4 digits" component={renderField} 
+    validate={digitValidator({ digits: 4 })} />
+
 ```
 
 `defaultMessage` accepts a String, a Hash or a [FormattedMessage](https://github.com/yahoo/react-intl/wiki/Components#string-formatting-components). See the `message` option. Its default value is `is not valid`.
+
+> Note: As of version 2.0.0, you can now return a message directly if invalid (allowing things like pluralization). For backward compatibility, if you return a boolean, the validator will return the defaultMessage if invalid.
 
 > Note: you'll still be able to use the common options (`message` & `allowBlank`) and the conditional validation (`if` and `unless`).
 
@@ -443,6 +513,9 @@ Signature: `parseDate(dateString, format[, ymd])`
 
 Examples:
 ```
+import { date } from 'redux-form-validators'
+let parseDate = date.parseDate
+
 parseDate('12/31/2017', 'mm/dd/yyyy')        => new Date(2017, 11, 31)
 parseDate('2016/01',    'yyyy/mm'))          => new Date(2016,  1,  1)
 parseDate('12/01',      'mm/dd'))            => new Date(1970, 11,  1)
@@ -462,6 +535,9 @@ Signature: `formatDate(date, format[, ymd])`
 
 Examples:
 ```
+import { date } from 'redux-form-validators'
+let formatDate = date.formatDate
+
 formatDate(new Date(2017, 11, 31), 'mm/dd/yyyy')        => '12/31/2017'
 formatDate(new Date(2016,  1,  1), 'yyyy/mm'))          => '2016/01'   
 formatDate(new Date(1970, 11,  1), 'mm/dd'))            => '12/01'     

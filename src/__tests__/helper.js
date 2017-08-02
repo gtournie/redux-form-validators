@@ -1,5 +1,5 @@
 
 
 export default function(result) {
-  return (result && result.props && result.props.id) || void(0)
+  return (result && result.id) || void(0)
 }

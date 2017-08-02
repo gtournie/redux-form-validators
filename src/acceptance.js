@@ -1,19 +1,14 @@
-import React from 'react'
-import { FormattedMessage } from 'react-intl'
-import { formatMessage, prepare, memoize } from './helpers'
-
-export const ACCEPT = ['1', 'true']
+import messages from './messages'
+import Validators from './index'
+import { toObjectMsg, prepare, memoize } from './helpers'
 
 
-let acceptance = memoize(function ({ accept=ACCEPT, message, msg, 'if': ifCond, unless }={}) {
-  msg = formatMessage(msg || message)
-     || <FormattedMessage id="form.errors.acceptance" defaultMessage="must be accepted" />
-
-  accept = [].concat(accept).map(String)
+let acceptance = memoize(function ({ accept, message, msg, 'if': ifCond, unless }={}) {
+  msg = toObjectMsg(msg || message) || messages.acceptance
 
   return prepare(ifCond, unless, false, function (value) {
-    if (accept.indexOf(value) < 0) {
-      return msg
+    if ([].concat(accept || Validators.defaultOptions.accept).map(String).indexOf(value) < 0) {
+      return Validators.formatMessage(msg)
     }
   })
 })

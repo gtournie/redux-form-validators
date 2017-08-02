@@ -1,30 +1,35 @@
-import React from 'react'
-
 import absence from './absence'
 import acceptance from './acceptance'
 import addValidator from './add-validator'
 import confirmation from './confirmation'
-import date, { parseDate, formatDate } from './date'
-import email, { REG_EMAIL } from './email'
+import date from './date'
+import email from './email'
 import format from './format'
 import inclusion from './inclusion'
 import exclusion from './exclusion'
 import length from './length'
+import messages from './messages'
 import numericality from './numericality'
 import presence from './presence'
-import url, { REG_URL } from './url'
+import url from './url'
 
-import { DEFAULT_ALLOW_BLANK } from './helpers'
+import { formatMsg as formatMessage, DEFAULT_OPTIONS } from './helpers'
 
 let required = presence // alias
+
+export default {
+  formatMessage,
+  defaultOptions: DEFAULT_OPTIONS,
+  messages
+}
 
 export {
   absence,
   acceptance,
   addValidator,
   confirmation,
-  date, parseDate, formatDate,
-  email, REG_EMAIL,
+  date,
+  email,
   exclusion,
   format,
   inclusion,
@@ -32,8 +37,7 @@ export {
   numericality,
   presence,
   required,
-  url, REG_URL,
-  DEFAULT_ALLOW_BLANK
+  url
 }
 
 

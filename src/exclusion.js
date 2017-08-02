@@ -1,4 +1,3 @@
-import React from 'react'
 import { inclusionExclusion } from './inclusion'
 import { memoize } from './helpers'
 

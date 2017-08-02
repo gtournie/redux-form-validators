@@ -1,15 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+import React from 'react'
+import { FormattedMessage, defineMessages } from 'react-intl'
+import ReactDOM from 'react-dom'
+import App from './App'
 
-import { IntlProvider } from 'react-intl';
-import { Provider } from 'react-redux';
+import 'bootstrap-loader'
 
-import configureStore from './redux';
+import { IntlProvider } from 'react-intl'
+import { Provider } from 'react-redux'
 
-import en from './locales/en.json';
+import configureStore from './redux'
 
-const store = configureStore();
+import en from './locales/en.json'
+
+import Validators from 'redux-form-validators'
+
+Validators.formatMessage = function(msg) {
+  return <FormattedMessage {...(msg.props || msg)}/>
+}
+
+const store = configureStore()
 
 ReactDOM.render(
   (

@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { inclusion } from '../index'
+import Validators, { inclusion } from '../index'
 import getErrorId from './helper'
 
 const ERROR_ID = 'form.errors.inclusion'
@@ -23,5 +23,26 @@ describe('Validator: inclusion', function() {
     assert.ok(!test('foo', { within: ['bar', 'foo'], caseSensitive: true }))
     assert.ok(!test('FOO', { within: ['foo'], caseSensitive: false }))
     assert.ok(!test('fOo', { within: ['foo'], caseSensitive: false }))
+  })
+  it('should use default caseSensitive option', function() {
+    let defaultValue = Validators.defaultOptions.caseSensitive
+
+    Validators.defaultOptions.caseSensitive = true
+    assert.ok(!test('foo', { within: 'foo' }))
+
+    Validators.defaultOptions.caseSensitive = false
+    assert.ok(!test('foo', { within: 'FOO' }))
+
+    Validators.defaultOptions.caseSensitive = defaultValue;
+  })
+  it('should use formatMessage', function() {
+    let defaultValue = Validators.formatMessage
+
+    Validators.formatMessage = function(msg) {
+      return Object.assign({}, msg, { id: msg.id + '2' })
+    }
+    assert.equal(ERROR_ID + '2', test('1', { in: [2, 3, 4] }))
+
+    Validators.formatMessage = defaultValue;
   })
 })
