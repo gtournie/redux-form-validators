@@ -12,7 +12,7 @@
 
 Simple validations with redux-form. Heavily inspired by the rails validations.
 
-[Installation](#installation) [Example](#example) [Documentation](#documentation)
+[Installation](#installation) | [Example](#example) | [Documentation](#documentation)
 
 ## Installation
 ```npm install redux-form-validators```
