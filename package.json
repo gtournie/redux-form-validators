@@ -1,6 +1,6 @@
 {
   "name": "redux-form-validators",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Simple validations with redux-form",
   "main": "src/index.js",
   "repository": {
