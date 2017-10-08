@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
 import { FormattedMessage } from 'react-intl'
-import { acceptance, date, required, email, length, numericality, confirmation, addValidator } from 'redux-form-validators'
+import { acceptance, date, required, email, length, numericality, confirmation, url, addValidator } from 'redux-form-validators'
 
 import { Col, Row, Button, Input, Form, FormFeedback, FormGroup, FormText, Label } from 'reactstrap'
 
@@ -97,6 +97,10 @@ class FieldValidationForm extends Component {
             <Col sm="6">
               <Field name="age" type="text" label="Age" component={renderInputField}
                 validate={numericality({ int: true, '>': 0, '<': 100, msg: "form.errors.invalid", allowBlank: true })} />
+            </Col>
+            <Col sm="6">
+              <Field name="url" type="text" label="URL" component={renderInputField}
+                validate={url({ allowBlank: true })} />
             </Col>
           </Row>
           {/*<Button type="submit">Submit</Button>*/}
