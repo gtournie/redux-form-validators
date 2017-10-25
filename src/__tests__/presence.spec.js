@@ -11,6 +11,7 @@ function test (value) {
 describe('Validator: presence', function() {
   it('should be invalid when `value` is empty', function() {
     assert.equal(ERROR_ID, test())
+    assert.equal(ERROR_ID, test(null))
     assert.equal(ERROR_ID, test(''))
     assert.equal(ERROR_ID, test('   '))
     assert.equal(ERROR_ID, test(' \n \t '))

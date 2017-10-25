@@ -17,8 +17,8 @@ export function regFormat (options, reg, messageId) {
 }
 
 export function prepare (ifCond, unlessCond, allowBlank, func) {
-  return function (value='', allValues={}) {
-    value = '' + value
+  return function (value, allValues={}) {
+    value = null == value ? '' : '' + value
 
     if ((null != allowBlank ? allowBlank : DEFAULT_OPTIONS.allowBlank) && !value.trim()) {
       return
