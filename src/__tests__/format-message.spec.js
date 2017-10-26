@@ -13,6 +13,7 @@ describe('formatMessage', function() {
   it('should replace the vars', function() {
     assert.equal('foo 1 2', formatMsg({ defaultMessage: 'foo {bar} {foobar}', values: { bar: 1, foobar: 2 } }))
     assert.equal('foo 1', formatMsg({ defaultMessage: 'foo {count, number}', values: { count: 1 } }))
+    assert.equal('foo 1', formatMsg({ defaultMessage: 'foo {count}', values: { count: 1 } }))
   })
   it('should pluralize', function() {
     let msg = '{count, number} {count, plural, one {char} other {chars}}'

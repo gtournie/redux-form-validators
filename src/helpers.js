@@ -1,4 +1,6 @@
 import format from './format'
+import Validators from './index'
+import MESSAGES from './messages'
 
 export var DEFAULT_OPTIONS = {
   allowBlank: false,
@@ -10,17 +12,25 @@ export var DEFAULT_OPTIONS = {
 };
 
 
-export function regFormat (options, reg, messageId) {
-  options.msg = options.msg || options.message || messageId
-  options.with = reg
-  return format(options)
+export function regFormat (func, messageType) {
+  return memoize(function(options) {
+    options = options || {}
+    let msg = options.msg || options.message
+
+    return prepare(options['if'], options.unless, options.allowBlank, function (value) {
+      if (!value.match(func(options))) {
+        return Validators.formatMessage(prepareMsg(msg, messageType))
+      }
+    })
+  })
 }
+
 
 export function prepare (ifCond, unlessCond, allowBlank, func) {
   return function (value, allValues={}) {
     value = null == value ? '' : '' + value
 
-    if ((null != allowBlank ? allowBlank : DEFAULT_OPTIONS.allowBlank) && !value.trim()) {
+    if ((null != allowBlank ? allowBlank : Validators.defaultOptions.allowBlank) && !value.trim()) {
       return
     }
     if (('function' !== typeof ifCond || ifCond(allValues, value)) &&
@@ -31,6 +41,7 @@ export function prepare (ifCond, unlessCond, allowBlank, func) {
 }
 
 export function trunc (num) {
+  /* istanbul ignore next */
   return Math.trunc ? Math.trunc(num) : num < 0 ? Math.ceil(num) : Math.floor(num)
 }
 
@@ -50,8 +61,8 @@ export function formatMsg (msg) {
   if (msg.props) {
     msg = msg.props
   }
-  let text = msg.defaultMessage || msg.id;
-  return ((!msg.values ? text : text) || '').replace(TEMPLATE_REG, function(content) {
+  let text = msg.defaultMessage || msg.id || '';
+  return !msg.values ? text : text.replace(TEMPLATE_REG, function(content) {
     let parts = content.slice(1, -1).split(',')
     let count = msg.values[parts[0]]
     if (parts.length <= 2) {
@@ -67,13 +78,28 @@ export function formatMsg (msg) {
   })
 }
 
+export function prepareMsg (msg, type, values) {
+  if (null == msg) {
+    return Object.assign({}, MESSAGES[type], { values: values })
+  }
+  if (HAS_PROP.call(msg, 'props') && isReactElement(msg)) {
+    msg = msg.props
+  }
+  if (null != msg[type]) {
+    msg = msg[type]
+  }
+  if (isObject(msg)) {
+    if (HAS_PROP.call(msg, 'id') || HAS_PROP.call(msg, 'defaultMessage')) {
+      return Object.assign({}, msg, { values: values })
+    }
+    return Object.assign({}, MESSAGES[type], { values: values })
+  }
+  return { id: msg, defaultMessage: msg, values: values }
+}
+
 export function toObjectMsg (msg) {
   if (null == msg) return null
   return isObject(msg) ? msg : { id: msg, defaultMessage: msg }
-}
-
-export function addMsgValues (msg, values) {
-  return Object.assign({}, msg, { values: values })
 }
 
 export function memoize (func) {

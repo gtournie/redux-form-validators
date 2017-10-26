@@ -448,9 +448,20 @@ format({ with: /^[a-z]+$/i, message: { id: 'form.errors.alpha',
   defaultMessage: 'Letters only' } })
 format({ with: /^[a-z]+$/i, message: <FormattedMessage id="form.errors.alpha"
   defaultMessage="Letters only"/> })
+  
+// Version >= 2.1.0 only
+length({ msg: { tooShort: 'too short', tooLong: 'too long' }, in: [2, 8] })
+length({ msg: { tooShort: { id: 'errors.length.min', 
+  defaultMessage: 'too short' } }, min: 2 })
+length({ msg: { tooShort: <FormattedMessage id="errors.length.min"
+  defaultMessage="too short"/> }, min: 2 })
+length({ msg: { tooShort: 'min {count, number} characters' }, min: 2, max: 8 })
+  //=> tooLong message remains the default message
 ```
 
-> Note: all messages are internally converted into javascript objects (see [i18n and react-intl](#i18n-and-react-intl)), so if you pass a FormattedMessage as an argument, don't expect it to be returned as it.  
+> Note: As of version 2.1.0, you can also override just certain messages, and/or use interpolation.
+
+> Note: all messages are internally converted into javascript objects (see [i18n and react-intl](#i18n-and-react-intl)), so if you pass a FormattedMessage as an argument, don't expect it to be returned as it.   
 
 [See all default messages](https://github.com/gtournie/redux-form-validators/blob/master/examples/src/locales/en.json).
 
@@ -463,7 +474,7 @@ Finally, it's possible to associate `if` and `unless` with a function which will
 
 ```
 <Field name="surname" type="text" label="Surname" component={renderField} 
-    validate={presence({ if: (value, values) => { return '' !== values.name } })} />
+    validate={presence({ if: (values, value) => { return '' !== values.name } })} />
 ```
 
 ### Adding a validator

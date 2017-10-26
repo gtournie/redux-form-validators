@@ -1,6 +1,5 @@
-import messages from './messages'
 import Validators from './index'
-import { toObjectMsg, prepare, memoize } from './helpers'
+import { prepareMsg, prepare, memoize } from './helpers'
 
 
 let inclusion = memoize(function (options) {
@@ -16,7 +15,7 @@ export function inclusionExclusion (inclusion, {
       'if': ifCond, unless,
       allowBlank
     }) {
-  msg = toObjectMsg(msg || message)
+  msg = msg || message
   within = [].concat(within || inc).map(function(val) { return ('' + val) })
 
   return prepare(ifCond, unless, allowBlank, function (value) {
@@ -29,11 +28,11 @@ export function inclusionExclusion (inclusion, {
     }
     if (inclusion) {
       if (array.indexOf(value) < 0) {
-        return Validators.formatMessage(msg || messages.inclusion)
+        return Validators.formatMessage(prepareMsg(msg, 'inclusion'))
       }
     } else {
       if (array.indexOf(value) >= 0) {
-        return Validators.formatMessage(msg || messages.exclusion)
+        return Validators.formatMessage(prepareMsg(msg, 'exclusion'))
       }
     }
   })
