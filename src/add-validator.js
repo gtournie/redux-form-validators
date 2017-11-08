@@ -11,12 +11,13 @@ export default function addValidator ({ validator, defaultMessage, defaultMsg })
 
     return prepare(options.if, options.unless, options.allowBlank, function (value, allValues) {
       let result = validator(options, value, allValues)
-      if ('boolean' !== typeof result) {
-        return result
-      }
       if (!result) {
         return Validators.formatMessage(msg)
       }
+      if (typeof result === 'object') {
+        return Validators.formatMessage(result)
+      }
+      return result
     })
   })
 }
