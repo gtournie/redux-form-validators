@@ -50,6 +50,16 @@ describe('Validator: addValidator', function() {
     assert.ok(!test(invalidValidator, '', { invalid: 'valid' }))
     assert.ok(!test(digitValidator, '1 2 3 4', { digits: 4 }))
   })
+  it('should not use formatMessage when valid', function() {
+    let defaultValue = Validators.formatMessage
+
+    /* istanbul ignore next */
+    Validators.formatMessage = function(msg) { return msg.id }
+
+    assert.ok(!digitValidator({ digits: 4 })('1 2 3 4'))
+
+    Validators.formatMessage = defaultValue;
+  })
   it('should use formatMessage', function() {
     let defaultValue = Validators.formatMessage
 

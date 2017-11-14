@@ -12,7 +12,7 @@ export default function addValidator ({ validator, defaultMessage, defaultMsg })
     return prepare(options.if, options.unless, options.allowBlank, function (value, allValues) {
       let result = validator(options, value, allValues)
       if ('boolean' !== typeof result) {
-        return Validators.formatMessage(result)
+        return result ? Validators.formatMessage(result) : null
       }
       if (!result) {
         return Validators.formatMessage(msg)
