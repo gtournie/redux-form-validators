@@ -112,6 +112,11 @@ export function memoize (func) {
   }
 }
 
+// Duck-typing for Immutable.js to avoid dependencies
+export function isImmutable (obj) {
+  return obj.toJS && typeof obj.toJS === 'function'
+}
+
 // private
 const HAS_PROP = ({}).hasOwnProperty
 const TO_STRING = ({}).toString
