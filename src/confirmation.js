@@ -1,10 +1,5 @@
 import Validators from './index'
-import { prepareMsg, prepare, memoize } from './helpers'
-
-// Duck-typing for Immutable.js to avoid dependencies
-const isImmutable = obj => (
-  obj.toJS && typeof obj.toJS === 'function'
-)
+import { prepareMsg, prepare, memoize, isImmutable } from './helpers'
 
 let confirmation = memoize(function ({
       field,
