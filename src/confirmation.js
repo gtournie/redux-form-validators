@@ -1,6 +1,10 @@
 import Validators from './index'
 import { prepareMsg, prepare, memoize } from './helpers'
 
+// Duck-typing for Immutable.js to avoid dependencies
+const isImmutable = obj => (
+  obj.toJS && typeof obj.toJS === 'function'
+)
 
 let confirmation = memoize(function ({
       field,
@@ -13,7 +17,14 @@ let confirmation = memoize(function ({
   msg = msg || message
 
   return prepare(ifCond, unless, false, function (value, allValues) {
-    let fieldValue = '' + (allValues[field] || '')
+    let fieldValue;
+    
+    if (isImmutable(allValues)) {
+      fieldValue = allValues.getIn(field.split('.'))
+    } else {
+      fieldValue = '' + (allValues[field] || '')
+    }
+
     let cs = (null != caseSensitive ? caseSensitive : Validators.defaultOptions.caseSensitive)
 
     if (cs ? value !== fieldValue : value.toLowerCase() !== fieldValue.toLowerCase()) {
