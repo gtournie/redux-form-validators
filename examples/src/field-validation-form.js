@@ -3,10 +3,27 @@ import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
 import { FormattedMessage } from 'react-intl'
-import { acceptance, date, required, email, length, numericality, confirmation, url, addValidator } from 'redux-form-validators'
+import { acceptance, date, required, email, file, length, numericality, confirmation, url, addValidator } from 'redux-form-validators'
 
 import { Col, Row, Button, Input, Form, FormFeedback, FormGroup, FormText, Label } from 'reactstrap'
 
+
+function renderFileField ({ hint, input, label, type, meta: { touched, error }={}, ...inputProps }) {
+  inputProps = {...input, ...inputProps }
+  delete inputProps.value
+  let feedback = touched && error
+  let status   = touched && error ? 'danger' :  ''
+  let htmlId   = inputProps.id || inputProps.name
+
+  return (
+    <FormGroup color={status}>
+      <Label className="form-control-label" for={htmlId}>{label}</Label>
+      <Input type="file" multiple="multiple" id={htmlId} {...inputProps} />
+      {feedback ? <FormFeedback>{feedback}</FormFeedback> : ''}
+      {hint ? <FormText color="muted">{hint}</FormText> : ''}
+    </FormGroup>
+  )
+}
 
 function renderInputField ({ hint, input, label, type, meta: { touched, error }={}, ...inputProps }) {
   inputProps = {...input, ...inputProps }
@@ -101,6 +118,11 @@ class FieldValidationForm extends Component {
             <Col sm="6">
               <Field name="url" type="text" label="URL" component={renderInputField}
                 validate={url({ allowBlank: true })} />
+            </Col>
+          </Row>
+          <Row>
+            <Col sm="12">
+              <Field name="file" label="File" component={renderFileField} validate={[required(), file({ minSize: '0.2MB', maxSize: '1MB' })]} />
             </Col>
           </Row>
           {/*<Button type="submit">Submit</Button>*/}

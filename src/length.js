@@ -1,5 +1,5 @@
 import Validators from './index'
-import { prepareMsg, prepare, isNumber, memoize } from './helpers'
+import { prepareMsg, prepare, isNumber, selectNum, memoize } from './helpers'
 
 
 let length = memoize(function ({
@@ -13,9 +13,10 @@ let length = memoize(function ({
     }) {
   msg   = msg || message
 
-  equal = isNumber(equal) ? equal : is
-  min   = isNumber(min)   ? min   : minimum
-  max   = isNumber(max)   ? max   : maximum
+  equal = selectNum(equal, is)
+  min   = selectNum(min,   minimum)
+  max   = selectNum(max,   maximum)
+
   range = range || within
   if (range && isNumber(range[0]) && isNumber(range[1])) {
     min = range[0]
@@ -23,13 +24,13 @@ let length = memoize(function ({
   }
 
   return prepare(ifCond, unless, allowBlank, function (value) {
-    if (isNumber(equal) && value.length !== +equal) {
+    if (null !== equal && value.length !== equal) {
       return Validators.formatMessage(prepareMsg(msg, 'wrongLength', { count: equal }))
     }
-    if (isNumber(max) && value.length > +max) {
+    if (null !== max && value.length > max) {
       return Validators.formatMessage(prepareMsg(msg, 'tooLong', { count: max }))
     }
-    if (isNumber(min) && value.length < +min) {
+    if (null !== min && value.length < min) {
       return Validators.formatMessage(prepareMsg(msg, 'tooShort', { count: min }))
     }
   })

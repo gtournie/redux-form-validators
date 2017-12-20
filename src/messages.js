@@ -41,6 +41,30 @@ let messages = defineMessages({
     id: "form.errors.exclusion", 
     defaultMessage: "is reserved"
   },
+  file: {
+    id: "form.errors.file",
+    defaultMessage: "is not a file"
+  },
+  fileAccept: {
+    id: "form.errors.fileAccept",
+    defaultMessage: "invalid file {count, plural, one {type} other {types ({count})}}"
+  },
+  fileTooBig: {
+    id: "form.errors.fileTooBig",
+    defaultMessage: "{count, plural, one {is} other {{count} files are}} too small (maximum is {count, plural, one {{size}} other {{size} each}})"
+  },
+  fileTooFew: {
+    id: "form.errors.fileTooFew",
+    defaultMessage: "invalid number of files (minimum is {count})"
+  },
+  fileTooMany: {
+    id: "form.errors.fileTooMany",
+    defaultMessage: "invalid number of files (maximum is {count})"
+  },
+  fileTooSmall: {
+    id: "form.errors.fileTooSmall",
+    defaultMessage: "{count, plural, one {is} other {{count} files are}} too small (minimum is {count, plural, one {{size}} other {{size} each}})"
+  },
   greaterThan: {
     id: "form.errors.greaterThan", 
     defaultMessage: "must be greater than {count, number}"

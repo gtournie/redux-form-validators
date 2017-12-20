@@ -15,12 +15,18 @@ describe('Validator: presence', function() {
     assert.equal(ERROR_ID, test(''))
     assert.equal(ERROR_ID, test('   '))
     assert.equal(ERROR_ID, test(' \n \t '))
+    assert.equal(ERROR_ID, test(new FileList()))
+    assert.equal(ERROR_ID, test(new FileList({ length: 0 })))
+    assert.equal(ERROR_ID, test(new FileList([])))
     assert.equal(ERROR_ID, getErrorId(required()(' \n \t '))) // Alias
   })
   it('should be valid when `value` is not empty', function() {
     assert.ok(!test(1))
     assert.ok(!test('str'))
     assert.ok(!test(' abc '))
+    assert.ok(!test(new File()))
+    assert.ok(!test(new FileList({ length: 1 })))
+    assert.ok(!test(new FileList([{}])))
     assert.ok(!getErrorId(required()(' abc ')))
   })
   it('should use formatMessage', function() {

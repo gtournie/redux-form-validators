@@ -1,6 +1,18 @@
 import assert from 'assert'
-import { absence, date, acceptance, confirmation, email, exclusion,
-  format, inclusion, length, numericality, presence, url } from '../index'
+import {
+  absence,
+  date,
+  acceptance,
+  confirmation,
+  email,
+  exclusion,
+  file,
+  format,
+  inclusion,
+  length,
+  numericality,
+  presence,
+  url } from '../index'
 import getErrorId from './helper'
 
 import React from 'react'
@@ -22,6 +34,7 @@ describe('Validator option: message', function() {
       assert.equal('foobar', test(key, 'foobar', email, blank))
       assert.equal('foobar', test(key, 'foobar', date, blank, { format: 'mm/dd/yyyy' }))
       assert.equal('foobar', test(key, 'foobar', exclusion, blank, { in: [blank] }))
+      assert.equal('foobar', test(key, 'foobar', file))
       assert.equal('foobar', test(key, 'foobar', format, blank, { with: /^foo$/ }))
       assert.equal('foobar', test(key, 'foobar', inclusion, blank, { in: [] }))
       assert.equal('foobar', test(key, 'foobar', length, blank, { is: 300 }))

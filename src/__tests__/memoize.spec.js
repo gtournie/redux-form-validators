@@ -7,6 +7,7 @@ import { absence,
   date,
   email,
   exclusion,
+  file,
   format,
   inclusion,
   length,
@@ -60,6 +61,9 @@ describe('memoize', function () {
 
     assert.ok(test(exclusion, { within: ['foo'], caseSensitive: true }))
     assert.ok(test(exclusion, { in: 'foo' }))
+
+    assert.ok(test(file))
+    assert.ok(test(file, { accept: '.png' }))
 
     assert.ok(test(format, { without: /\w+/ }))
     assert.ok(test(format, { with: new RegExp('\\w+') }))

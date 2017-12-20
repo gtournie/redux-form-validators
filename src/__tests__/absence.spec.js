@@ -13,12 +13,18 @@ describe('Validator: absence', function () {
     assert.equal(ERROR_ID, test(1))
     assert.equal(ERROR_ID, test('str'))
     assert.equal(ERROR_ID, test(' abc '))
+    assert.equal(ERROR_ID, test(new File()))
+    assert.equal(ERROR_ID, test(new FileList({ length: 1 })))
+    assert.equal(ERROR_ID, test(new FileList([{}])))
   })
   it('should be valid when `value` is empty', function() {
     assert.ok(!test())
     assert.ok(!test(''))
     assert.ok(!test('   '))
     assert.ok(!test(' \n \t '))
+    assert.ok(!test(new FileList()))
+    assert.ok(!test(new FileList([])))
+    assert.ok(!test(new FileList({ length: 0 })))
   })
   it('should use formatMessage', function() {
     let defaultValue = Validators.formatMessage

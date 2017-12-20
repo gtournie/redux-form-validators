@@ -88,6 +88,7 @@ Validators
 * [exclusion](#exclusion)
 * [absence](#absence)
 * [url](#url)
+* [file](#file)
 
 More
 * [i18n and react-intl](#i18n-and-react-intl)
@@ -150,8 +151,16 @@ numericality({ '>': 6, '<=': 20 })
 numericality({ int: true, odd: true })
 ```
 
-The default error message is "is not a number".
-
+The default error messages are: 
+* "is not a number"
+* "must be greater than {number}"
+* "must be greater than or equal to {number}"
+* "must be equal to {number}"
+* "must be other than {number}"
+* "must be less than {number}"
+* "must be less than or equal to {number}"
+* "must be odd"
+* "must be even"
 
 ### date
 
@@ -360,6 +369,45 @@ The default error message is "is not a valid URL".
 
 > Note: As of version 2.0.0, the default protocol value is now: ['http', 'https'] ('ftp' was previously included)
 
+### file
+
+Validates that the specified value is a valid File or FileList.
+
+```
+<Field name="file" type="file" label="File" component={renderFileField} 
+    validate={file()} />
+```
+
+The possible file constraint options are:
+
+* `accept` - The value is a file (or a list of files) that match a comma-separated list of allowed file extensions or MIME types
+* `minSize` - The value is a file (or a list of files) that cannot be smaller than the specified size
+* `maxSize` - The value is a file (or a list of files) that cannot be bigger than the specified size
+* `minFiles` - The value is a list of files that cannot be smaller than the specified length 
+* `maxFiles` - The value is a list of files that cannot be bigger than the specified length 
+
+Examples
+```
+file()
+file({ accept: 'image/png, image/jpeg' })
+file({ accept: '.png, .jpg, .jpeg' })
+file({ accept: 'image/*' }) // Accept any file with an image/* MIME type
+file({ minSize: '5 MB', maxSize: '1 TB' })
+file({ minFiles: 2, maxFiles: 5 })
+```
+
+The default error messages are: 
+* "is not a file"
+* "invalid file type" / "invalid file types ({count})"
+* "is too small (minimum is {size})" / "{count} files are too small (minimum is {size} each)"
+* "is too big (maximum is {size})" / "{count} files are too big (maximum is {size} each)"
+* "invalid number of files (minimum is {count})"
+* "invalid number of files (maximum is {count})"
+
+> Note: size units supported: B, KB, MB, GB, TB, PB, EB 
+
+> Note: file inputs are only compatible with `file`, `required` or `absence` validators
+
 
 ### i18n and react-intl
 
@@ -380,6 +428,27 @@ Validators.formatMessage = function(msg) {
   defaultMessage: "must be greater than {count, number}",
   values: { count: 10 }
 }
+```
+> Note: You can also change the default plural rules or file size formats:
+```
+Validators.defaultOptions.pluralRules = {
+  1: 'one', 5: 'one', 7: 'one', 8: 'one', 9: 'one', 10: 'one',
+  2: 'two', 3: 'two',
+  4: 'few',
+  6: 'many'
+}
+let msg = '{count, plural, one {foo} two {bar} few {fooo} many {baaar} other {foobar}}'
+
+const FR_UNITS = {
+  B:  'octets',
+  KB: 'Ko',
+  ...
+}
+Validators.formatSize = function (size, unit) {
+  return size + ' ' + FR_UNITS[unit]
+}
+file({ minSize: '5MB' }) // -> is too small (minimum is 5 Mo)
+file({ minSize: 500 })   // -> is too small (minimum is 500 octets)
 ```
 
 And if you're using [babel-plugin-react-intl](https://github.com/yahoo/babel-plugin-react-intl) to extract your application messages, you'll need to **add** a new plugin entry in your webpack config ([example](https://github.com/gtournie/redux-form-validators/blob/master/webpack/example.js)):
@@ -404,7 +473,11 @@ redux-form-validators comes with default options:
   dateFormat:    'yyyy-mm-dd',
   dateYmd:       'ymd',
   accept:        ['1', 'true'],    
-  caseSensitive: true  // confirmation, inclusion, exclusion
+  caseSensitive: true,  // confirmation, inclusion, exclusion
+  pluralRules: { // See the "i18n and react-intl" section
+    0: 'zero',
+    1: 'one'
+  }
 };
 ```
 

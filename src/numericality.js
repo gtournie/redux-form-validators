@@ -1,5 +1,5 @@
 import Validators from './index'
-import { prepareMsg, prepare, isNumber, trunc, memoize } from './helpers'
+import { prepareMsg, prepare, isNumber, selectNum, trunc, memoize } from './helpers'
 
 
 let numericality = memoize(function ({
@@ -20,12 +20,12 @@ let numericality = memoize(function ({
   msg            = msg || message
 
   int            = int || integer
-  equal          = isNumber(equal)          ? equal          : equalTo
-  diff           = isNumber(diff)           ? diff           : otherThan
-  greater        = isNumber(greater)        ? greater        : greaterThan
-  less           = isNumber(less)           ? less           : lessThan
-  greaterOrEqual = isNumber(greaterOrEqual) ? greaterOrEqual : greaterThanOrEqualTo
-  lessOrEqual    = isNumber(lessOrEqual)    ? lessOrEqual    : lessThanOrEqualTo
+  equal          = selectNum(equal,          equalTo)
+  diff           = selectNum(diff,           otherThan)
+  greater        = selectNum(greater,        greaterThan)
+  greaterOrEqual = selectNum(greaterOrEqual, greaterThanOrEqualTo)
+  less           = selectNum(less,           lessThan)
+  lessOrEqual    = selectNum(lessOrEqual,    lessThanOrEqualTo)
 
   return prepare(ifCond, unless, allowBlank, function (value) {
     if (!isNumber(value)) {
@@ -34,22 +34,22 @@ let numericality = memoize(function ({
     if (int && (+value % 1)) {
       return Validators.formatMessage(prepareMsg(msg, 'notANumber'))
     }
-    if (isNumber(equal) && +value !== +equal) {
+    if (null !== equal && +value !== equal) {
       return Validators.formatMessage(prepareMsg(msg, 'equalTo', { count: equal }))
     }
-    if (isNumber(diff) && +value === +diff) {
+    if (null !== diff && +value === diff) {
       return Validators.formatMessage(prepareMsg(msg, 'otherThan', { count: diff }))
     }
-    if (isNumber(greater) && +value <= +greater) {
+    if (null !== greater && +value <= greater) {
       return Validators.formatMessage(prepareMsg(msg, 'greaterThan', { count: greater }))
     }
-    if (isNumber(greaterOrEqual) && +value < +greaterOrEqual) {
+    if (null !== greaterOrEqual && +value < greaterOrEqual) {
       return Validators.formatMessage(prepareMsg(msg, 'greaterThanOrEqualTo', { count: greaterOrEqual }))
     }
-    if (isNumber(less) && +value >= +less) {
+    if (null !== less && +value >= less) {
       return Validators.formatMessage(prepareMsg(msg, 'lessThan', { count: less }))
     }
-    if (isNumber(lessOrEqual) && +value > +lessOrEqual) {
+    if (null !== lessOrEqual && +value > lessOrEqual) {
       return Validators.formatMessage(prepareMsg(msg, 'lessThanOrEqualTo', { count: lessOrEqual }))
     }
     if (even && (trunc(+value) % 2)) {

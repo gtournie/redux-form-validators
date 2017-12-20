@@ -2,13 +2,20 @@ import format from './format'
 import Validators from './index'
 import MESSAGES from './messages'
 
+export const HAS_PROP = ({}).hasOwnProperty
+export const TO_STRING = ({}).toString
+
 export var DEFAULT_OPTIONS = {
   allowBlank: false,
   urlProtocols: ['http', 'https'],
   dateFormat: 'yyyy-mm-dd', // ISO
   dateYmd: 'ymd',
   accept: ['1', 'true'],
-  caseSensitive: true       // confirmation, inclusion, exclusion
+  caseSensitive: true,      // confirmation, inclusion, exclusion
+  pluralRules: {
+    0: 'zero',
+    1: 'one'
+  }
 };
 
 
@@ -28,10 +35,12 @@ export function regFormat (func, messageType) {
 
 export function prepare (ifCond, unlessCond, allowBlank, func) {
   return function (value, allValues={}) {
-    value = null == value ? '' : '' + value
+    if (!value || 'object' !== typeof value) {
+      value = null == value ? '' : '' + value
 
-    if ((null != allowBlank ? allowBlank : Validators.defaultOptions.allowBlank) && !value.trim()) {
-      return
+      if ((null != allowBlank ? allowBlank : Validators.defaultOptions.allowBlank) && !value.trim()) {
+        return
+      }
     }
     if (('function' !== typeof ifCond || ifCond(allValues, value)) &&
         ('function' !== typeof unlessCond || !unlessCond(allValues, value))) {
@@ -45,36 +54,32 @@ export function trunc (num) {
   return Math.trunc ? Math.trunc(num) : num < 0 ? Math.ceil(num) : Math.floor(num)
 }
 
+export function selectNum (var1, var2) {
+  return isNumber(var1) ? +var1 : (arguments.length > 1 && isNumber(var2) ? +var2 : null)
+}
+
 export function isNumber (num) {
-  return !isNaN(num) && '' !== ('' + num).trim()
+  return !isNaN(num) && (0 != num || '' !== ('' + num).trim())
 }
-
-let pluralRules = {
-  0:     /zero\s*\{(.*?)\}/,
-  1:     /one\s*\{(.*?)\}/,
-  other: /other\s*\{(.*?)\}/
-}
-
-let TEMPLATE_REG = /\{([^{}]*\{[^{}]*\}[^{}]*)+\}|\{(.*?)\}/g
 
 export function formatMsg (msg) {
   if (msg.props) {
     msg = msg.props
   }
-  let text = msg.defaultMessage || msg.id || '';
-  return !msg.values ? text : text.replace(TEMPLATE_REG, function(content) {
-    let parts = content.slice(1, -1).split(',')
+  let text = msg.defaultMessage || msg.id || ''
+  let rules = Validators.defaultOptions.pluralRules
+  return !msg.values ? text : parseMsg(text, function(part) {
+    let parts = part.split(',')
     let count = msg.values[parts[0]]
+    // {value} OR {count, number}
     if (parts.length <= 2) {
-      return null == count ? '' : count
+      return null == count ? '' : ('' + count)
     }
-    let plural = parts[2].trim()
-    let rules = pluralRules[+count]
-    let result
-    if (rules && (result = plural.match(rules))) {
-      return result[1]
-    }
-    return (plural.match(pluralRules.other) || [])[1] || ''
+    // plural
+    let plural = parts.slice(2).join(',').trim()
+    let info = {}
+    let result = parseMsg(plural, null, rules[+count] || 'other', info)
+    return info.found ? result : parseMsg(plural, null, 'other', {})
   })
 }
 
@@ -113,8 +118,38 @@ export function memoize (func) {
 }
 
 // private
-const HAS_PROP = ({}).hasOwnProperty
-const TO_STRING = ({}).toString
+function parseMsg (msg, func, pattern, info) {
+  let start = msg.indexOf('{')
+  if (start < 0) return pattern ? '' : msg
+  let index = start
+  let count = 1
+  let len = msg.length
+  while (count > 0 && index < len) {
+    ++index;
+    if ('{' === msg.charAt(index)) {
+      ++count;
+    }
+    if ('}' === msg.charAt(index)) {
+      --count;
+    }
+  }
+  if (pattern) {
+    if (pattern === msg.slice(0, start).trim()) {
+      info.found = true
+      return msg.slice(start + 1, index).trim()
+    }
+    return parseMsg(msg.slice(index + 1), null, pattern, info)
+  }
+
+  // func gets all '{.*}' parts
+  // e.g:
+  // - {count}
+  // - {count, plural, one {1 thing} other {many things}}
+  // - ...
+  return msg.slice(0, start) +
+    parseMsg(func(msg.slice(start + 1, index).trim()), func) +
+    parseMsg(msg.slice(index + 1), func)
+}
 
 function stringify (options) {
   let arr = []
@@ -130,10 +165,10 @@ function stringify (options) {
   return JSON.stringify(arr)
 }
 
-function isReactElement(object) {
+function isReactElement (object) {
   return typeof object === 'object' && object !== null && '$$typeof' in object;
 }
 
-function isObject(obj) {
+function isObject (obj) {
   return 'object' === typeof obj && '[object Object]' === TO_STRING.call(obj) && null !== obj;
 }

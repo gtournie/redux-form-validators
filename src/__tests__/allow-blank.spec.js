@@ -1,5 +1,6 @@
 import assert from 'assert'
-import Validators, { email, date, exclusion, format, inclusion, length, numericality, url } from '../index'
+import Validators, { email, date, exclusion, file, format, inclusion, length, numericality, url } from '../index'
+import { TO_STRING } from '../helpers'
 import getErrorId from './helper'
 
 const BLANK_STRINGS = ['', ' ', ' \n \t ']
@@ -20,8 +21,9 @@ describe('Validator option: allowBlank', function() {
       assert.ok(test(numericality, blank, { allowBlank: false }).indexOf('form.errors') === 0)
       assert.ok(test(url, blank, { allowBlank: false }).indexOf('form.errors') === 0)
     })
+    assert.ok(test(file, new FileList(), { allowBlank: false }).indexOf('form.errors') === 0)
   })
-  it('should be invalid when `value` is blank with allowBlank: true', function() {
+  it('should be valid when `value` is blank with allowBlank: true', function() {
     BLANK_STRINGS.forEach(function(blank) {
       assert.ok(!test(email, blank, { allowBlank: true }))
       assert.ok(!test(date, blank, { format: 'mm/dd/yyyy', allowBlank: true }))
@@ -32,6 +34,7 @@ describe('Validator option: allowBlank', function() {
       assert.ok(!test(numericality, blank, { allowBlank: true }))
       assert.ok(!test(url, blank, { allowBlank: true }))
     })
+    assert.ok(!test(file, new FileList(), { allowBlank: true }))
   })
   it('should use default allowBlank option', function() {
     let defaultValue = Validators.defaultOptions.allowBlank

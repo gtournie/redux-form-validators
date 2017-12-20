@@ -13,7 +13,12 @@ let confirmation = memoize(function ({
   msg = msg || message
 
   return prepare(ifCond, unless, false, function (value, allValues) {
-    let fieldValue = '' + (allValues[field] || '')
+    // Immutable.js compatibility
+    let fieldValue = 'function' === typeof allValues.getIn
+      ? allValues.getIn(field.split('.'))
+      : allValues[field]
+    fieldValue = '' + (fieldValue || '')
+
     let cs = (null != caseSensitive ? caseSensitive : Validators.defaultOptions.caseSensitive)
 
     if (cs ? value !== fieldValue : value.toLowerCase() !== fieldValue.toLowerCase()) {

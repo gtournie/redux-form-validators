@@ -4,6 +4,7 @@ import addValidator from './add-validator'
 import confirmation from './confirmation'
 import date from './date'
 import email from './email'
+import file, { formatSize } from './file'
 import format from './format'
 import inclusion from './inclusion'
 import exclusion from './exclusion'
@@ -19,6 +20,7 @@ let required = presence // alias
 
 export default {
   formatMessage,
+  formatSize,
   defaultOptions: DEFAULT_OPTIONS,
   messages
 }
@@ -31,6 +33,7 @@ export {
   date,
   email,
   exclusion,
+  file,
   format,
   inclusion,
   length,

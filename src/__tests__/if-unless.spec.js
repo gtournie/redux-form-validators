@@ -1,6 +1,18 @@
 import assert from 'assert'
-import { absence, date, acceptance, confirmation, email, exclusion,
-  format, inclusion, length, numericality, presence, url } from '../index'
+import {
+  absence,
+  date,
+  acceptance,
+  confirmation,
+  email,
+  exclusion,
+  file,
+  format,
+  inclusion,
+  length,
+  numericality,
+  presence,
+  url } from '../index'
 import getErrorId from './helper'
 
 
@@ -31,6 +43,7 @@ describe('Validator option: if & unless', function() {
       assert.ok(!test(type, email, blank))
       assert.ok(!test(type, date, blank, { format: 'mm/dd/yyyy' }))
       assert.ok(!test(type, exclusion, blank, { in: [blank] }))
+      assert.ok(!test(type, file, blank, { minFiles: 9 }))
       assert.ok(!test(type, format, blank, { with: /^foo$/ }))
       assert.ok(!test(type, inclusion, blank, { in: [] }))
       assert.ok(!test(type, length, blank, { is: 300 }))
