@@ -9,6 +9,12 @@
   "form.errors.equalTo": "must be equal to {count, number}",
   "form.errors.even": "must be even",
   "form.errors.exclusion": "is reserved",
+  "form.errors.file": "is not a file",
+  "form.errors.fileAccept": "invalid file {count, plural, one {type} other {types ({count})}}",
+  "form.errors.fileTooBig": "{count, plural, one {is} other {{count} files are}} too small (maximum is {count, plural, one {{size}} other {{size} each}})",
+  "form.errors.fileTooFew": "invalid number of files (minimum is {count})",
+  "form.errors.fileTooMany": "invalid number of files (maximum is {count})",
+  "form.errors.fileTooSmall": "{count, plural, one {is} other {{count} files are}} too small (minimum is {count, plural, one {{size}} other {{size} each}})",
   "form.errors.greaterThan": "must be greater than {count, number}",
   "form.errors.greaterThanOrEqualTo": "must be greater than or equal to {count, number}",
   "form.errors.inclusion": "is not included in the list",
@@ -21,6 +27,7 @@
   "form.errors.presence": "is required",
   "form.errors.tooLong": "is too long (maximum is {count, number} {count, plural, one {character} other {characters}})",
   "form.errors.tooShort": "is too short (minimum is {count, number} {count, plural, one {character} other {characters}})",
+  "form.errors.tooYoung": "Sorry, you must be at least 18 years old",
   "form.errors.url": "is not a valid URL",
   "form.errors.wrongLength": "is the wrong length (should be {count, number} {count, plural, one {character} other {characters}})"
 }

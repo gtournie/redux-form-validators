@@ -528,7 +528,7 @@ Object.assign(Validators.messages, {
 
 > Note: This won't work with react-intl, as you load the messages from a json file
 
-[See all default messages](https://github.com/gtournie/redux-form-validators/blob/master/examples/src/locales/en.json).
+[See all default messages](https://github.com/gtournie/redux-form-validators/blob/master/src/messages.js).
 
 
 ### Common validation options
@@ -575,7 +575,7 @@ length({ msg: { tooShort: 'min {count, number} characters' }, min: 2, max: 8 })
 
 > Note: all messages are internally converted into javascript objects (see [i18n and react-intl](#i18n-and-react-intl)), so if you pass a FormattedMessage as an argument, don't expect it to be returned as it.   
 
-[See all default messages](https://github.com/gtournie/redux-form-validators/blob/master/examples/src/locales/en.json).
+[See all default messages](https://github.com/gtournie/redux-form-validators/blob/master/src/messages.js).
 
 
 ### Conditional validation
