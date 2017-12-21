@@ -31,9 +31,9 @@ describe('formatMessage', function() {
     assert.equal('2 28 chars', formatMsg({ defaultMessage: msg, values: { count: 2, size: 28 } }))
   })
   it('should pluralize with given pluralRules', function() {
-    let defaultPluralRules = Validators.defaultOptions.pluralRules
+    let defaultPluralRules = Validators.pluralRules
     
-    Validators.defaultOptions.pluralRules = {
+    Validators.pluralRules = {
       1: 'one', 5: 'one', 7: 'one', 8: 'one', 9: 'one', 10: 'one',
       2: 'two', 3: 'two',
       4: 'few',
@@ -53,6 +53,6 @@ describe('formatMessage', function() {
     assert.equal('one', formatMsg({ defaultMessage: msg, values: { count: 9 } }))
     assert.equal('one', formatMsg({ defaultMessage: msg, values: { count: 10 } }))
 
-    Validators.defaultOptions.pluralRules = defaultPluralRules
+    Validators.pluralRules = defaultPluralRules
   })
 })

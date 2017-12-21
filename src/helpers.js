@@ -1,6 +1,5 @@
 import format from './format'
 import Validators from './index'
-import MESSAGES from './messages'
 
 export const HAS_PROP = ({}).hasOwnProperty
 export const TO_STRING = ({}).toString
@@ -11,11 +10,7 @@ export var DEFAULT_OPTIONS = {
   dateFormat: 'yyyy-mm-dd', // ISO
   dateYmd: 'ymd',
   accept: ['1', 'true'],
-  caseSensitive: true,      // confirmation, inclusion, exclusion
-  pluralRules: {
-    0: 'zero',
-    1: 'one'
-  }
+  caseSensitive: true       // confirmation, inclusion, exclusion
 };
 
 
@@ -63,11 +58,12 @@ export function isNumber (num) {
 }
 
 export function formatMsg (msg) {
+  console.log(msg)
   if (msg.props) {
     msg = msg.props
   }
   let text = msg.defaultMessage || msg.id || ''
-  let rules = Validators.defaultOptions.pluralRules
+  let rules = Validators.pluralRules
   return !msg.values ? text : parseMsg(text, function(part) {
     let parts = part.split(',')
     let count = msg.values[parts[0]]
@@ -85,7 +81,7 @@ export function formatMsg (msg) {
 
 export function prepareMsg (msg, type, values) {
   if (null == msg) {
-    return Object.assign({}, MESSAGES[type], { values: values })
+    return defaultMessage(type, values)
   }
   if (HAS_PROP.call(msg, 'props') && isReactElement(msg)) {
     msg = msg.props
@@ -97,7 +93,7 @@ export function prepareMsg (msg, type, values) {
     if (HAS_PROP.call(msg, 'id') || HAS_PROP.call(msg, 'defaultMessage')) {
       return Object.assign({}, msg, { values: values })
     }
-    return Object.assign({}, MESSAGES[type], { values: values })
+    return defaultMessage(type, values)
   }
   return { id: msg, defaultMessage: msg, values: values }
 }
@@ -118,6 +114,13 @@ export function memoize (func) {
 }
 
 // private
+function defaultMessage (type, values) {
+  let msg = Validators.messages[type]
+  return 'string' === typeof msg
+    ? { defaultMessage: msg, values: values }
+    : Object.assign({}, msg, { values: values })
+}
+
 function parseMsg (msg, func, pattern, info) {
   let start = msg.indexOf('{')
   if (start < 0) return pattern ? '' : msg

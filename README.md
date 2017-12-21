@@ -91,11 +91,12 @@ Validators
 * [file](#file)
 
 More
-* [i18n and react-intl](#i18n-and-react-intl)
-* [adding a validator](#adding-a-validator)
 * [default options](#default-options)
+* [i18n and react-intl](#i18n-and-react-intl)
+* [default messages override](#default-messages-override)
 * [common validation options](#common-validation-options)
 * [conditional validation](#conditional-validation)
+* [adding a validator](#adding-a-validator)
 * [date helpers](#date-helpers)
 
 
@@ -409,59 +410,6 @@ The default error messages are:
 > Note: file inputs are only compatible with `file`, `required` or `absence` validators
 
 
-### i18n and react-intl
-
-By default, all errors messages are in english and are pluralized if needed (basic support) but you can use [react-intl](https://github.com/yahoo/react-intl) to support different languages. All you need to do is to insert the following lines:
-```
-import Validators from 'redux-form-validators'
-import { FormattedMessage } from 'react-intl'
-
-Validators.formatMessage = function(msg) {
-  return <FormattedMessage {...(msg.props || msg)} />
-}
-```
-
-> Note: You can also implement your own i18n/pluralization module by overriding `Validators.formatMessage`. The first argument is a javascript object compatible with react-intl: 
-```
-{
-  id: "form.errors.greaterThan", 
-  defaultMessage: "must be greater than {count, number}",
-  values: { count: 10 }
-}
-```
-> Note: You can also change the default plural rules or file size formats:
-```
-Validators.defaultOptions.pluralRules = {
-  1: 'one', 5: 'one', 7: 'one', 8: 'one', 9: 'one', 10: 'one',
-  2: 'two', 3: 'two',
-  4: 'few',
-  6: 'many'
-}
-let msg = '{count, plural, one {foo} two {bar} few {fooo} many {baaar} other {foobar}}'
-
-const FR_UNITS = {
-  B:  'octets',
-  KB: 'Ko',
-  ...
-}
-Validators.formatSize = function (size, unit) {
-  return size + ' ' + FR_UNITS[unit]
-}
-file({ minSize: '5MB' }) // -> is too small (minimum is 5 Mo)
-file({ minSize: 500 })   // -> is too small (minimum is 500 octets)
-```
-
-And if you're using [babel-plugin-react-intl](https://github.com/yahoo/babel-plugin-react-intl) to extract your application messages, you'll need to **add** a new plugin entry in your webpack config ([example](https://github.com/gtournie/redux-form-validators/blob/master/webpack/example.js)):
-```
-["react-intl", {
-  "messagesDir": ...,
-  "languages": ...,
-  // /!\ it's important to keep a relative path here
-  "moduleSourceName": "./redux-form-validators"
-}
-``` 
-
-
 ### Default options
 
 redux-form-validators comes with default options:
@@ -491,6 +439,97 @@ Object.assign(Validators.defaultOptions, {
   urlProtocols: ['http', 'https', 'ftp']
 })
 ```
+
+### i18n and react-intl
+
+By default, all errors messages are in english and are pluralized if needed (basic support) but you can use [react-intl](https://github.com/yahoo/react-intl) to support different languages. All you need to do is to insert the following lines:
+```
+import Validators from 'redux-form-validators'
+import { FormattedMessage } from 'react-intl'
+
+Validators.formatMessage = function(msg) {
+  return <FormattedMessage {...(msg.props || msg)} />
+}
+```
+
+> Note: You can also implement your own i18n/pluralization module by overriding `Validators.formatMessage`. The first argument is a javascript object compatible with react-intl: 
+```
+{
+  id: "form.errors.greaterThan", 
+  defaultMessage: "must be greater than {count, number}",
+  values: { count: 10 }
+}
+```
+
+> Note: You can also change the default plural rules or file size formats:
+```
+// Plural rules
+Validators.pluralRules = {
+  1: 'one', 5: 'one', 7: 'one', 8: 'one', 9: 'one', 10: 'one',
+  2: 'two', 3: 'two',
+  4: 'few',
+  6: 'many'
+}
+let msg = '{count, plural, one {foo} two {bar} few {fooo} many {baaar} other {foobar}}'
+
+// Size format
+const FR_UNITS = {
+  B:  'octets',
+  KB: 'Ko',
+  ...
+}
+Validators.formatSize = function (size, unit) {
+  return size + ' ' + FR_UNITS[unit]
+}
+file({ minSize: '5MB' }) // -> is too small (minimum is 5 Mo)
+file({ minSize: 500 })   // -> is too small (minimum is 500 octets)
+```
+
+And if you're using [babel-plugin-react-intl](https://github.com/yahoo/babel-plugin-react-intl) to extract your application messages, you'll need to **add** a new plugin entry in your webpack config ([example](https://github.com/gtournie/redux-form-validators/blob/master/webpack/example.js)):
+```
+["react-intl", {
+  "messagesDir": ...,
+  "languages": ...,
+  // /!\ it's important to keep a relative path here
+  "moduleSourceName": "./redux-form-validators"
+}
+``` 
+
+### Default messages override
+
+To override the default messages globally:
+```
+Object.assign(Validators.messages, {
+  email: {
+    id: "form.errors.email", 
+    defaultMessage: "is not a valid email address"
+  },
+  presence: {
+    id: "form.errors.presence",
+    defaultMessage: "is missing"
+  },
+  tooShort: {
+    id: "form.errors.tooShort",
+    defaultMessage: "is too short: {count, number} chars minimum"
+  },
+  ...
+})
+```
+
+OR even simpler if you don't override formatMessage (and don't need ids):
+```
+Object.assign(Validators.messages, {
+  email:    "is not a valid email address",
+  presence: "is missing",
+  tooShort: "is too short: {count, number} chars minimum",
+  ...
+})
+```
+
+> Note: This won't work with react-intl, as you load the messages from a json file
+
+[See all default messages](https://github.com/gtournie/redux-form-validators/blob/master/examples/src/locales/en.json).
+
 
 ### Common validation options
 

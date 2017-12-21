@@ -17,6 +17,7 @@ import getErrorId from './helper'
 
 import React from 'react'
 import { FormattedMessage } from 'react-intl';
+import Validators from "../index";
 
 
 function test (key, msg, func, value, params={}) {
@@ -67,5 +68,32 @@ describe('Validator option: message', function() {
       assert.equal('form.errors.tooShort', test(key, { wrongLength: { id: 'is' } }, length, blank, { min: 1 }))
       assert.equal('form.errors.tooShort', test(key, { wrongLength: { id: 'is' } }, length, blank, { is: 0, min: 1 }))
     })
+  })
+
+  it('should override default messages', function() {
+    let formatMessage = Validators.formatMessage
+    Validators.formatMessage = ValidatorsFormatMessage
+
+    let defaultMessages = Validators.messages
+    assert.equal(defaultMessages.presence.defaultMessage, presence()(''))
+
+    Validators.messages.presence = {
+      id: "form.errors.presence",
+      defaultMessage: "is mandatory"
+    }
+    assert.equal("is mandatory", presence()(''))
+    Validators.messages.tooShort = "is too short: {count} chars expected"
+    assert.equal("is too short: 4 chars expected", length({ min: 4 })(''))
+
+    Object.assign(Validators.messages, {
+      presence: {
+        id: "form.errors.presence",
+        defaultMessage: "is missing"
+      }
+    })
+    assert.equal("is missing", presence()(''))
+
+    Validators.messages = defaultMessages
+    Validators.formatMessage = formatMessage
   })
 })

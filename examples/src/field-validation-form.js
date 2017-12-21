@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
 import { FormattedMessage } from 'react-intl'
-import { acceptance, date, required, email, file, length, numericality, confirmation, url, addValidator } from 'redux-form-validators'
+import Validators, { acceptance, date, required, email, file, length, numericality, confirmation, url, addValidator } from 'redux-form-validators'
 
 import { Col, Row, Button, Input, Form, FormFeedback, FormGroup, FormText, Label } from 'reactstrap'
 
