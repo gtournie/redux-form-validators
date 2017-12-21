@@ -58,7 +58,6 @@ export function isNumber (num) {
 }
 
 export function formatMsg (msg) {
-  console.log(msg)
   if (msg.props) {
     msg = msg.props
   }
