@@ -3,6 +3,7 @@ import Validators, { numericality } from '../index'
 import getErrorId from './helper'
 
 const ERROR_NOT_A_NUMBER_ID       = 'form.errors.notANumber'
+const ERROR_NOT_AN_INTEGER_ID     = 'form.errors.notAnInteger'
 const ERROR_EQUAL_TO_ID           = 'form.errors.equalTo'
 const ERROR_OTHER_THAN_ID         = 'form.errors.otherThan'
 const ERROR_GREATER_THAN_ID       = 'form.errors.greaterThan'
@@ -25,10 +26,10 @@ describe('Validator: numericality', function () {
     assert.equal(ERROR_NOT_A_NUMBER_ID, test('foobar12'))
   })
   it('should be invalid when `value` is not a integer', function() {
-    assert.equal(ERROR_NOT_A_NUMBER_ID, test('',             { int: true }))
-    assert.equal(ERROR_NOT_A_NUMBER_ID, test('foobar',       { int: true }))
-    assert.equal(ERROR_NOT_A_NUMBER_ID, test('12.345',       { int: true }))
-    assert.equal(ERROR_NOT_A_NUMBER_ID, test('0.01',         { integer: true }))
+    assert.equal(ERROR_NOT_AN_INTEGER_ID, test('',             { int: true }))
+    assert.equal(ERROR_NOT_AN_INTEGER_ID, test('foobar',       { int: true }))
+    assert.equal(ERROR_NOT_AN_INTEGER_ID, test('12.345',       { int: true }))
+    assert.equal(ERROR_NOT_AN_INTEGER_ID, test('0.01',         { integer: true }))
   })
   it('should be invalid when `value` is not = to equalTo', function() {
     assert.equal(ERROR_EQUAL_TO_ID, test(1,                  { '=': 0 }))
