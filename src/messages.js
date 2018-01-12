@@ -93,6 +93,10 @@ let messages = defineMessages({
     id: "form.errors.notANumber", 
     defaultMessage: "is not a number"
   },
+  notAnInteger: {
+    id: "form.errors.notAnInteger",
+    defaultMessage: "is not an integer"
+  },
   odd: {
     id: "form.errors.odd", 
     defaultMessage: "must be odd"
