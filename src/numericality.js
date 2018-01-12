@@ -29,10 +29,10 @@ let numericality = memoize(function ({
 
   return prepare(ifCond, unless, allowBlank, function (value) {
     if (!isNumber(value)) {
-      return Validators.formatMessage(prepareMsg(msg, 'notAnInteger'))
+      return Validators.formatMessage(prepareMsg(msg, 'notANumber'))
     }
     if (int && (+value % 1)) {
-      return Validators.formatMessage(prepareMsg(msg, 'notANumber'))
+      return Validators.formatMessage(prepareMsg(msg, 'notAnInteger'))
     }
     if (null !== equal && +value !== equal) {
       return Validators.formatMessage(prepareMsg(msg, 'equalTo', { count: equal }))
