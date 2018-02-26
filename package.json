@@ -1,6 +1,6 @@
 {
   "name": "redux-form-validators",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "Simple validations with redux-form",
   "main": "lib/index.js",
   "repository": {
@@ -39,7 +39,8 @@
     "clean": "rimraf dist lib",
     "manage:i18n": "node ./translationRunner.js",
     "prepublish": "npm run clean && npm run test && npm run build",
-    "test": "babel-node ./node_modules/.bin/isparta cover _mocha -- --compilers js:babel-core/register --recursive src/__tests__/*.spec.js --require src/__tests__/setup.js --full-trace",
+    "test":
+      "babel-node ./node_modules/.bin/isparta cover _mocha -- --compilers js:babel-core/register --recursive src/__tests__/*.spec.js --require src/__tests__/setup.js --full-trace",
     "coveralls": "cat coverage/lcov.info | coveralls"
   },
   "devDependencies": {
@@ -91,9 +92,7 @@
   "npmFileMap": [
     {
       "basePath": "/dist/",
-      "files": [
-        "*.js"
-      ]
+      "files": ["*.js"]
     }
   ]
 }
