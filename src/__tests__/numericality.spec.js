@@ -26,8 +26,8 @@ describe('Validator: numericality', function () {
     assert.equal(ERROR_NOT_A_NUMBER_ID, test('foobar12'))
   })
   it('should be invalid when `value` is not a integer', function() {
-    assert.equal(ERROR_NOT_AN_INTEGER_ID, test('',             { int: true }))
-    assert.equal(ERROR_NOT_AN_INTEGER_ID, test('foobar',       { int: true }))
+    assert.equal(ERROR_NOT_A_NUMBER_ID, test('',             { int: true }))
+    assert.equal(ERROR_NOT_A_NUMBER_ID, test('foobar',       { int: true }))
     assert.equal(ERROR_NOT_AN_INTEGER_ID, test('12.345',       { int: true }))
     assert.equal(ERROR_NOT_AN_INTEGER_ID, test('0.01',         { integer: true }))
   })
