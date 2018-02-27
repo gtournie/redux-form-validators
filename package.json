@@ -1,8 +1,10 @@
 {
   "name": "redux-form-validators",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Simple validations with redux-form",
+  "module": "src/index.js",
   "main": "lib/index.js",
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gtournie/redux-form-validators.git"
