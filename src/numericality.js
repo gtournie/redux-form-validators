@@ -32,7 +32,7 @@ let numericality = memoize(function ({
       return Validators.formatMessage(prepareMsg(msg, 'notANumber'))
     }
     if (int && (+value % 1)) {
-      return Validators.formatMessage(prepareMsg(msg, 'notANumber'))
+      return Validators.formatMessage(prepareMsg(msg, 'notAnInteger'))
     }
     if (null !== equal && +value !== equal) {
       return Validators.formatMessage(prepareMsg(msg, 'equalTo', { count: equal }))
