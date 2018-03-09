@@ -29,7 +29,7 @@ export function regFormat (func, messageType) {
 
 
 export function prepare (ifCond, unlessCond, allowBlank, func) {
-  return function (value, allValues={}) {
+  return function (value, allValues={}, ...args) {
     if (!value || 'object' !== typeof value) {
       value = null == value ? '' : '' + value
 
@@ -39,7 +39,7 @@ export function prepare (ifCond, unlessCond, allowBlank, func) {
     }
     if (('function' !== typeof ifCond || ifCond(allValues, value)) &&
         ('function' !== typeof unlessCond || !unlessCond(allValues, value))) {
-      return func(value, allValues)
+      return func(value, allValues, ...args)
     }
   }
 }

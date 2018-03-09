@@ -9,8 +9,8 @@ export default function addValidator ({ validator, defaultMessage, defaultMsg })
   return memoize(function (options={}) {
     let msg = toObjectMsg(options.msg || options.message) || defaultMsg
 
-    return prepare(options.if, options.unless, options.allowBlank, function (value, allValues) {
-      let result = validator(options, value, allValues)
+    return prepare(options.if, options.unless, options.allowBlank, function (...args) {
+      let result = validator(options, ...args)
       if ('boolean' !== typeof result) {
         return result ? Validators.formatMessage(result) : null
       }
