@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
 import { FormattedMessage } from 'react-intl'
-import Validators, { acceptance, date, required, email, file, length, numericality, confirmation, url, addValidator } from 'redux-form-validators'
+import Validators, { acceptance, date, required, email, file, length, numericality, confirmation, url, addValidator, ip } from 'redux-form-validators'
 
 import { Col, Row, Button, Input, Form, FormFeedback, FormGroup, FormText, Label } from 'reactstrap'
 
@@ -118,6 +118,12 @@ class FieldValidationForm extends Component {
             <Col sm="6">
               <Field name="url" type="text" label="URL" component={renderInputField}
                 validate={url({ allowBlank: true })} />
+            </Col>
+          </Row>
+          <Row>
+            <Col sm="6">
+                <Field name="ip" type="text" label="ip" component={renderInputField}
+                       validate={ip()} />
             </Col>
           </Row>
           <Row>

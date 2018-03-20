@@ -13,6 +13,7 @@ import messages from './messages'
 import numericality from './numericality'
 import presence from './presence'
 import url from './url'
+import ip from './ip';
 
 import { formatMsg as formatMessage, DEFAULT_OPTIONS } from './helpers'
 
@@ -44,7 +45,8 @@ export {
   numericality,
   presence,
   required,
-  url
+  url,
+  ip
 }
 
 

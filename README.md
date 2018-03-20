@@ -88,6 +88,7 @@ Validators
 * [exclusion](#exclusion)
 * [absence](#absence)
 * [url](#url)
+* [ip](#ip)
 * [file](#file)
 
 More
@@ -369,6 +370,15 @@ url({ protocols: ['http', 'https'] })
 The default error message is "is not a valid URL".
 
 > Note: As of version 2.0.0, the default protocol value is now: ['http', 'https'] ('ftp' was previously included)
+
+### ip
+
+Validates that the specified value is a valid IP.
+
+```
+<Field name="url" type="text" label="URL" component={renderField} 
+    validate={ip()} />
+```
 
 ### file
 
