@@ -3,6 +3,14 @@ import addValidator from './add-validator';
 const ipv4Maybe = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
 const ipv6Block = /^[0-9A-F]{1,4}$/i;
 
+export default addValidator({
+    defaultMessage: "IP only",
+    validator: function(options, value) {
+
+        return isIP(value, options.version);
+    }
+});
+
 function isIP(str, version = '') {
     assertString(str);
     version = String(version);
@@ -63,13 +71,6 @@ function isIP(str, version = '') {
     }
     return false;
 }
-export default addValidator({
-    defaultMessage: "Letters only",
-    validator: function(options, value) {
-
-        return isIP(value, options.version);
-    }
-});
 
 function assertString(input) {
     const isString = (typeof input === 'string' || input instanceof String);

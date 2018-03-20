@@ -119,10 +119,12 @@ class FieldValidationForm extends Component {
               <Field name="url" type="text" label="URL" component={renderInputField}
                 validate={url({ allowBlank: true })} />
             </Col>
-              <Col sm="6">
-                  <Field name="ip" type="text" label="ip" component={renderInputField}
-                         validate={ip()} />
-              </Col>
+          </Row>
+          <Row>
+            <Col sm="6">
+                <Field name="ip" type="text" label="ip" component={renderInputField}
+                       validate={ip()} />
+            </Col>
           </Row>
           <Row>
             <Col sm="12">
