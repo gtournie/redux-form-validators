@@ -5,11 +5,52 @@
 
   export type Validator = (value: any, allValues?: any, props?: any) => any;
 
+  export interface MessageDescriptor {
+    id: string;
+    defaultMessage?: string;
+    description?: string;
+    values?: string | object;
+  }
+
   export interface DefaultValidatorOptions {
     if?: (values: any, value: any) => boolean;
     unless?: (values: any, value: any) => boolean;
-    message?: string;
-    msg?: string
+    message?: MessageDescriptor | string;
+    msg?: MessageDescriptor | string;
+  }
+
+  export interface ValidatorMessages {
+    absence: MessageDescriptor | string;
+    acceptance: MessageDescriptor | string;
+    confirmation: MessageDescriptor | string;
+    dateFormat: MessageDescriptor | string;
+    dateInvalid: MessageDescriptor | string;
+    dateRange: MessageDescriptor | string;
+    email: MessageDescriptor | string;
+    equalTo: MessageDescriptor | string;
+    even: MessageDescriptor | string;
+    exclusion: MessageDescriptor | string;
+    file: MessageDescriptor| string;
+    fileAccept: MessageDescriptor | string;
+    fileTooBig: MessageDescriptor | string;
+    fileTooFew: MessageDescriptor | string;
+    fileTooMany: MessageDescriptor | string;
+    fileTooSmall: MessageDescriptor | string;
+    greaterThan: MessageDescriptor | string;
+    greaterThanOrEqualTo: MessageDescriptor | string;
+    inclusion: MessageDescriptor | string;
+    invalid: MessageDescriptor | string;
+    lessThan: MessageDescriptor | string;
+    lessThanOrEqualTo: MessageDescriptor | string;
+    notAnInteger: MessageDescriptor | string;
+    notANumber: MessageDescriptor | string;
+    odd: MessageDescriptor | string;
+    otherThan: MessageDescriptor | string;
+    presence: MessageDescriptor | string;
+    tooLong: MessageDescriptor | string;
+    tooShort: MessageDescriptor | string;
+    url: MessageDescriptor | string;
+    wrongLength: MessageDescriptor | string;
   }
 
   export const absence: (options?: DefaultValidatorOptions) => Validator;
@@ -113,4 +154,21 @@
   }
 
   export const url: (options?: UrlValidatorOptions) => Validator;
+
+  declare const Validators: {
+    formatMessage: (msg: MessageDescriptor | string) => string;
+    formatSize: (size: number | string, units: string) => string;
+    defaultOptions: {
+      allowBlank: boolean;
+      urlProtocols: string[];
+      dateFormat: string;
+      dateYmd: string;
+      accept: string[];
+      caseSensitive: boolean;
+    };
+    messages: ValidatorMessages,
+    pluralRules: any
+  }
+
+  export default Validators;
   
