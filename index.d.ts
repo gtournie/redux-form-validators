@@ -12,8 +12,8 @@
     msg?: string
   }
 
-  export const absence: (options?: DefaultValidatorOptions) => Validator | Validator[];
-  export const acceptance: (options?: DefaultValidatorOptions) => Validator | Validator[];
+  export const absence: (options?: DefaultValidatorOptions) => Validator;
+  export const acceptance: (options?: DefaultValidatorOptions) => Validator;
 
   export interface ConfirmationValidatorOptions extends DefaultValidatorOptions {
     field?: string;
@@ -21,8 +21,7 @@
     caseSensitive?: boolean;
   }
 
-  export const confirmation: (options?: ConfirmationValidatorOptions) =>
-                              Validator | Validator[];
+  export const confirmation: (options?: ConfirmationValidatorOptions) => Validator;
 
   export interface DateValidatorOptions extends DefaultValidatorOptions {
     format?: string;
@@ -36,9 +35,9 @@
     allowBlank?: boolean;
   }
 
-  export const date: (options?: DateValidatorOptions) => Validator | Validator[];
-  export const email: (options?: DefaultValidatorOptions) => Validator | Validator[];
-  export const exclusion: (options?: DefaultValidatorOptions) => Validator | Validator[];
+  export const date: (options?: DateValidatorOptions) => Validator;
+  export const email: (options?: DefaultValidatorOptions) => Validator;
+  export const exclusion: (options?: DefaultValidatorOptions) => Validator;
 
   export interface FileValidatorOptions extends DefaultValidatorOptions {
     accept?: string;
@@ -49,7 +48,7 @@
     allowBlank?: boolean;
   }
 
-  export const file: (options?: FileValidatorOptions) => Validator | Validator[];
+  export const file: (options?: FileValidatorOptions) => Validator;
 
   export interface FormatOptions extends DefaultValidatorOptions {
     'with'?: RegExp;
@@ -57,7 +56,7 @@
     allowBlank?: boolean;
   }
 
-  export const format: (options?: FormatOptions) => Validator | Validator[];
+  export const format: (options?: FormatOptions) => Validator;
 
   export interface InclusionValidatorOptions extends DefaultValidatorOptions {
     'in'?: any[];
@@ -66,8 +65,7 @@
     allowBlank?: boolean;
   }
 
-  export const inclusion: (options?: InclusionValidatorOptions) => 
-                          Validator | Validator[];
+  export const inclusion: (options?: InclusionValidatorOptions) => Validator;
 
 
   export interface LengthValidatorOptions extends DefaultValidatorOptions {
@@ -82,7 +80,7 @@
     allowBlank?: boolean;
   }
 
-  export const length: (options?: LengthValidatorOptions) => Validator | Validator[];
+  export const length: (options?: LengthValidatorOptions) => Validator;
 
   export interface NumericalityValidatorOptions extends DefaultValidatorOptions {
     int?: boolean;
@@ -104,16 +102,15 @@
     allowBlank?: boolean;
   }
 
-  export const numericality: (options?: NumericalityValidatorOptions) =>
-                              Validator | Validator[];
+  export const numericality: (options?: NumericalityValidatorOptions) => Validator;
 
-  export const presence: (options?: DefaultValidatorOptions) => Validator | Validator[];
-  export const required: (options?: DefaultValidatorOptions) => Validator | Validator[];
+  export const presence: (options?: DefaultValidatorOptions) => Validator;
+  export const required: (options?: DefaultValidatorOptions) => Validator;
 
   export interface UrlValidatorOptions extends DefaultValidatorOptions {
     protocol?: string;
     protocols?: string[]
   }
 
-  export const url: (options?: UrlValidatorOptions) => Validator | Validator[];
+  export const url: (options?: UrlValidatorOptions) => Validator;
   
