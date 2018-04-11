@@ -26,12 +26,12 @@
   export interface DateValidatorOptions extends DefaultValidatorOptions {
     format?: string;
     ymd?: string;
-    '='?: Date | string;
-    '!='?: Date | string;
-    '>'?: Date | string;
-    '>='?: Date | string;
-    '<'?: Date | string;
-    '<='?: Date | string;
+    '='?: Date | number | string;
+    '!='?: Date | number | string;
+    '>'?: Date | number | string;
+    '>='?: Date | number | string;
+    '<'?: Date | number | string;
+    '<='?: Date | number | string;
     allowBlank?: boolean;
   }
 
@@ -41,8 +41,8 @@
 
   export interface FileValidatorOptions extends DefaultValidatorOptions {
     accept?: string;
-    minSize?: string;
-    maxSize?: string;
+    minSize?: number | string;
+    maxSize?: number | string;
     minFiles?: number;
     maxFiles?: number;
     allowBlank?: boolean;
