@@ -6,51 +6,57 @@
   export type Validator = (value: any, allValues?: any, props?: any) => any;
 
   export interface MessageDescriptor {
-    id: string;
+    id?: string;
     defaultMessage?: string;
     description?: string;
     values?: string | object;
   }
 
+  export interface MessageProps {
+    props: MessageDescriptor;
+  }
+
+  declare type ValidatorMessage = MessageDescriptor | MessageProps | string;
+
   export interface DefaultValidatorOptions {
     if?: (values: any, value: any) => boolean;
     unless?: (values: any, value: any) => boolean;
-    message?: MessageDescriptor | string;
-    msg?: MessageDescriptor | string;
+    message?: ValidatorMessage;
+    msg?: ValidatorMessage
   }
 
   export interface ValidatorMessages {
-    absence: MessageDescriptor | string;
-    acceptance: MessageDescriptor | string;
-    confirmation: MessageDescriptor | string;
-    dateFormat: MessageDescriptor | string;
-    dateInvalid: MessageDescriptor | string;
-    dateRange: MessageDescriptor | string;
-    email: MessageDescriptor | string;
-    equalTo: MessageDescriptor | string;
-    even: MessageDescriptor | string;
-    exclusion: MessageDescriptor | string;
-    file: MessageDescriptor| string;
-    fileAccept: MessageDescriptor | string;
-    fileTooBig: MessageDescriptor | string;
-    fileTooFew: MessageDescriptor | string;
-    fileTooMany: MessageDescriptor | string;
-    fileTooSmall: MessageDescriptor | string;
-    greaterThan: MessageDescriptor | string;
-    greaterThanOrEqualTo: MessageDescriptor | string;
-    inclusion: MessageDescriptor | string;
-    invalid: MessageDescriptor | string;
-    lessThan: MessageDescriptor | string;
-    lessThanOrEqualTo: MessageDescriptor | string;
-    notAnInteger: MessageDescriptor | string;
-    notANumber: MessageDescriptor | string;
-    odd: MessageDescriptor | string;
-    otherThan: MessageDescriptor | string;
-    presence: MessageDescriptor | string;
-    tooLong: MessageDescriptor | string;
-    tooShort: MessageDescriptor | string;
-    url: MessageDescriptor | string;
-    wrongLength: MessageDescriptor | string;
+    absence: ValidatorMessage;
+    acceptance: ValidatorMessage;
+    confirmation: ValidatorMessage;
+    dateFormat: ValidatorMessage;
+    dateInvalid: ValidatorMessage;
+    dateRange: ValidatorMessage;
+    email: ValidatorMessage;
+    equalTo: ValidatorMessage;
+    even: ValidatorMessage;
+    exclusion: ValidatorMessage;
+    file: ValidatorMessage;
+    fileAccept: ValidatorMessage;
+    fileTooBig: ValidatorMessage;
+    fileTooFew: ValidatorMessage;
+    fileTooMany: ValidatorMessage;
+    fileTooSmall: ValidatorMessage;
+    greaterThan: ValidatorMessage;
+    greaterThanOrEqualTo: ValidatorMessage;
+    inclusion: ValidatorMessage;
+    invalid: ValidatorMessage;
+    lessThan: ValidatorMessage;
+    lessThanOrEqualTo: ValidatorMessage;
+    notAnInteger: ValidatorMessage;
+    notANumber: ValidatorMessage;
+    odd: ValidatorMessage;
+    otherThan: ValidatorMessage;
+    presence: ValidatorMessage;
+    tooLong: ValidatorMessage;
+    tooShort: ValidatorMessage;
+    url: ValidatorMessage;
+    wrongLength: ValidatorMessage;
   }
 
   export const absence: (options?: DefaultValidatorOptions) => Validator;
@@ -156,8 +162,8 @@
   export const url: (options?: UrlValidatorOptions) => Validator;
 
   declare const Validators: {
-    formatMessage: (msg: MessageDescriptor | string) => string;
-    formatSize: (size: number | string, units: string) => string;
+    formatMessage: (msg: MessageDescriptor) => string;
+    formatSize: (size: string, units: string) => string;
     defaultOptions: {
       allowBlank: boolean;
       urlProtocols: string[];
@@ -167,7 +173,7 @@
       caseSensitive: boolean;
     };
     messages: ValidatorMessages,
-    pluralRules: any
+    pluralRules: object
   }
 
   export default Validators;
