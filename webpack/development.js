@@ -1,11 +1,9 @@
-'use strict';
+'use strict'
 
-var webpack = require('webpack');
-var baseConfig = require('./base');
+var webpack = require('webpack')
 
-var config = Object.create(baseConfig);
-config.plugins = [
-  new webpack.optimize.ModuleConcatenationPlugin()
-];
+var config = require('./base')
+config.mode = 'development'
+config.plugins = [new webpack.optimize.ModuleConcatenationPlugin()]
 
-module.exports = config;
+module.exports = config

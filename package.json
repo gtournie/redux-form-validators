@@ -1,6 +1,6 @@
 {
   "name": "redux-form-validators",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "description": "Simple validations with redux-form",
   "module": "lib/index.js",
   "main": "lib/index.js",
@@ -36,13 +36,12 @@
     "check:src": "npm run test",
     "build": "npm run build:lib && npm run build:umd && npm run build:umd:min",
     "build:lib": "babel src --out-dir lib",
-    "build:umd": "webpack src/index.js dist/redux-form-validator.js --config webpack/development.js",
-    "build:umd:min": "webpack src/index.js dist/redux-form-validators.min.js --config webpack/production.js",
+    "build:umd": "webpack --config webpack/development.js",
+    "build:umd:min": "webpack --config webpack/production.js",
     "clean": "rimraf dist lib",
     "manage:i18n": "node ./translationRunner.js",
     "prepublish": "npm run clean && npm run test && npm run build",
-    "test":
-      "babel-node ./node_modules/.bin/isparta cover _mocha -- --compilers js:babel-core/register --recursive src/__tests__/*.spec.js --require src/__tests__/setup.js --full-trace",
+    "test": "babel-node ./node_modules/.bin/isparta cover _mocha -- --compilers js:babel-core/register --recursive src/__tests__/*.spec.js --require src/__tests__/setup.js --full-trace",
     "coveralls": "cat coverage/lcov.info | coveralls"
   },
   "devDependencies": {
@@ -55,17 +54,14 @@
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-0": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
-    "bootstrap": "4.0.0-alpha.6",
-    "bootstrap-loader": "2.0.0-beta.19",
-    "compression-webpack-plugin": "1.0.0",
-    "coveralls": "2.13.1",
+    "bootstrap": "4.1.1",
+    "bootstrap-loader": "2.2.0",
+    "compression-webpack-plugin": "1.1.11",
+    "coveralls": "3.0.1",
     "css-loader": "0.28.4",
     "expect": "1.20.2",
-    "extract-text-webpack-plugin": "3.0.0",
-    "file-loader": "0.11.2",
     "html-loader": "0.5.0",
     "isparta": "4.0.0",
-    "json-loader": "0.5.7",
     "mocha": "3.5.0",
     "node-sass": "4.5.3",
     "postcss-loader": "2.0.6",
@@ -79,22 +75,24 @@
     "react-intl": "2.3.0",
     "react-intl-translations-manager": "5.0.0",
     "react-redux": "^5.0.5",
-    "reactstrap": "4.8.0",
+    "reactstrap": "6.0.1",
     "redux": "4.0.0",
-    "redux-form": "7.0.3",
-    "resolve-url-loader": "2.1.0",
+    "redux-form": "7.3.0",
+    "resolve-url-loader": "2.3.0",
     "rimraf": "2.6.1",
-    "sass-loader": "6.0.6",
+    "sass-loader": "7.0.1",
     "style-loader": "0.18.2",
-    "url-loader": "0.5.9",
-    "webpack": "3.4.1",
-    "webpack-dev-server": "2.6.1"
+    "webpack": "4.8.1",
+    "webpack-cli": "2.1.3",
+    "webpack-dev-server": "3.1.4"
   },
   "npmName": "redux-form-validators",
   "npmFileMap": [
     {
       "basePath": "/dist/",
-      "files": ["*.js"]
+      "files": [
+        "*.js"
+      ]
     }
   ]
 }

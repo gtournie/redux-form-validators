@@ -7,33 +7,36 @@ import { acceptance, date, required, email, length, numericality, confirmation }
 
 import { Col, Row, Button, Input, Form, FormFeedback, FormGroup, FormText, Label } from 'reactstrap'
 
+let FIELD_INDEX = 0
 
-function renderInputField ({ hint, input, label, type, meta: { touched, error }={}, ...inputProps }) {
-  inputProps = {...input, ...inputProps }
+function renderInputField({ hint, input, label, type, meta: { touched, error } = {}, ...inputProps }) {
+  inputProps = { ...input, ...inputProps }
   let feedback = touched && error
-  let status   = touched && error ? 'danger' :  ''
-  let htmlId   = inputProps.id || inputProps.name
+  let invalid = !!(touched && error)
+  let htmlId = 'general-validation-form' + ++FIELD_INDEX
 
   return (
-    <FormGroup color={status}>
-      <Label className="form-control-label" for={htmlId}>{label}</Label>
-      <Input type={type || 'text'} id={htmlId} autoComplete="off" state={status} {...inputProps} />
+    <FormGroup>
+      <Label className="form-control-label" for={htmlId}>
+        {label}
+      </Label>
+      <Input invalid={invalid} type={type || 'text'} id={htmlId} autoComplete="off" {...inputProps} />
       {feedback ? <FormFeedback>{feedback}</FormFeedback> : ''}
       {hint ? <FormText color="muted">{hint}</FormText> : ''}
     </FormGroup>
   )
 }
 
-function renderCheckField ({ hint, input, label, type, meta: { touched, error, warning }={}, ...inputProps }) {
-  inputProps = {...input, ...inputProps }
+function renderCheckField({ hint, input, label, type, meta: { touched, error, warning } = {}, ...inputProps }) {
+  inputProps = { ...input, ...inputProps }
   let feedback = touched && error
-  let status   = touched && error ? 'danger' :  ''
-  let htmlId   = inputProps.id || inputProps.name
+  let invalid = !!(touched && error)
+  let htmlId = 'general-validation-form' + ++FIELD_INDEX
 
   return (
-    <FormGroup color={status}>
+    <FormGroup>
       <Label check className="form-control-label" for={htmlId}>
-        <Input type={type || 'text'} id={htmlId} autoComplete="off" state={status} {...inputProps} />
+        <Input invalid={invalid} type={type || 'text'} id={htmlId} autoComplete="off" {...inputProps} />
         {` ${label}`}
       </Label>
       {feedback ? <FormFeedback>{feedback}</FormFeedback> : ''}
@@ -42,36 +45,44 @@ function renderCheckField ({ hint, input, label, type, meta: { touched, error, w
   )
 }
 
-
 let twentyYearsAgo = function() {
   let d = new Date()
   d.setFullYear(d.getFullYear() - 20)
   return d
-};
+}
 
 const TOO_YOUNG_ERROR = (
-  <FormattedMessage id="form.errors.tooYoung"
-      defaultMessage="Sorry, you must be at least 18 years old" />
+  <FormattedMessage id="form.errors.tooYoung" defaultMessage="Sorry, you must be at least 18 years old" />
 )
 
 let validations = {
-  name:     [required(), length({ in: [6, 20] })],
-  email:    [required(), email()],
+  name: [required(), length({ in: [6, 20] })],
+  email: [required(), email()],
   password: [required(), length({ min: 8 })],
   password_confirmation: [confirmation({ field: 'password', fieldLabel: 'Password' })],
-  bday: [date({ format: 'mm/dd/yy' }), date({ format: 'mm/dd/yy', '<=': twentyYearsAgo,
-    msg: "Sorry, you must be at least 20 years old", allowBlank: true })],
-  date: [date({ format: 'YYYY-MM-DD', ymd: 'YMD',
-    '>': new Date(2000, 0, 1), '<': 'today', allowBlank: true })],
-  age: [
-    required(),
-    numericality({ int: true, msg: 'msg.fallback_to_text' }),
-    numericality({ '>=': 18, msg: TOO_YOUNG_ERROR })
-  ]
+  bday: [
+    date({ format: 'mm/dd/yy' }),
+    date({
+      format: 'mm/dd/yy',
+      '<=': twentyYearsAgo,
+      msg: 'Sorry, you must be at least 20 years old',
+      allowBlank: true,
+    }),
+  ],
+  date: [
+    date({
+      format: 'YYYY-MM-DD',
+      ymd: 'YMD',
+      '>': new Date(2000, 0, 1),
+      '<': 'today',
+      allowBlank: true,
+    }),
+  ],
+  age: [required(), numericality({ int: true, msg: 'int only' }), numericality({ '>=': 18, msg: TOO_YOUNG_ERROR })],
 }
 
 // Reusable with any other form
-let validate = (values) => {
+let validate = values => {
   const errors = {}
   for (let field in validations) {
     let value = values[field]
@@ -102,9 +113,14 @@ class GeneralValidationForm extends Component {
               <Field name="password" type="password" label="Password" component={renderInputField} />
             </Col>
             <Col sm="6">
-              <Field name="password_confirmation" type="password" label="Password confirmation" component={renderInputField} />
+              <Field
+                name="password_confirmation"
+                type="password"
+                label="Password confirmation"
+                component={renderInputField}
+              />
             </Col>
-            </Row>
+          </Row>
           <Row>
             <Col sm="6">
               <Field name="bday" type="text" label="Birthday" component={renderInputField} placeholder="mm/dd/yy" />
@@ -125,12 +141,6 @@ class GeneralValidationForm extends Component {
   }
 }
 
-
 GeneralValidationForm = reduxForm({ form: 'generalValidationForm', validate })(GeneralValidationForm)
 
 export default GeneralValidationForm
-
-
-
-
-

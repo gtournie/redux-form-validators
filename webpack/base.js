@@ -1,17 +1,17 @@
-var webpack = require('webpack');
-
+var webpack = require('webpack')
+var path = require('path')
 
 module.exports = {
   module: {
-    loaders: [
-      { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ }
-    ]
+    rules: [{ test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ }],
   },
   output: {
     library: 'ReduxFormValidators',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
+    path: path.resolve(process.cwd(), 'dist'),
+    filename: 'redux-form-validator.js',
   },
   resolve: {
-    extensions: ['.js']
-  }
-};
+    extensions: ['.js'],
+  },
+}

@@ -1,17 +1,10 @@
-'use strict';
+'use strict'
 
-var webpack = require('webpack');
-var baseConfig = require('./base');
+var webpack = require('webpack')
 
-var config = Object.create(baseConfig);
-config.plugins = [
-  new webpack.optimize.ModuleConcatenationPlugin(),
-  new webpack.optimize.UglifyJsPlugin({
-    compressor: {
-      screw_ie8: true,
-      warnings: false
-    }
-  })
-];
+var config = require('./base')
+config.mode = 'production'
+config.output.filename = 'redux-form-validators.min.js'
+config.plugins = [new webpack.optimize.ModuleConcatenationPlugin()]
 
-module.exports = config;
+module.exports = config
