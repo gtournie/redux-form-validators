@@ -1,6 +1,6 @@
 {
   "name": "redux-form-validators",
-  "version": "2.4.3",
+  "version": "2.5.0",
   "description": "Simple validations with redux-form",
   "module": "lib/index.js",
   "main": "lib/index.js",
@@ -28,7 +28,7 @@
   "homepage": "https://github.com/gtournie/redux-form-validators#readme",
   "peerDependencies": {
     "react-redux": "^3.0.0 || ^4.0.0 || ^5.0.0",
-    "redux": "^3.3.1",
+    "redux": "^3.3.1 || ^4.0.0",
     "redux-form": "^6.0.0 || ^7.0.0"
   },
   "scripts": {
@@ -41,7 +41,8 @@
     "clean": "rimraf dist lib",
     "manage:i18n": "node ./translationRunner.js",
     "prepublish": "npm run clean && npm run test && npm run build",
-    "test": "babel-node ./node_modules/.bin/isparta cover _mocha -- --compilers js:babel-core/register --recursive src/__tests__/*.spec.js --require src/__tests__/setup.js --full-trace",
+    "test":
+      "babel-node ./node_modules/.bin/isparta cover _mocha -- --compilers js:babel-core/register --recursive src/__tests__/*.spec.js --require src/__tests__/setup.js --full-trace",
     "coveralls": "cat coverage/lcov.info | coveralls"
   },
   "devDependencies": {
@@ -79,7 +80,7 @@
     "react-intl-translations-manager": "5.0.0",
     "react-redux": "^5.0.5",
     "reactstrap": "4.8.0",
-    "redux": "3.7.2",
+    "redux": "4.0.0",
     "redux-form": "7.0.3",
     "resolve-url-loader": "2.1.0",
     "rimraf": "2.6.1",
@@ -93,9 +94,7 @@
   "npmFileMap": [
     {
       "basePath": "/dist/",
-      "files": [
-        "*.js"
-      ]
+      "files": ["*.js"]
     }
   ]
 }
