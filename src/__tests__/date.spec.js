@@ -198,7 +198,7 @@ describe('format date', function() {
     Validators.setOptions({ dateYmd: defaultValue })
   })
   it('should use formatMessage', function() {
-    let defaultValue = Validators.getFormatMessage
+    let defaultValue = Validators.getFormatMessage()
 
     Validators.setFormatMessage(function(msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
