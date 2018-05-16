@@ -36,50 +36,10 @@ export function setMessages(messages) {
 }
 
 export function getMessages() {
-  return customMessages
-}
-
-export function regFormat (func, messageType) {
-  return memoize(function(options) {
-    options = options || {}
-    let msg = options.msg || options.message
-
-    return prepare(options['if'], options.unless, options.allowBlank, function (value) {
-      if (!value.match(func(options))) {
-        return getFormatMessage()(prepareMsg(msg, messageType))
-      }
-    })
-  })
-}
-
-
-export function prepare (ifCond, unlessCond, allowBlank, func) {
-  return function (value, allValues={}, ...args) {
-    if (!value || 'object' !== typeof value) {
-      value = null == value ? '' : '' + value
-
-      if ((null != allowBlank ? allowBlank : getOptions().allowBlank) && !value.trim()) {
-        return
-      }
-    }
-    if (('function' !== typeof ifCond || ifCond(allValues, value)) &&
-        ('function' !== typeof unlessCond || !unlessCond(allValues, value))) {
-      return func(value, allValues, ...args)
-    }
+  return {
+    ...messages,
+    ...customMessages,
   }
-}
-
-export function trunc (num) {
-  /* istanbul ignore next */
-  return Math.trunc ? Math.trunc(num) : num < 0 ? Math.ceil(num) : Math.floor(num)
-}
-
-export function selectNum (var1, var2) {
-  return isNumber(var1) ? +var1 : (arguments.length > 1 && isNumber(var2) ? +var2 : null)
-}
-
-export function isNumber (num) {
-  return !isNaN(num) && (0 != num || '' !== ('' + num).trim())
 }
 
 function formatMsg (msg) {
@@ -125,6 +85,49 @@ export function setFormatSize(formatSize) {
 
 export function getFormatSize() {
   return customFormatSize
+}
+
+export function regFormat (func, messageType) {
+  return memoize(function(options) {
+    options = options || {}
+    let msg = options.msg || options.message
+
+    return prepare(options['if'], options.unless, options.allowBlank, function (value) {
+      if (!value.match(func(options))) {
+        return getFormatMessage()(prepareMsg(msg, messageType))
+      }
+    })
+  })
+}
+
+
+export function prepare (ifCond, unlessCond, allowBlank, func) {
+  return function (value, allValues={}, ...args) {
+    if (!value || 'object' !== typeof value) {
+      value = null == value ? '' : '' + value
+
+      if ((null != allowBlank ? allowBlank : getOptions().allowBlank) && !value.trim()) {
+        return
+      }
+    }
+    if (('function' !== typeof ifCond || ifCond(allValues, value)) &&
+        ('function' !== typeof unlessCond || !unlessCond(allValues, value))) {
+      return func(value, allValues, ...args)
+    }
+  }
+}
+
+export function trunc (num) {
+  /* istanbul ignore next */
+  return Math.trunc ? Math.trunc(num) : num < 0 ? Math.ceil(num) : Math.floor(num)
+}
+
+export function selectNum (var1, var2) {
+  return isNumber(var1) ? +var1 : (arguments.length > 1 && isNumber(var2) ? +var2 : null)
+}
+
+export function isNumber (num) {
+  return !isNaN(num) && (0 != num || '' !== ('' + num).trim())
 }
 
 export function prepareMsg (msg, type, values) {
