@@ -20,7 +20,6 @@ let required = presence // alias
 export default {
   getFormatMessage,
   setFormatMessage,
-  formatSize,
   getOptions,
   setOptions,
   getMessages,
