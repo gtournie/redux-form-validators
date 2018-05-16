@@ -22,11 +22,7 @@ export default {
   formatMessage,
   formatSize,
   defaultOptions: DEFAULT_OPTIONS,
-  messages,
-  pluralRules: {
-    0: 'zero',
-    1: 'one'
-  }
+  messages
 }
 
 export {

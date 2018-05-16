@@ -1,4 +1,4 @@
-import Validators from './index'
+import messages from './messages'
 
 export const HAS_PROP = ({}).hasOwnProperty
 export const TO_STRING = ({}).toString
@@ -9,7 +9,11 @@ export var DEFAULT_OPTIONS = {
   dateFormat: 'yyyy-mm-dd', // ISO
   dateYmd: 'ymd',
   accept: ['1', 'true'],
-  caseSensitive: true       // confirmation, inclusion, exclusion
+  caseSensitive: true,      // confirmation, inclusion, exclusion
+  pluralRules: {
+    0: 'zero',
+    1: 'one'
+  }
 };
 
 
@@ -20,7 +24,7 @@ export function regFormat (func, messageType) {
 
     return prepare(options['if'], options.unless, options.allowBlank, function (value) {
       if (!value.match(func(options))) {
-        return Validators.formatMessage(prepareMsg(msg, messageType))
+        return formatMsg(prepareMsg(msg, messageType))
       }
     })
   })
@@ -32,7 +36,7 @@ export function prepare (ifCond, unlessCond, allowBlank, func) {
     if (!value || 'object' !== typeof value) {
       value = null == value ? '' : '' + value
 
-      if ((null != allowBlank ? allowBlank : Validators.defaultOptions.allowBlank) && !value.trim()) {
+      if ((null != allowBlank ? allowBlank : DEFAULT_OPTIONS.allowBlank) && !value.trim()) {
         return
       }
     }
@@ -61,7 +65,7 @@ export function formatMsg (msg) {
     msg = msg.props
   }
   let text = msg.defaultMessage || msg.id || ''
-  let rules = Validators.pluralRules
+  let rules = DEFAULT_OPTIONS.pluralRules
   return !msg.values ? text : parseMsg(text, function(part) {
     let parts = part.split(',')
     let count = msg.values[parts[0]]
@@ -113,7 +117,7 @@ export function memoize (func) {
 
 // private
 function defaultMessage (type, values) {
-  let msg = Validators.messages[type]
+  let msg = messages[type]
   return 'string' === typeof msg
     ? { defaultMessage: msg, values: values }
     : Object.assign({}, msg, { values: values })
