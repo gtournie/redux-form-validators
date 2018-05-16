@@ -1,4 +1,4 @@
-import { formatMsg, prepareMsg, prepare, trunc, memoize, DEFAULT_OPTIONS } from './helpers'
+import { formatMsg, prepareMsg, prepare, trunc, memoize, getOptions } from './helpers'
 
 
 const DATE_METHODS = {
@@ -104,11 +104,13 @@ function normFormatDate (date, format) {
   })
 }
 function normalizeFormat (format, ymd) {
+  const { dateFormat, dateYmd } = getOptions()
+
   if (null == format) {
-    format = DEFAULT_OPTIONS.dateFormat
+    format = dateFormat
   }
   if (!ymd) {
-    ymd = DEFAULT_OPTIONS.dateYmd
+    ymd = dateYmd
   }
   if (!ymd || 'ymd' === ymd) {
     return format

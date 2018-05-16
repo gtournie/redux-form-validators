@@ -1,4 +1,4 @@
-import { formatMsg, prepareMsg, prepare, memoize, DEFAULT_OPTIONS } from './helpers'
+import { formatMsg, prepareMsg, prepare, memoize, getOptions } from './helpers'
 
 
 let inclusion = memoize(function (options) {
@@ -18,7 +18,7 @@ export function inclusionExclusion (inclusion, {
   within = [].concat(within || inc).map(function(val) { return ('' + val) })
 
   return prepare(ifCond, unless, allowBlank, function (value) {
-    let cs = (null != caseSensitive ? caseSensitive : DEFAULT_OPTIONS.caseSensitive)
+    let cs = (null != caseSensitive ? caseSensitive : getOptions().caseSensitive)
     let array = within;
 
     if (!cs) {

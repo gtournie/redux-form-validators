@@ -1,4 +1,4 @@
-import { formatMsg, prepareMsg, prepare, memoize, DEFAULT_OPTIONS } from './helpers'
+import { formatMsg, prepareMsg, prepare, memoize, getOptions } from './helpers'
 
 
 let confirmation = memoize(function ({
@@ -18,7 +18,7 @@ let confirmation = memoize(function ({
       : allValues[field]
     fieldValue = '' + (fieldValue || '')
 
-    let cs = (null != caseSensitive ? caseSensitive : DEFAULT_OPTIONS.caseSensitive)
+    let cs = (null != caseSensitive ? caseSensitive : getOptions().caseSensitive)
 
     if (cs ? value !== fieldValue : value.toLowerCase() !== fieldValue.toLowerCase()) {
       return formatMsg(prepareMsg(msg, 'confirmation', { fieldLabel: fieldLabel || field }))

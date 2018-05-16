@@ -1,4 +1,4 @@
-import { formatMsg, prepareMsg, prepare, selectNum, memoize, TO_STRING, DEFAULT_OPTIONS } from './helpers'
+import { formatMsg, prepareMsg, prepare, selectNum, memoize, TO_STRING, getOptions } from './helpers'
 
 
 let ACCEPT_SEP_REG = /\s*,\s*/
@@ -48,7 +48,7 @@ let file = memoize(function ({
     let isAFileList = isFileList(value)
 
     // special blank check
-    if ((null != allowBlank ? allowBlank : DEFAULT_OPTIONS.allowBlank) && isAFileList && 0 === value.length) {
+    if ((null != allowBlank ? allowBlank : getOptions().allowBlank) && isAFileList && 0 === value.length) {
       return
     }
     if (!isAFileList) {

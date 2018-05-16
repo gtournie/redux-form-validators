@@ -49,7 +49,7 @@ export function prepare (ifCond, unlessCond, allowBlank, func) {
     if (!value || 'object' !== typeof value) {
       value = null == value ? '' : '' + value
 
-      if ((null != allowBlank ? allowBlank : DEFAULT_OPTIONS.allowBlank) && !value.trim()) {
+      if ((null != allowBlank ? allowBlank : getOptions().allowBlank) && !value.trim()) {
         return
       }
     }
@@ -78,7 +78,7 @@ export function formatMsg (msg) {
     msg = msg.props
   }
   let text = msg.defaultMessage || msg.id || ''
-  let rules = DEFAULT_OPTIONS.pluralRules
+  let rules = getOptions().pluralRules
   return !msg.values ? text : parseMsg(text, function(part) {
     let parts = part.split(',')
     let count = msg.values[parts[0]]
