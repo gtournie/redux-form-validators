@@ -1,6 +1,4 @@
-import Validators from './index'
-import { prepareMsg, prepare, trunc, memoize } from './helpers'
-
+import { formatMsg, prepareMsg, prepare, trunc, memoize, DEFAULT_OPTIONS } from './helpers'
 
 
 const DATE_METHODS = {
@@ -33,30 +31,30 @@ let date = memoize(function ({
     let normFormat = normalizeFormat(format, ymd)
     let date = normParseDate(value, normFormat, false)
     if ('wrongFormat' === date) {
-      return Validators.formatMessage(prepareMsg(msg, 'dateFormat', { format: format }))
+      return formatMsg(prepareMsg(msg, 'dateFormat', { format: format }))
     }
     if ('invalid' === date) {
-      return Validators.formatMessage(prepareMsg(msg, 'dateInvalid'))
+      return formatMsg(prepareMsg(msg, 'dateInvalid'))
     }
     if (date) {
       let date2
       if (eq && +date !== +(date2 = getDate(eq))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('=', date2, normFormat)))
+        return formatMsg(prepareMsg(msg, 'dateRange', values('=', date2, normFormat)))
       }
       if (diff && +date === +(date2 = getDate(diff))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('!=', date2, normFormat)))
+        return formatMsg(prepareMsg(msg, 'dateRange', values('!=', date2, normFormat)))
       }
       if (gt && date <= (date2 = getDate(gt))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('>', date2, normFormat)))
+        return formatMsg(prepareMsg(msg, 'dateRange', values('>', date2, normFormat)))
       }
       if (gte && date < (date2 = getDate(gte))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('>=', date2, normFormat)))
+        return formatMsg(prepareMsg(msg, 'dateRange', values('>=', date2, normFormat)))
       }
       if (lt && date >= (date2 = getDate(lt))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('<', date2, normFormat)))
+        return formatMsg(prepareMsg(msg, 'dateRange', values('<', date2, normFormat)))
       }
       if (lte && date > (date2 = getDate(lte))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('<=', date2, normFormat)))
+        return formatMsg(prepareMsg(msg, 'dateRange', values('<=', date2, normFormat)))
       }
     }
   })
@@ -107,10 +105,10 @@ function normFormatDate (date, format) {
 }
 function normalizeFormat (format, ymd) {
   if (null == format) {
-    format = Validators.defaultOptions.dateFormat
+    format = DEFAULT_OPTIONS.dateFormat
   }
   if (!ymd) {
-    ymd = Validators.defaultOptions.dateYmd
+    ymd = DEFAULT_OPTIONS.dateYmd
   }
   if (!ymd || 'ymd' === ymd) {
     return format
