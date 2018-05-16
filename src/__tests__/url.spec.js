@@ -38,21 +38,21 @@ describe('Validator: url', function() {
     assert.ok(!test('ftp://foo:bar@128.193.1.32:3000/foo?foo=bar', { protocol: 'ftp' }))
   })
   it('should use default urlProtocols option', function() {
-    let defaultValue = Validators.defaultOptions.urlProtocols
+    let defaultValue = Validators.getOptions().urlProtocols
 
-    Validators.defaultOptions.urlProtocols = ['ftp']
+    Validators.setOptions({ urlProtocols: ['ftp'] })
     assert.equal(ERROR_ID, test('http://google.com'))
     assert.equal(ERROR_ID, test('https://www.google.com'))
     assert.equal(ERROR_ID, test('http://foo:bar@128.193.1.32:3000/foo?foo=bar'))
     assert.ok(!test('ftp://foo:bar@128.193.1.32:3000/foo?foo=bar'))
 
-    Validators.defaultOptions.urlProtocols = ['http', 'https']
+    Validators.setOptions({ urlProtocols: ['http', 'https'] })
     assert.ok(!test('http://google.com'))
     assert.ok(!test('https://www.google.com'))
     assert.ok(!test('http://foo:bar@128.193.1.32:3000/foo?foo=bar'))
     assert.equal(ERROR_ID, test('ftp://foo:bar@128.193.1.32:3000/foo?foo=bar'))
 
-    Validators.defaultOptions.urlProtocols = defaultValue
+    Validators.setOptions({ urlProtocols: defaultValue })
   })
   it('should use formatMessage', function() {
     let defaultValue = Validators.getFormatMessage()
