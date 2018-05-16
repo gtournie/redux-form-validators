@@ -1,4 +1,3 @@
-import format from './format'
 import Validators from './index'
 
 export const HAS_PROP = ({}).hasOwnProperty
