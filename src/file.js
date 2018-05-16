@@ -1,13 +1,9 @@
-import { getFormatMessage, prepareMsg, prepare, selectNum, memoize, TO_STRING, getOptions } from './helpers'
+import { getFormatMessage, prepareMsg, prepare, selectNum, memoize, TO_STRING, getOptions, getFormatSize } from './helpers'
 
 
 let ACCEPT_SEP_REG = /\s*,\s*/
 let ESCAPE_REG = /([.+?^=!:${}()|[\]\/\\])/g; // Removed star char
 let ANY_REG    = /\*/g
-
-export function formatSize (size, unit) {
-  return size + ' ' + unit
-}
 
 let file = memoize(function ({
       message, msg,
@@ -93,7 +89,7 @@ let file = memoize(function ({
       return getFormatMessage()(prepareMsg(msg, 'fileTooSmall', {
         files: tooSmallError,
         count: tooSmallError.length,
-        size:  formatSize(pair[1], pair[2] || 'B')
+        size:  getFormatSize()(pair[1], pair[2] || 'B')
       }))
     }
     if (tooBigError.length) {
@@ -101,7 +97,7 @@ let file = memoize(function ({
       return getFormatMessage()(prepareMsg(msg, 'fileTooBig', {
         files: tooBigError,
         count: tooBigError.length,
-        size:  formatSize(pair[1], pair[2] || 'B')
+        size:  getFormatSize()(pair[1], pair[2] || 'B')
       }))
     }
   })

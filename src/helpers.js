@@ -113,6 +113,20 @@ export function getFormatMessage() {
   return customFormatMessage
 }
 
+function formatSize (size, unit) {
+  return size + ' ' + unit
+}
+
+let customFormatSize = formatSize
+
+export function setFormatSize(formatSize) {
+  customFormatSize = formatSize
+}
+
+export function getFormatSize() {
+  return customFormatSize
+}
+
 export function prepareMsg (msg, type, values) {
   if (null == msg) {
     return defaultMessage(type, values)

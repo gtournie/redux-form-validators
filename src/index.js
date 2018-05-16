@@ -4,7 +4,7 @@ import addValidator from './add-validator'
 import confirmation from './confirmation'
 import date from './date'
 import email from './email'
-import file, { formatSize } from './file'
+import file from './file'
 import format from './format'
 import inclusion from './inclusion'
 import exclusion from './exclusion'
@@ -13,7 +13,7 @@ import numericality from './numericality'
 import presence from './presence'
 import url from './url'
 
-import { getOptions, setOptions, getMessages, setMessages, getFormatMessage, setFormatMessage } from './helpers'
+import { getOptions, setOptions, getMessages, setMessages, getFormatMessage, setFormatMessage, getFormatSize, setFormatSize } from './helpers'
 
 let required = presence // alias
 
@@ -25,6 +25,8 @@ export default {
   setOptions,
   getMessages,
   setMessages,
+  getFormatSize,
+  setFormatSize,
 }
 
 export {
