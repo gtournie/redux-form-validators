@@ -1,5 +1,4 @@
-import Validators from './index'
-import { prepareMsg, prepare, memoize } from './helpers'
+import { formatMsg, prepareMsg, prepare, memoize } from './helpers'
 import { isFileList } from "./file";
 
 
@@ -8,7 +7,7 @@ let absence = memoize(function ({ message, msg, 'if': ifCond, unless }={}) {
 
   return prepare(ifCond, unless, false, function (value) {
     if ('string' === typeof value ? value.trim() : isFileList(value) && !isNaN(value.length) ? value.length : value) {
-      return Validators.formatMessage(prepareMsg(msg, 'absence'))
+      return formatMsg(prepareMsg(msg, 'absence'))
     }
   })
 })
