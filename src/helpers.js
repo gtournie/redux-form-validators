@@ -167,9 +167,10 @@ export function memoize (func) {
 // private
 function defaultMessage (type, values) {
   let msg = getMessages()[type]
+
   return 'string' === typeof msg
     ? { defaultMessage: msg, values: values }
-    : Object.assign({}, msg, { values: values })
+    : { ...msg, values: values }
 }
 
 function parseMsg (msg, func, pattern, info) {
