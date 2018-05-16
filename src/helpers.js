@@ -3,7 +3,7 @@ import messages from './messages'
 export const HAS_PROP = ({}).hasOwnProperty
 export const TO_STRING = ({}).toString
 
-export var DEFAULT_OPTIONS = {
+export const DEFAULT_OPTIONS = {
   allowBlank: false,
   urlProtocols: ['http', 'https'],
   dateFormat: 'yyyy-mm-dd', // ISO
@@ -15,6 +15,19 @@ export var DEFAULT_OPTIONS = {
     1: 'one'
   }
 };
+
+let CUSTOM_OPTIONS = {}
+
+export function setOptions (options) {
+  CUSTOM_OPTIONS = options
+}
+
+export function getOptions () {
+  return {
+    ...DEFAULT_OPTIONS,
+    ...CUSTOM_OPTIONS,
+  }
+}
 
 
 export function regFormat (func, messageType) {

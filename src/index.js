@@ -14,14 +14,15 @@ import numericality from './numericality'
 import presence from './presence'
 import url from './url'
 
-import { formatMsg as formatMessage, DEFAULT_OPTIONS } from './helpers'
+import { formatMsg as formatMessage, getOptions, setOptions } from './helpers'
 
 let required = presence // alias
 
 export default {
   formatMessage,
   formatSize,
-  defaultOptions: DEFAULT_OPTIONS,
+  getOptions,
+  setOptions,
   messages
 }
 
