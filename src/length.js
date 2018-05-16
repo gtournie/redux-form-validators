@@ -1,5 +1,4 @@
-import Validators from './index'
-import { prepareMsg, prepare, isNumber, selectNum, memoize } from './helpers'
+import { formatMsg, prepareMsg, prepare, isNumber, selectNum, memoize } from './helpers'
 
 
 let length = memoize(function ({
@@ -25,13 +24,13 @@ let length = memoize(function ({
 
   return prepare(ifCond, unless, allowBlank, function (value) {
     if (null !== equal && value.length !== equal) {
-      return Validators.formatMessage(prepareMsg(msg, 'wrongLength', { count: equal }))
+      return formatMsg(prepareMsg(msg, 'wrongLength', { count: equal }))
     }
     if (null !== max && value.length > max) {
-      return Validators.formatMessage(prepareMsg(msg, 'tooLong', { count: max }))
+      return formatMsg(prepareMsg(msg, 'tooLong', { count: max }))
     }
     if (null !== min && value.length < min) {
-      return Validators.formatMessage(prepareMsg(msg, 'tooShort', { count: min }))
+      return formatMsg(prepareMsg(msg, 'tooShort', { count: min }))
     }
   })
 })
