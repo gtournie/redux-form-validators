@@ -1,9 +1,8 @@
-import messages from './messages'
-import { toObjectMsg, formatMsg, prepare, memoize } from './helpers'
+import { toObjectMsg, formatMsg, prepare, memoize, getMessages } from './helpers'
 
 
 export default function addValidator ({ validator, defaultMessage, defaultMsg }) {
-  defaultMsg = toObjectMsg(defaultMsg || defaultMessage) || messages.invalid
+  defaultMsg = toObjectMsg(defaultMsg || defaultMessage) || getMessages().invalid
 
   return memoize(function (options={}) {
     let msg = toObjectMsg(options.msg || options.message) || defaultMsg

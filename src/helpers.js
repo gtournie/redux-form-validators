@@ -29,6 +29,15 @@ export function getOptions () {
   }
 }
 
+let customMessages = messages
+
+export function setMessages(messages) {
+  customMessages = messages
+}
+
+export function getMessages() {
+  return customMessages
+}
 
 export function regFormat (func, messageType) {
   return memoize(function(options) {
@@ -130,7 +139,7 @@ export function memoize (func) {
 
 // private
 function defaultMessage (type, values) {
-  let msg = messages[type]
+  let msg = getMessages()[type]
   return 'string' === typeof msg
     ? { defaultMessage: msg, values: values }
     : Object.assign({}, msg, { values: values })

@@ -9,12 +9,11 @@ import format from './format'
 import inclusion from './inclusion'
 import exclusion from './exclusion'
 import length from './length'
-import messages from './messages'
 import numericality from './numericality'
 import presence from './presence'
 import url from './url'
 
-import { formatMsg as formatMessage, getOptions, setOptions } from './helpers'
+import { formatMsg as formatMessage, getOptions, setOptions, getMessages, setMessages } from './helpers'
 
 let required = presence // alias
 
@@ -23,7 +22,8 @@ export default {
   formatSize,
   getOptions,
   setOptions,
-  messages
+  getMessages,
+  setMessages,
 }
 
 export {
