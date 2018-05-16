@@ -1,7 +1,8 @@
 import assert from 'assert'
 import Validators from '../index'
-import { formatMsg } from '../helpers'
+import { getFormatMessage } from '../helpers'
 
+const formatMsg = getFormatMessage()
 
 describe('formatMessage', function() {
   it('should return the default value or id', function() {
