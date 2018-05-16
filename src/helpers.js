@@ -46,7 +46,7 @@ export function regFormat (func, messageType) {
 
     return prepare(options['if'], options.unless, options.allowBlank, function (value) {
       if (!value.match(func(options))) {
-        return formatMsg(prepareMsg(msg, messageType))
+        return getFormatMessage()(prepareMsg(msg, messageType))
       }
     })
   })
@@ -82,7 +82,7 @@ export function isNumber (num) {
   return !isNaN(num) && (0 != num || '' !== ('' + num).trim())
 }
 
-export function formatMsg (msg) {
+function formatMsg (msg) {
   if (msg.props) {
     msg = msg.props
   }
@@ -101,6 +101,16 @@ export function formatMsg (msg) {
     let result = parseMsg(plural, null, rules[+count] || 'other', info)
     return info.found ? result : parseMsg(plural, null, 'other', {})
   })
+}
+
+let customFormatMessage = formatMsg
+
+export function setFormatMessage(formatMessage) {
+  customFormatMessage = formatMessage
+}
+
+export function getFormatMessage() {
+  return customFormatMessage
 }
 
 export function prepareMsg (msg, type, values) {

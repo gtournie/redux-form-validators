@@ -1,5 +1,5 @@
 import { isFileList } from './file'
-import { formatMsg, prepareMsg, prepare, memoize } from './helpers'
+import { getFormatMessage, prepareMsg, prepare, memoize } from './helpers'
 
 
 let presence = memoize(function ({ message, msg, 'if': ifCond, unless }={}) {
@@ -7,7 +7,7 @@ let presence = memoize(function ({ message, msg, 'if': ifCond, unless }={}) {
 
   return prepare(ifCond, unless, false, function (value) {
     if ('string' === typeof value ? !value.trim() : isFileList(value) && !isNaN(value.length) ? !value.length : !value) {
-      return formatMsg(prepareMsg(msg, 'presence'))
+      return getFormatMessage()(prepareMsg(msg, 'presence'))
     }
   })
 })

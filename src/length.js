@@ -1,4 +1,4 @@
-import { formatMsg, prepareMsg, prepare, isNumber, selectNum, memoize } from './helpers'
+import { getFormatMessage, prepareMsg, prepare, isNumber, selectNum, memoize } from './helpers'
 
 
 let length = memoize(function ({
@@ -24,13 +24,13 @@ let length = memoize(function ({
 
   return prepare(ifCond, unless, allowBlank, function (value) {
     if (null !== equal && value.length !== equal) {
-      return formatMsg(prepareMsg(msg, 'wrongLength', { count: equal }))
+      return getFormatMessage()(prepareMsg(msg, 'wrongLength', { count: equal }))
     }
     if (null !== max && value.length > max) {
-      return formatMsg(prepareMsg(msg, 'tooLong', { count: max }))
+      return getFormatMessage()(prepareMsg(msg, 'tooLong', { count: max }))
     }
     if (null !== min && value.length < min) {
-      return formatMsg(prepareMsg(msg, 'tooShort', { count: min }))
+      return getFormatMessage()(prepareMsg(msg, 'tooShort', { count: min }))
     }
   })
 })

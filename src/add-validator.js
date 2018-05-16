@@ -1,4 +1,4 @@
-import { toObjectMsg, formatMsg, prepare, memoize, getMessages } from './helpers'
+import { toObjectMsg, getFormatMessage, prepare, memoize, getMessages } from './helpers'
 
 
 export default function addValidator ({ validator, defaultMessage, defaultMsg }) {
@@ -10,10 +10,10 @@ export default function addValidator ({ validator, defaultMessage, defaultMsg })
     return prepare(options.if, options.unless, options.allowBlank, function (...args) {
       let result = validator(options, ...args)
       if ('boolean' !== typeof result) {
-        return result ? formatMsg(result) : null
+        return result ? getFormatMessage()(result) : null
       }
       if (!result) {
-        return formatMsg(msg)
+        return getFormatMessage()(msg)
       }
     })
   })

@@ -13,12 +13,13 @@ import numericality from './numericality'
 import presence from './presence'
 import url from './url'
 
-import { formatMsg as formatMessage, getOptions, setOptions, getMessages, setMessages } from './helpers'
+import { getOptions, setOptions, getMessages, setMessages, getFormatMessage, setFormatMessage } from './helpers'
 
 let required = presence // alias
 
 export default {
-  formatMessage,
+  getFormatMessage,
+  setFormatMessage,
   formatSize,
   getOptions,
   setOptions,

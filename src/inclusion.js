@@ -1,4 +1,4 @@
-import { formatMsg, prepareMsg, prepare, memoize, getOptions } from './helpers'
+import { getFormatMessage, prepareMsg, prepare, memoize, getOptions } from './helpers'
 
 
 let inclusion = memoize(function (options) {
@@ -27,11 +27,11 @@ export function inclusionExclusion (inclusion, {
     }
     if (inclusion) {
       if (array.indexOf(value) < 0) {
-        return formatMsg(prepareMsg(msg, 'inclusion'))
+        return getFormatMessage()(prepareMsg(msg, 'inclusion'))
       }
     } else {
       if (array.indexOf(value) >= 0) {
-        return formatMsg(prepareMsg(msg, 'exclusion'))
+        return getFormatMessage()(prepareMsg(msg, 'exclusion'))
       }
     }
   })

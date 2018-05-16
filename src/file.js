@@ -1,4 +1,4 @@
-import { formatMsg, prepareMsg, prepare, selectNum, memoize, TO_STRING, getOptions } from './helpers'
+import { getFormatMessage, prepareMsg, prepare, selectNum, memoize, TO_STRING, getOptions } from './helpers'
 
 
 let ACCEPT_SEP_REG = /\s*,\s*/
@@ -52,16 +52,16 @@ let file = memoize(function ({
       return
     }
     if (!isAFileList) {
-      return formatMsg(prepareMsg(msg, 'file'))
+      return getFormatMessage()(prepareMsg(msg, 'file'))
     }
     if (isNaN(value.length)) {
       value = [value]
     }
     if (value.length < minFiles) {
-      return formatMsg(prepareMsg(msg, 'fileTooFew', { count: minFiles }))
+      return getFormatMessage()(prepareMsg(msg, 'fileTooFew', { count: minFiles }))
     }
     if (null !== maxFiles && value.length > maxFiles) {
-      return formatMsg(prepareMsg(msg, 'fileTooMany', { count: maxFiles }))
+      return getFormatMessage()(prepareMsg(msg, 'fileTooMany', { count: maxFiles }))
     }
 
     let acceptError   = []
@@ -86,11 +86,11 @@ let file = memoize(function ({
       }
     }
     if (acceptError.length) {
-      return formatMsg(prepareMsg(msg, 'fileAccept', { files: acceptError, count: acceptError.length }))
+      return getFormatMessage()(prepareMsg(msg, 'fileAccept', { files: acceptError, count: acceptError.length }))
     }
     if (tooSmallError.length) {
       let pair = parse(minSize)
-      return formatMsg(prepareMsg(msg, 'fileTooSmall', {
+      return getFormatMessage()(prepareMsg(msg, 'fileTooSmall', {
         files: tooSmallError,
         count: tooSmallError.length,
         size:  formatSize(pair[1], pair[2] || 'B')
@@ -98,7 +98,7 @@ let file = memoize(function ({
     }
     if (tooBigError.length) {
       let pair = parse(maxSize)
-      return formatMsg(prepareMsg(msg, 'fileTooBig', {
+      return getFormatMessage()(prepareMsg(msg, 'fileTooBig', {
         files: tooBigError,
         count: tooBigError.length,
         size:  formatSize(pair[1], pair[2] || 'B')

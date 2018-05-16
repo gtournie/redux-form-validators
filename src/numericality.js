@@ -1,4 +1,4 @@
-import { formatMsg, prepareMsg, prepare, isNumber, selectNum, trunc, memoize } from './helpers'
+import { getFormatMessage, prepareMsg, prepare, isNumber, selectNum, trunc, memoize } from './helpers'
 
 
 let numericality = memoize(function ({
@@ -28,34 +28,34 @@ let numericality = memoize(function ({
 
   return prepare(ifCond, unless, allowBlank, function (value) {
     if (!isNumber(value)) {
-      return formatMsg(prepareMsg(msg, 'notANumber'))
+      return getFormatMessage()(prepareMsg(msg, 'notANumber'))
     }
     if (int && (+value % 1)) {
-      return formatMsg(prepareMsg(msg, 'notAnInteger'))
+      return getFormatMessage()(prepareMsg(msg, 'notAnInteger'))
     }
     if (null !== equal && +value !== equal) {
-      return formatMsg(prepareMsg(msg, 'equalTo', { count: equal }))
+      return getFormatMessage()(prepareMsg(msg, 'equalTo', { count: equal }))
     }
     if (null !== diff && +value === diff) {
-      return formatMsg(prepareMsg(msg, 'otherThan', { count: diff }))
+      return getFormatMessage()(prepareMsg(msg, 'otherThan', { count: diff }))
     }
     if (null !== greater && +value <= greater) {
-      return formatMsg(prepareMsg(msg, 'greaterThan', { count: greater }))
+      return getFormatMessage()(prepareMsg(msg, 'greaterThan', { count: greater }))
     }
     if (null !== greaterOrEqual && +value < greaterOrEqual) {
-      return formatMsg(prepareMsg(msg, 'greaterThanOrEqualTo', { count: greaterOrEqual }))
+      return getFormatMessage()(prepareMsg(msg, 'greaterThanOrEqualTo', { count: greaterOrEqual }))
     }
     if (null !== less && +value >= less) {
-      return formatMsg(prepareMsg(msg, 'lessThan', { count: less }))
+      return getFormatMessage()(prepareMsg(msg, 'lessThan', { count: less }))
     }
     if (null !== lessOrEqual && +value > lessOrEqual) {
-      return formatMsg(prepareMsg(msg, 'lessThanOrEqualTo', { count: lessOrEqual }))
+      return getFormatMessage()(prepareMsg(msg, 'lessThanOrEqualTo', { count: lessOrEqual }))
     }
     if (even && (trunc(+value) % 2)) {
-      return formatMsg(prepareMsg(msg, 'even'))
+      return getFormatMessage()(prepareMsg(msg, 'even'))
     }
     if (odd && !(trunc(+value) % 2)) {
-      return formatMsg(prepareMsg(msg, 'odd'))
+      return getFormatMessage()(prepareMsg(msg, 'odd'))
     }
   })
 })
