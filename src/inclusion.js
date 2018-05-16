@@ -1,5 +1,4 @@
-import Validators from './index'
-import { prepareMsg, prepare, memoize } from './helpers'
+import { formatMsg, prepareMsg, prepare, memoize, DEFAULT_OPTIONS } from './helpers'
 
 
 let inclusion = memoize(function (options) {
@@ -19,7 +18,7 @@ export function inclusionExclusion (inclusion, {
   within = [].concat(within || inc).map(function(val) { return ('' + val) })
 
   return prepare(ifCond, unless, allowBlank, function (value) {
-    let cs = (null != caseSensitive ? caseSensitive : Validators.defaultOptions.caseSensitive)
+    let cs = (null != caseSensitive ? caseSensitive : DEFAULT_OPTIONS.caseSensitive)
     let array = within;
 
     if (!cs) {
@@ -28,11 +27,11 @@ export function inclusionExclusion (inclusion, {
     }
     if (inclusion) {
       if (array.indexOf(value) < 0) {
-        return Validators.formatMessage(prepareMsg(msg, 'inclusion'))
+        return formatMsg(prepareMsg(msg, 'inclusion'))
       }
     } else {
       if (array.indexOf(value) >= 0) {
-        return Validators.formatMessage(prepareMsg(msg, 'exclusion'))
+        return formatMsg(prepareMsg(msg, 'exclusion'))
       }
     }
   })
