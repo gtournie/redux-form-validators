@@ -37,7 +37,6 @@ export function setMessages(messages) {
 
 export function getMessages() {
   return {
-    ...messages,
     ...customMessages,
   }
 }

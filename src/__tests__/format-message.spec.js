@@ -1,10 +1,20 @@
 import assert from 'assert'
 import Validators from '../index'
-import { getFormatMessage } from '../helpers'
+import { getFormatMessage, setFormatMessage } from '../helpers'
 
-const formatMsg = getFormatMessage()
+let globalFormatMessage = getFormatMessage()
+let formatMsg
 
 describe('formatMessage', function() {
+  before(function() {
+    setFormatMessage(ValidatorsFormatMessage)
+    formatMsg = getFormatMessage()
+  })
+
+  after(function() {
+    setFormatMessage(globalFormatMessage)
+  })
+
   it('should return the default value or id', function() {
     assert.equal('foo', formatMsg({ defaultMessage: 'foo', id: 'bar' }))
     assert.equal('bar', formatMsg({ id: 'bar' }))

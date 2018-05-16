@@ -90,7 +90,6 @@ describe('Validator option: message', function() {
       ...Validators.getMessages(),
       tooShort: "is too short: {count} chars expected"
     })
-    Validators.messages.tooShort = "is too short: {count} chars expected"
     assert.equal("is too short: 4 chars expected", length({ min: 4 })(''))
 
     Validators.setMessages({

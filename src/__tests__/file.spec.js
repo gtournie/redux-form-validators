@@ -137,7 +137,7 @@ describe('Validator: file', function() {
   })
   it('should use formatSize', function() {
     let formatMessage = Validators.getFormatMessage()
-    let defaultValue = Validators.getFormatSize()
+    let formatSize = Validators.getFormatSize()
     let unitMap = {
       B:  'octets',
       KB: 'Ko',
@@ -152,7 +152,7 @@ describe('Validator: file', function() {
     assert.equal('1 Ko', file({ msg: "{size}", minSize: '1KB' })(new File({ size: 1 })))
     assert.equal('1024 octets', file({ msg: "{size}", minSize: 1024 })(new File({ size: 1 })))
 
-    Validators.setFormatSize(defaultValue)
+    Validators.setFormatSize(formatSize)
     Validators.setFormatMessage(formatMessage)
   })
   it('should use formatMessage', function() {
