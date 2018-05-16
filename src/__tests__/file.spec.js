@@ -136,31 +136,31 @@ describe('Validator: file', function() {
     })
   })
   it('should use formatSize', function() {
-    let formatMessage = Validators.formatMessage
-    let defaultValue = Validators.formatSize
+    let formatMessage = Validators.getFormatMessage()
+    let defaultValue = Validators.getFormatSize()
     let unitMap = {
       B:  'octets',
       KB: 'Ko',
     }
 
-    Validators.formatMessage = ValidatorsFormatMessage
-    Validators.formatSize = function(size, unit) {
+    Validators.setFormatMessage(ValidatorsFormatMessage)
+    Validators.setFormatSize(function(size, unit) {
       return size + ' ' + unitMap[unit]
-    }
+    })
 
     assert.equal('2 octets',  file({ msg: "{size}", minSize: '2B' })(new File({ size: 1 })))
     assert.equal('1 Ko', file({ msg: "{size}", minSize: '1KB' })(new File({ size: 1 })))
     assert.equal('1024 octets', file({ msg: "{size}", minSize: 1024 })(new File({ size: 1 })))
 
-    Validators.formatSize = defaultValue;
-    Validators.formatMessage = formatMessage
+    Validators.setFormatSize(defaultValue)
+    Validators.setFormatMessage(formatMessage)
   })
   it('should use formatMessage', function() {
-    let defaultValue = Validators.formatMessage
+    let defaultValue = Validators.getFormatMessage()
 
-    Validators.formatMessage = function(msg) {
+    Validators.setFormatMessage(function(msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
-    }
+    })
     assert.equal(ERROR_FILE      + '2', test({}))
     assert.equal(ERROR_ACCEPT    + '2', test(new FileList([{ type: 'video/mp4', name: 'foo' }]), { accept: '.zip' }))
     assert.equal(ERROR_TOO_BIG   + '2', test(new FileList([{ size: 2 }]), { maxSize: 1 }))
@@ -168,6 +168,6 @@ describe('Validator: file', function() {
     assert.equal(ERROR_TOO_MANY  + '2', test(new FileList([{}, {}]), { maxFiles: 1 }))
     assert.equal(ERROR_TOO_SMALL + '2', test(new FileList([{ size: 1 }]), { minSize: 2 }))
 
-    Validators.formatMessage = defaultValue;
+    Validators.setFormatMessage(defaultValue)
   })
 })

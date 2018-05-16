@@ -55,13 +55,13 @@ describe('Validator: url', function() {
     Validators.defaultOptions.urlProtocols = defaultValue
   })
   it('should use formatMessage', function() {
-    let defaultValue = Validators.formatMessage
+    let defaultValue = Validators.getFormatMessage()
 
-    Validators.formatMessage = function(msg) {
+    Validators.setFormatMessage(function(msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
-    }
+    })
     assert.equal(ERROR_ID + '2', test('http:/:/'))
 
-    Validators.formatMessage = defaultValue;
+    Validators.setFormatMessage(defaultValue)
   })
 })
