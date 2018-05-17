@@ -1,7 +1,7 @@
 import { getFormatMessage, prepareMsg, prepare, selectNum, memoize, TO_STRING, getOptions, getFormatSize } from './helpers'
 
 let ACCEPT_SEP_REG = /\s*,\s*/
-let ESCAPE_REG = /([.+?^=!:${}()|[\]\/\\])/g // Removed star char
+let ESCAPE_REG = /([.+?^=!:${}()|[]\/\\])/g // Removed star char
 let ANY_REG = /\*/g
 
 let file = memoize(function ({
@@ -114,7 +114,7 @@ export function isFileList (value) {
 }
 
 // private
-const SIZE_REG = /^([\d\.]+)\s*([KMGTPE]?B)?$/
+const SIZE_REG = /^([\d.]+)\s*([KMGTPE]?B)?$/
 const SIZE_UNITS = {
   B: 1,
   KB: 1024,

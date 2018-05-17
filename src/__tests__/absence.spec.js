@@ -1,6 +1,6 @@
 import assert from 'assert'
 import Validators, { absence } from '../index'
-import getErrorId, { getFormatMessage } from './helper'
+import getErrorId from './helper'
 
 const ERROR_ID = 'form.errors.absence'
 

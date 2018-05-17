@@ -16,6 +16,7 @@ import { absence,
   url } from '../index'
 
 function test (func, options) {
+  // eslint-disable-next-line no-self-compare
   return options ? func(options) === func(Object.assign(options)) : func() === func()
 }
 
@@ -55,6 +56,7 @@ describe('memoize', function () {
       /* istanbul ignore next */
       function () { return new Date() }
     }))
+    // eslint-disable-next-line no-new-func
     assert.ok(test(date, { format: 'jj/mm/aaaa', ymd: 'amj', '<=': new Function('return new Date()') }))
 
     assert.ok(test(email))
@@ -85,7 +87,7 @@ describe('memoize', function () {
 
     assert.ok(test(url))
     assert.ok(test(url, { protocol: 'http' }))
-    assert.ok(test(url, { protocol: new Array('http', 'https') }))
+    assert.ok(test(url, { protocol: ['http', 'https'] }))
 
     assert.ok(test(fooValidator))
     assert.ok(test(fooValidator, { allowBlank: true }))

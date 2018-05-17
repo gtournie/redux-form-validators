@@ -125,6 +125,7 @@ export function selectNum (var1, var2) {
 }
 
 export function isNumber (num) {
+  // eslint-disable-next-line eqeqeq
   return !isNaN(num) && (num != 0 || ('' + num).trim() !== '')
 }
 

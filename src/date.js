@@ -72,6 +72,8 @@ function formatDate (date, format, ymd) {
     return null
   }
   let t = new Date(date).getTime()
+
+  // eslint-disable-next-line no-self-compare
   return t !== t ? null : normFormatDate(date, normalizeFormat(format, ymd))
 }
 

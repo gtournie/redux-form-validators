@@ -15,11 +15,13 @@ function test (value, params) {
 
 function testParse (date, strDate, format, ymd) {
   let t = parseDate(strDate, format, ymd).getTime()
+
+  // eslint-disable-next-line no-self-compare
   return date ? date.getTime() === t : t !== t // "t !== t" => invalid date (getTime returns NaN)
 }
 
 function testFormat (strDate, date, format, ymd) {
-  return strDate == formatDate(date, format, ymd)
+  return strDate === formatDate(date, format, ymd)
 }
 
 describe('Validator: date', function () {

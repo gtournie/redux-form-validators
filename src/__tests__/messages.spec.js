@@ -1,5 +1,5 @@
 import assert from 'assert'
-import {
+import Validators, {
   absence,
   date,
   acceptance,
@@ -15,9 +15,10 @@ import {
   url } from '../index'
 import getErrorId from './helper'
 
+/* eslint-disable no-unused-vars */
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import Validators from '../index'
+/* eslint-enable no-unused-vars */
 
 function test (key, msg, func, value, params = {}) {
   params[key] = msg
