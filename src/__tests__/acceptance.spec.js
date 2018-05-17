@@ -35,24 +35,24 @@ describe('Validator: acceptance', function() {
     assert.equal(ERROR_ID, test('2',  { accept: ['foo', 3] }))
   })
   it('should use default accept option', function() {
-    let defaultValue = Validators.defaultOptions.accept
+    let defaultValue = Validators.getOptions().accept
 
-    Validators.defaultOptions.accept = 'foo'
+    Validators.setOptions({ accept: 'foo' })
     assert.ok(!test('foo'))
 
-    Validators.defaultOptions.accept = ['foo', 2]
+    Validators.setOptions({ accept: ['foo', 2] })
     assert.ok(!test(2))
 
-    Validators.defaultOptions.accept = defaultValue;
+    Validators.setOptions({ accept: defaultValue })
   })
   it('should use formatMessage', function() {
-    let defaultValue = Validators.formatMessage
+    let defaultValue = Validators.getFormatMessage()
 
-    Validators.formatMessage = function(msg) {
+    Validators.setFormatMessage(function(msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
-    }
+    })
     assert.equal(ERROR_ID + '2', test())
 
-    Validators.formatMessage = defaultValue;
+    Validators.setFormatMessage(defaultValue)
   })
 })

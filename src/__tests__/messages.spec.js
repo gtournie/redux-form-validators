@@ -71,29 +71,38 @@ describe('Validator option: message', function() {
   })
 
   it('should override default messages', function() {
-    let formatMessage = Validators.formatMessage
-    Validators.formatMessage = ValidatorsFormatMessage
+    let formatMessage = Validators.getFormatMessage()
+    Validators.setFormatMessage(ValidatorsFormatMessage)
 
-    let defaultMessages = Validators.messages
+    let defaultMessages = Validators.getMessages()
     assert.equal(defaultMessages.presence.defaultMessage, presence()(''))
 
-    Validators.messages.presence = {
-      id: "form.errors.presence",
-      defaultMessage: "is mandatory"
-    }
+    Validators.setMessages({
+      ...defaultMessages,
+      presence: {
+        id: "form.errors.presence",
+        defaultMessage: "is mandatory"
+      }
+    })
     assert.equal("is mandatory", presence()(''))
-    Validators.messages.tooShort = "is too short: {count} chars expected"
+
+    Validators.setMessages({
+      ...Validators.getMessages(),
+      tooShort: "is too short: {count} chars expected"
+    })
     assert.equal("is too short: 4 chars expected", length({ min: 4 })(''))
 
-    Object.assign(Validators.messages, {
+    Validators.setMessages({
+      ...defaultMessages,
       presence: {
         id: "form.errors.presence",
         defaultMessage: "is missing"
       }
     })
+
     assert.equal("is missing", presence()(''))
 
-    Validators.messages = defaultMessages
-    Validators.formatMessage = formatMessage
+    Validators.setMessages(defaultMessages)
+    Validators.setFormatMessage(formatMessage)
   })
 })

@@ -50,15 +50,15 @@ describe('Validator: length', function() {
     assert.ok(!test('foobar', { is: 6 }))
   })
   it('should use formatMessage', function() {
-    let defaultValue = Validators.formatMessage
+    let defaultValue = Validators.getFormatMessage()
 
-    Validators.formatMessage = function(msg) {
+    Validators.setFormatMessage(function(msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
-    }
+    })
     assert.equal(ERROR_TOO_SHORT_ID + '2', test('foobar', { min: 7 }))
     assert.equal(ERROR_TOO_LONG_ID + '2', test('f',       { max: 0 }))
     assert.equal(ERROR_WRONG_LENGTH_ID + '2', test('foobar', { is: 7 }))
 
-    Validators.formatMessage = defaultValue;
+    Validators.setFormatMessage(defaultValue)
   })
 })

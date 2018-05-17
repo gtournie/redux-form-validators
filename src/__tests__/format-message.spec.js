@@ -1,9 +1,20 @@
 import assert from 'assert'
 import Validators from '../index'
-import { formatMsg } from '../helpers'
+import { getFormatMessage, setFormatMessage } from '../helpers'
 
+let globalFormatMessage = getFormatMessage()
+let formatMsg
 
 describe('formatMessage', function() {
+  before(function() {
+    setFormatMessage(ValidatorsFormatMessage)
+    formatMsg = getFormatMessage()
+  })
+
+  after(function() {
+    setFormatMessage(globalFormatMessage)
+  })
+
   it('should return the default value or id', function() {
     assert.equal('foo', formatMsg({ defaultMessage: 'foo', id: 'bar' }))
     assert.equal('bar', formatMsg({ id: 'bar' }))
@@ -31,14 +42,16 @@ describe('formatMessage', function() {
     assert.equal('2 28 chars', formatMsg({ defaultMessage: msg, values: { count: 2, size: 28 } }))
   })
   it('should pluralize with given pluralRules', function() {
-    let defaultPluralRules = Validators.pluralRules
+    let defaultPluralRules = Validators.getOptions().pluralRules
     
-    Validators.pluralRules = {
-      1: 'one', 5: 'one', 7: 'one', 8: 'one', 9: 'one', 10: 'one',
-      2: 'two', 3: 'two',
-      4: 'few',
-      6: 'many'
-    }
+    Validators.setOptions({
+      pluralRules: {
+        1: 'one', 5: 'one', 7: 'one', 8: 'one', 9: 'one', 10: 'one',
+        2: 'two', 3: 'two',
+        4: 'few',
+        6: 'many'
+      }
+    })
     let msg = '{count, plural, one {one} two {two_three} few {four} many {six} other {other}}'
 
     assert.equal('other', formatMsg({ defaultMessage: msg, values: { count: 0 } }))
@@ -53,6 +66,6 @@ describe('formatMessage', function() {
     assert.equal('one', formatMsg({ defaultMessage: msg, values: { count: 9 } }))
     assert.equal('one', formatMsg({ defaultMessage: msg, values: { count: 10 } }))
 
-    Validators.pluralRules = defaultPluralRules
+    Validators.setOptions({ pluralRules: defaultPluralRules })
   })
 })
