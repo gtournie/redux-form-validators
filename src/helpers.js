@@ -1,44 +1,115 @@
-import format from './format'
-import Validators from './index'
+import messages from './messages'
 
 export const HAS_PROP = ({}).hasOwnProperty
 export const TO_STRING = ({}).toString
 
-export var DEFAULT_OPTIONS = {
+export const DEFAULT_OPTIONS = {
   allowBlank: false,
   urlProtocols: ['http', 'https'],
   dateFormat: 'yyyy-mm-dd', // ISO
   dateYmd: 'ymd',
   accept: ['1', 'true'],
-  caseSensitive: true       // confirmation, inclusion, exclusion
-};
+  caseSensitive: true, // confirmation, inclusion, exclusion
+  pluralRules: {
+    0: 'zero',
+    1: 'one'
+  }
+}
 
+let CUSTOM_OPTIONS = {}
+
+export function setOptions (options) {
+  CUSTOM_OPTIONS = options
+}
+
+export function getOptions () {
+  return {
+    ...DEFAULT_OPTIONS,
+    ...CUSTOM_OPTIONS
+  }
+}
+
+let customMessages = messages
+
+export function setMessages (messages) {
+  customMessages = messages
+}
+
+export function getMessages () {
+  return {
+    ...customMessages
+  }
+}
+
+function formatMsg (msg) {
+  if (msg.props) {
+    msg = msg.props
+  }
+  let text = msg.defaultMessage || msg.id || ''
+  let rules = getOptions().pluralRules
+  return !msg.values ? text : parseMsg(text, function (part) {
+    let parts = part.split(',')
+    let count = msg.values[parts[0]]
+    // {value} OR {count, number}
+    if (parts.length <= 2) {
+      return count == null ? '' : ('' + count)
+    }
+    // plural
+    let plural = parts.slice(2).join(',').trim()
+    let info = {}
+    let result = parseMsg(plural, null, rules[+count] || 'other', info)
+    return info.found ? result : parseMsg(plural, null, 'other', {})
+  })
+}
+
+let customFormatMessage = formatMsg
+
+export function setFormatMessage (formatMessage) {
+  customFormatMessage = formatMessage
+}
+
+export function getFormatMessage () {
+  return customFormatMessage
+}
+
+function formatSize (size, unit) {
+  return size + ' ' + unit
+}
+
+let customFormatSize = formatSize
+
+export function setFormatSize (formatSize) {
+  customFormatSize = formatSize
+}
+
+export function getFormatSize () {
+  return customFormatSize
+}
 
 export function regFormat (func, messageType) {
-  return memoize(function(options) {
+  return memoize(function (options) {
     options = options || {}
     let msg = options.msg || options.message
 
     return prepare(options['if'], options.unless, options.allowBlank, function (value) {
       if (!value.match(func(options))) {
-        return Validators.formatMessage(prepareMsg(msg, messageType))
+        return getFormatMessage()(prepareMsg(msg, messageType))
       }
     })
   })
 }
 
-
 export function prepare (ifCond, unlessCond, allowBlank, func) {
-  return function (value, allValues={}, ...args) {
-    if (!value || 'object' !== typeof value) {
-      value = null == value ? '' : '' + value
+  return function (value, allValues = {}, ...args) {
+    if (!value || typeof value !== 'object') {
+      value = value == null ? '' : '' + value
 
-      if ((null != allowBlank ? allowBlank : Validators.defaultOptions.allowBlank) && !value.trim()) {
+      if ((allowBlank != null ? allowBlank : getOptions().allowBlank) && !value.trim()) {
         return
       }
     }
-    if (('function' !== typeof ifCond || ifCond(allValues, value)) &&
-        ('function' !== typeof unlessCond || !unlessCond(allValues, value))) {
+    if ((typeof ifCond !== 'function' || ifCond(allValues, value)) &&
+        (typeof unlessCond !== 'function' || !unlessCond(allValues, value))) {
       return func(value, allValues, ...args)
     }
   }
@@ -54,38 +125,18 @@ export function selectNum (var1, var2) {
 }
 
 export function isNumber (num) {
-  return !isNaN(num) && (0 != num || '' !== ('' + num).trim())
-}
-
-export function formatMsg (msg) {
-  if (msg.props) {
-    msg = msg.props
-  }
-  let text = msg.defaultMessage || msg.id || ''
-  let rules = Validators.pluralRules
-  return !msg.values ? text : parseMsg(text, function(part) {
-    let parts = part.split(',')
-    let count = msg.values[parts[0]]
-    // {value} OR {count, number}
-    if (parts.length <= 2) {
-      return null == count ? '' : ('' + count)
-    }
-    // plural
-    let plural = parts.slice(2).join(',').trim()
-    let info = {}
-    let result = parseMsg(plural, null, rules[+count] || 'other', info)
-    return info.found ? result : parseMsg(plural, null, 'other', {})
-  })
+  // eslint-disable-next-line eqeqeq
+  return !isNaN(num) && (num != 0 || ('' + num).trim() !== '')
 }
 
 export function prepareMsg (msg, type, values) {
-  if (null == msg) {
+  if (msg == null) {
     return defaultMessage(type, values)
   }
   if (HAS_PROP.call(msg, 'props') && isReactElement(msg)) {
     msg = msg.props
   }
-  if (null != msg[type]) {
+  if (msg[type] != null) {
     msg = msg[type]
   }
   if (isObject(msg)) {
@@ -98,7 +149,7 @@ export function prepareMsg (msg, type, values) {
 }
 
 export function toObjectMsg (msg) {
-  if (null == msg) return null
+  if (msg == null) return null
   return isObject(msg) ? msg : { id: msg, defaultMessage: msg }
 }
 
@@ -106,7 +157,7 @@ export function memoize (func) {
   if (!func.cache) {
     func.cache = {}
   }
-  return function(options) {
+  return function (options) {
     let key = stringify(options)
     return HAS_PROP.call(func.cache, key) ? func.cache[key] : (func.cache[key] = func(options))
   }
@@ -114,10 +165,11 @@ export function memoize (func) {
 
 // private
 function defaultMessage (type, values) {
-  let msg = Validators.messages[type]
-  return 'string' === typeof msg
+  let msg = getMessages()[type]
+
+  return typeof msg === 'string'
     ? { defaultMessage: msg, values: values }
-    : Object.assign({}, msg, { values: values })
+    : { ...msg, values: values }
 }
 
 function parseMsg (msg, func, pattern, info) {
@@ -127,12 +179,12 @@ function parseMsg (msg, func, pattern, info) {
   let count = 1
   let len = msg.length
   while (count > 0 && index < len) {
-    ++index;
-    if ('{' === msg.charAt(index)) {
-      ++count;
+    ++index
+    if (msg.charAt(index) === '{') {
+      ++count
     }
-    if ('}' === msg.charAt(index)) {
-      --count;
+    if (msg.charAt(index) === '}') {
+      --count
     }
   }
   if (pattern) {
@@ -168,9 +220,9 @@ function stringify (options) {
 }
 
 function isReactElement (object) {
-  return typeof object === 'object' && object !== null && '$$typeof' in object;
+  return typeof object === 'object' && object !== null && '$$typeof' in object
 }
 
 function isObject (obj) {
-  return 'object' === typeof obj && '[object Object]' === TO_STRING.call(obj) && null !== obj;
+  return typeof obj === 'object' && TO_STRING.call(obj) === '[object Object]' && obj !== null
 }

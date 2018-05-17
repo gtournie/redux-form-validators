@@ -434,7 +434,7 @@ But you can easily change them:
 import Validators from 'redux-validators'
 
 // Override dateFormat & urlProtocols
-Object.assign(Validators.defaultOptions, {
+Validators.setOptions({
   dateFormat: 'mm/dd/yyyy',
   urlProtocols: ['http', 'https', 'ftp']
 })
@@ -447,12 +447,12 @@ By default, all errors messages are in english and are pluralized if needed (bas
 import Validators from 'redux-form-validators'
 import { FormattedMessage } from 'react-intl'
 
-Validators.formatMessage = function(msg) {
+Validators.setFormatMessage(function(msg) {
   return <FormattedMessage {...(msg.props || msg)} />
-}
+})
 ```
 
-> Note: You can also implement your own i18n/pluralization module by overriding `Validators.formatMessage`. The first argument is a javascript object compatible with react-intl: 
+> Note: You can also implement your own i18n/pluralization module by calling `Validators.setFormatMessage(...)`. The first argument is a javascript object compatible with react-intl: 
 ```
 {
   id: "form.errors.greaterThan", 
@@ -464,12 +464,14 @@ Validators.formatMessage = function(msg) {
 > Note: You can also change the default plural rules or file size formats:
 ```
 // Plural rules
-Validators.pluralRules = {
-  1: 'one', 5: 'one', 7: 'one', 8: 'one', 9: 'one', 10: 'one',
-  2: 'two', 3: 'two',
-  4: 'few',
-  6: 'many'
-}
+Validators.setOptions({
+  pluralRules: {
+    1: 'one', 5: 'one', 7: 'one', 8: 'one', 9: 'one', 10: 'one',
+    2: 'two', 3: 'two',
+    4: 'few',
+    6: 'many'
+  }
+})
 let msg = '{count, plural, one {foo} two {bar} few {fooo} many {baaar} other {foobar}}'
 
 // Size format
@@ -478,9 +480,9 @@ const FR_UNITS = {
   KB: 'Ko',
   ...
 }
-Validators.formatSize = function (size, unit) {
+Validators.setFormatSize(function (size, unit) {
   return size + ' ' + FR_UNITS[unit]
-}
+})
 file({ minSize: '5MB' }) // -> is too small (minimum is 5 Mo)
 file({ minSize: 500 })   // -> is too small (minimum is 500 octets)
 ```
@@ -499,7 +501,8 @@ And if you're using [babel-plugin-react-intl](https://github.com/yahoo/babel-plu
 
 To override the default messages globally:
 ```
-Object.assign(Validators.messages, {
+Validators.setMessages({
+  ...Validators.getMessages(), // to keep default/current messages
   email: {
     id: "form.errors.email", 
     defaultMessage: "is not a valid email address"
@@ -518,7 +521,8 @@ Object.assign(Validators.messages, {
 
 OR even simpler if you don't override formatMessage (and don't need ids):
 ```
-Object.assign(Validators.messages, {
+Validators.setMessages({
+  ...Validators.getMessages(), // to keep default/current messages
   email:    "is not a valid email address",
   presence: "is missing",
   tooShort: "is too short: {count, number} chars minimum",

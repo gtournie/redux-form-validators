@@ -161,19 +161,27 @@
 
   export const url: (options?: UrlValidatorOptions) => Validator;
 
-  declare const Validators: {
-    formatMessage: (msg: MessageDescriptor) => string;
-    formatSize: (size: string, units: string) => string;
-    defaultOptions: {
+  declare const formatMessage: (msg: MessageDescriptor) => string;
+  declare const formatSize: (size: string, units: string) => string;
+  declare const defaultOptions: {
       allowBlank: boolean;
       urlProtocols: string[];
       dateFormat: string;
       dateYmd: string;
       accept: string[];
       caseSensitive: boolean;
-    };
-    messages: ValidatorMessages,
-    pluralRules: object
+      pluralRules: object;
+  };
+
+  declare const Validators: {
+    getFormatMessage: () => formatMessage;
+    setFormatMessage: (formatMessage) => void;
+    getFormatSize: () => formatSize;
+    setFormatSize: (formatSize) => void;
+    getOptions: () => defaultOptions;
+    setOptions: (defaultOptions) => void;
+    getMessages: () => ValidatorMessages
+    setMessages: (ValidatorMessages) => void
   }
 
   export default Validators;

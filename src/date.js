@@ -1,62 +1,58 @@
-import Validators from './index'
-import { prepareMsg, prepare, trunc, memoize } from './helpers'
-
-
+import { getFormatMessage, prepareMsg, prepare, trunc, memoize, getOptions } from './helpers'
 
 const DATE_METHODS = {
-  y: function(d) { return d.getFullYear() },
-  m: function(d) { return d.getMonth() + 1 },
-  d: function(d) { return d.getDate() }
+  y: function (d) { return d.getFullYear() },
+  m: function (d) { return d.getMonth() + 1 },
+  d: function (d) { return d.getDate() }
 }
 
 const PARSE_REG = /(y+|m+|d+)/g
 
-const TO_STRING = ({}).toString;
+const TO_STRING = ({}).toString
 
 let date = memoize(function ({
-      format,
-      ymd,
-      '=': eq,
-      '!=': diff,
-      '>': gt,
-      '>=': gte,
-      '<': lt,
-      '<=': lte,
-      message, msg,
-      'if': ifCond, unless,
-      allowBlank
-    }={}) {
-
+  format,
+  ymd,
+  '=': eq,
+  '!=': diff,
+  '>': gt,
+  '>=': gte,
+  '<': lt,
+  '<=': lte,
+  message, msg,
+  'if': ifCond, unless,
+  allowBlank
+} = {}) {
   msg = msg || message
 
-  return prepare(ifCond, unless, allowBlank, function(value) {
+  return prepare(ifCond, unless, allowBlank, function (value) {
     let normFormat = normalizeFormat(format, ymd)
     let date = normParseDate(value, normFormat, false)
-    if ('wrongFormat' === date) {
-      return Validators.formatMessage(prepareMsg(msg, 'dateFormat', { format: format }))
+    if (date === 'wrongFormat') {
+      return getFormatMessage()(prepareMsg(msg, 'dateFormat', { format: format }))
     }
-    if ('invalid' === date) {
-      return Validators.formatMessage(prepareMsg(msg, 'dateInvalid'))
+    if (date === 'invalid') {
+      return getFormatMessage()(prepareMsg(msg, 'dateInvalid'))
     }
     if (date) {
       let date2
       if (eq && +date !== +(date2 = getDate(eq))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('=', date2, normFormat)))
+        return getFormatMessage()(prepareMsg(msg, 'dateRange', values('=', date2, normFormat)))
       }
       if (diff && +date === +(date2 = getDate(diff))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('!=', date2, normFormat)))
+        return getFormatMessage()(prepareMsg(msg, 'dateRange', values('!=', date2, normFormat)))
       }
       if (gt && date <= (date2 = getDate(gt))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('>', date2, normFormat)))
+        return getFormatMessage()(prepareMsg(msg, 'dateRange', values('>', date2, normFormat)))
       }
       if (gte && date < (date2 = getDate(gte))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('>=', date2, normFormat)))
+        return getFormatMessage()(prepareMsg(msg, 'dateRange', values('>=', date2, normFormat)))
       }
       if (lt && date >= (date2 = getDate(lt))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('<', date2, normFormat)))
+        return getFormatMessage()(prepareMsg(msg, 'dateRange', values('<', date2, normFormat)))
       }
       if (lte && date > (date2 = getDate(lte))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('<=', date2, normFormat)))
+        return getFormatMessage()(prepareMsg(msg, 'dateRange', values('<=', date2, normFormat)))
       }
     }
   })
@@ -72,10 +68,12 @@ function parseDate (strDate, format, ymd) {
 }
 
 function formatDate (date, format, ymd) {
-  if (!(date instanceof Date) && '[object Date]' !== TO_STRING.call(date)) {
-    return null;
+  if (!(date instanceof Date) && TO_STRING.call(date) !== '[object Date]') {
+    return null
   }
-  let t = new Date(date).getTime();
+  let t = new Date(date).getTime()
+
+  // eslint-disable-next-line no-self-compare
   return t !== t ? null : normFormatDate(date, normalizeFormat(format, ymd))
 }
 
@@ -84,10 +82,10 @@ function values (op, date, format) {
 }
 
 function getDate (d) {
-  if ('function' === typeof d) {
+  if (typeof d === 'function') {
     return new Date(+d())
   }
-  if (isNaN(d) && 'today' === ('' + d).toLowerCase()) {
+  if (isNaN(d) && ('' + d).toLowerCase() === 'today') {
     let today = new Date()
     today.setHours(0, 0, 0, 0)
     return today
@@ -95,28 +93,29 @@ function getDate (d) {
   return new Date(+d)
 }
 
-
 // FORMAT
 function normFormatDate (date, format) {
-  return format.replace(PARSE_REG, function(m) {
+  return format.replace(PARSE_REG, function (m) {
     let sym = m.charAt(0)
     let len = m.length
     let padded = padding(DATE_METHODS[sym](date), len)
-    return 'y' === sym ? padded.slice(padded.length - len, padded.length) : padded;
+    return sym === 'y' ? padded.slice(padded.length - len, padded.length) : padded
   })
 }
 function normalizeFormat (format, ymd) {
-  if (null == format) {
-    format = Validators.defaultOptions.dateFormat
+  const { dateFormat, dateYmd } = getOptions()
+
+  if (format == null) {
+    format = dateFormat
   }
   if (!ymd) {
-    ymd = Validators.defaultOptions.dateYmd
+    ymd = dateYmd
   }
-  if (!ymd || 'ymd' === ymd) {
+  if (!ymd || ymd === 'ymd') {
     return format
   }
   let reverseMapping = { [ymd.charAt(0)]: 'y', [ymd.charAt(1)]: 'm', [ymd.charAt(2)]: 'd' }
-  return format.replace(new RegExp(`[${ymd}]`, 'g'), function(sym) {
+  return format.replace(new RegExp(`[${ymd}]`, 'g'), function (sym) {
     return reverseMapping[sym]
   })
 }
@@ -124,21 +123,20 @@ function padding (num, pad) {
   return '0'.repeat(Math.max(0, pad - ('' + num).length)) + num
 }
 
-
 // PARSE
 function normParseDate (value, format, parse) {
   let order = []
-  let reg = new RegExp('^' + format.replace(PARSE_REG, function(m) {
+  let reg = new RegExp('^' + format.replace(PARSE_REG, function (m) {
     order.push(m.charAt(0))
     return `([0-9]{${m.length}})`
   }) + '$')
   let match = value.match(reg)
   if (match) {
     let flags = {}
-    order.forEach(function(token, index) {
+    order.forEach(function (token, index) {
       flags[token] = +match[index + 1]
     })
-    let comparable = null != flags.y ? (null != flags.m ? true : null == flags.d) : false
+    let comparable = flags.y != null ? (flags.m != null ? true : flags.d == null) : false
     flags = Object.assign({ y: 1970, m: 1, d: 1 }, flags)
     if (flags.y < 100) {
       flags.y = currentCentury(flags.y >= 69 ? -1 : 0) * 100 + flags.y

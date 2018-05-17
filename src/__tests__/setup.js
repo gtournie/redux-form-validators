@@ -1,9 +1,9 @@
 import Validators from '../index'
 
-global.ValidatorsFormatMessage = Validators.formatMessage
-Validators.formatMessage = function(msg) {
+global.ValidatorsFormatMessage = Validators.getFormatMessage()
+Validators.setFormatMessage(function (msg) {
   return msg
-}
+})
 
 global.FileList = function (params) {
   params = params || { length: 0 }

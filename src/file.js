@@ -1,36 +1,34 @@
-import Validators from './index'
-import { prepareMsg, prepare, selectNum, memoize, TO_STRING } from './helpers'
-
+import { getFormatMessage, prepareMsg, prepare, selectNum, memoize, TO_STRING, getOptions, getFormatSize } from './helpers'
 
 let ACCEPT_SEP_REG = /\s*,\s*/
-let ESCAPE_REG = /([.+?^=!:${}()|[\]\/\\])/g; // Removed star char
-let ANY_REG    = /\*/g
+let ESCAPE_REG = /([.+?^=!:${}()|[]\/\\])/g // Removed star char
+let ANY_REG = /\*/g
 
 let file = memoize(function ({
-      message, msg,
-      accept,
-      minSize,
-      maxSize,
-      minFiles,
-      maxFiles,
-      'if': ifCond,
-      unless,
-      allowBlank
-    }={}) {
-  msg   = msg   || message
+  message, msg,
+  accept,
+  minSize,
+  maxSize,
+  minFiles,
+  maxFiles,
+  'if': ifCond,
+  unless,
+  allowBlank
+} = {}) {
+  msg = msg || message
 
   minFiles = selectNum(minFiles)
   maxFiles = selectNum(maxFiles)
   if (maxFiles < 0) {
     maxFiles = null
   }
-  if (null === minFiles) {
+  if (minFiles === null) {
     minFiles = 1
   }
 
-  if ('string' === typeof accept && accept.trim()) {
-    accept = accept.trim().toLowerCase().split(ACCEPT_SEP_REG).map(function(type) {
-      return '.' === type.charAt(0) || type.indexOf('*') < 0
+  if (typeof accept === 'string' && accept.trim()) {
+    accept = accept.trim().toLowerCase().split(ACCEPT_SEP_REG).map(function (type) {
+      return type.charAt(0) === '.' || type.indexOf('*') < 0
         ? type
         : new RegExp('^' + type.replace(ESCAPE_REG, '\\$1').replace(ANY_REG, '.*') + '$', 'i')
     })
@@ -38,67 +36,67 @@ let file = memoize(function ({
     accept = null
   }
 
-  let min = null != minSize ? sizeToInt(minSize) : null
-  let max = null != maxSize ? sizeToInt(maxSize) : null
+  let min = minSize != null ? sizeToInt(minSize) : null
+  let max = maxSize != null ? sizeToInt(maxSize) : null
 
   return prepare(ifCond, unless, false, function (value) {
     let isAFileList = isFileList(value)
 
     // special blank check
-    if ((null != allowBlank ? allowBlank : Validators.defaultOptions.allowBlank) && isAFileList && 0 === value.length) {
+    if ((allowBlank != null ? allowBlank : getOptions().allowBlank) && isAFileList && value.length === 0) {
       return
     }
     if (!isAFileList) {
-      return Validators.formatMessage(prepareMsg(msg, 'file'))
+      return getFormatMessage()(prepareMsg(msg, 'file'))
     }
     if (isNaN(value.length)) {
       value = [value]
     }
     if (value.length < minFiles) {
-      return Validators.formatMessage(prepareMsg(msg, 'fileTooFew', { count: minFiles }))
+      return getFormatMessage()(prepareMsg(msg, 'fileTooFew', { count: minFiles }))
     }
-    if (null !== maxFiles && value.length > maxFiles) {
-      return Validators.formatMessage(prepareMsg(msg, 'fileTooMany', { count: maxFiles }))
+    if (maxFiles !== null && value.length > maxFiles) {
+      return getFormatMessage()(prepareMsg(msg, 'fileTooMany', { count: maxFiles }))
     }
 
-    let acceptError   = []
+    let acceptError = []
     let tooSmallError = []
-    let tooBigError   = []
+    let tooBigError = []
     for (let i = 0, len = value.length, val, ftype, fext; i < len; ++i) {
       val = value[i]
       if (accept) {
         ftype = val.type || ''
         fext = fileExt(val.name || '')
-        if (!accept.some(function(type) {
-              return 'string' === typeof type ? type === ('.' === type.charAt(0) ? fext : ftype) : type.test(ftype)
-            })) {
-          acceptError.push(val);
+        if (!accept.some(function (type) {
+          return typeof type === 'string' ? type === (type.charAt(0) === '.' ? fext : ftype) : type.test(ftype)
+        })) {
+          acceptError.push(val)
         }
       }
-      if (null != min && val.size < min) {
+      if (min != null && val.size < min) {
         tooSmallError.push(val)
       }
-      if (null != max && val.size > max) {
+      if (max != null && val.size > max) {
         tooBigError.push(val)
       }
     }
     if (acceptError.length) {
-      return Validators.formatMessage(prepareMsg(msg, 'fileAccept', { files: acceptError, count: acceptError.length }))
+      return getFormatMessage()(prepareMsg(msg, 'fileAccept', { files: acceptError, count: acceptError.length }))
     }
     if (tooSmallError.length) {
       let pair = parse(minSize)
-      return Validators.formatMessage(prepareMsg(msg, 'fileTooSmall', {
+      return getFormatMessage()(prepareMsg(msg, 'fileTooSmall', {
         files: tooSmallError,
         count: tooSmallError.length,
-        size:  Validators.formatSize(pair[1], pair[2] || 'B')
+        size: getFormatSize()(pair[1], pair[2] || 'B')
       }))
     }
     if (tooBigError.length) {
       let pair = parse(maxSize)
-      return Validators.formatMessage(prepareMsg(msg, 'fileTooBig', {
+      return getFormatMessage()(prepareMsg(msg, 'fileTooBig', {
         files: tooBigError,
         count: tooBigError.length,
-        size:  Validators.formatSize(pair[1], pair[2] || 'B')
+        size: getFormatSize()(pair[1], pair[2] || 'B')
       }))
     }
   })
@@ -106,23 +104,19 @@ let file = memoize(function ({
 
 export default file
 
-export function formatSize (size, unit) {
-  return size + ' ' + unit
-}
-
 export function isFileList (value) {
-  if (('undefined' !== typeof FileList && value instanceof FileList) ||
-      ('undefined' !== typeof File && (value instanceof File || value[0] instanceof File))) {
-    return true;
+  if ((typeof FileList !== 'undefined' && value instanceof FileList) ||
+      (typeof File !== 'undefined' && (value instanceof File || value[0] instanceof File))) {
+    return true
   }
-  let str = TO_STRING.call(value);
-  return '[object FileList]' === str || '[object File]' === str || '[object File]' === TO_STRING.call(value[0]);
+  let str = TO_STRING.call(value)
+  return str === '[object FileList]' || str === '[object File]' || TO_STRING.call(value[0]) === '[object File]'
 }
 
 // private
-const SIZE_REG = /^([\d\.]+)\s*([KMGTPE]?B)?$/
+const SIZE_REG = /^([\d.]+)\s*([KMGTPE]?B)?$/
 const SIZE_UNITS = {
-  B:  1,
+  B: 1,
   KB: 1024,
   MB: 1048576,
   GB: 1073741824,

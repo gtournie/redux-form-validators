@@ -1,0 +1,7 @@
+{
+    "extends": "standard",
+    "globals": {
+        "File": true,
+        "FileList": true
+    }
+}

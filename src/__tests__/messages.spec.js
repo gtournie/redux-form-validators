@@ -1,5 +1,5 @@
 import assert from 'assert'
-import {
+import Validators, {
   absence,
   date,
   acceptance,
@@ -15,20 +15,20 @@ import {
   url } from '../index'
 import getErrorId from './helper'
 
+/* eslint-disable no-unused-vars */
 import React from 'react'
-import { FormattedMessage } from 'react-intl';
-import Validators from "../index";
+import { FormattedMessage } from 'react-intl'
+/* eslint-enable no-unused-vars */
 
-
-function test (key, msg, func, value, params={}) {
+function test (key, msg, func, value, params = {}) {
   params[key] = msg
   return getErrorId(func(params)(value))
 }
 
-describe('Validator option: message', function() {
-  it('should return a custom message', function() {
+describe('Validator option: message', function () {
+  it('should return a custom message', function () {
     let blank = ''
-    ;['msg', 'message'].forEach(function(key) {
+    ;['msg', 'message'].forEach(function (key) {
       assert.equal('foobar', test(key, 'foobar', absence, 'foo'))
       assert.equal('foobar', test(key, 'foobar', acceptance))
       assert.equal('foobar', test(key, 'foobar', confirmation, 'foo', { field: 'bar' }))
@@ -46,9 +46,9 @@ describe('Validator option: message', function() {
     })
   })
 
-  it('should accept different message formats', function() {
+  it('should accept different message formats', function () {
     let blank = ''
-    ;['msg', 'message'].forEach(function(key) {
+    ;['msg', 'message'].forEach(function (key) {
       // React Intl element
       assert.equal('foobar', test(key, <FormattedMessage id="foobar" />, absence, 'foo'))
 
@@ -62,38 +62,47 @@ describe('Validator option: message', function() {
     })
   })
 
-  it('should fallback to default message', function() {
+  it('should fallback to default message', function () {
     let blank = ''
-    ;['msg', 'message'].forEach(function(key) {
+    ;['msg', 'message'].forEach(function (key) {
       assert.equal('form.errors.tooShort', test(key, { wrongLength: { id: 'is' } }, length, blank, { min: 1 }))
       assert.equal('form.errors.tooShort', test(key, { wrongLength: { id: 'is' } }, length, blank, { is: 0, min: 1 }))
     })
   })
 
-  it('should override default messages', function() {
-    let formatMessage = Validators.formatMessage
-    Validators.formatMessage = ValidatorsFormatMessage
+  it('should override default messages', function () {
+    let formatMessage = Validators.getFormatMessage()
+    Validators.setFormatMessage(ValidatorsFormatMessage)
 
-    let defaultMessages = Validators.messages
+    let defaultMessages = Validators.getMessages()
     assert.equal(defaultMessages.presence.defaultMessage, presence()(''))
 
-    Validators.messages.presence = {
-      id: "form.errors.presence",
-      defaultMessage: "is mandatory"
-    }
-    assert.equal("is mandatory", presence()(''))
-    Validators.messages.tooShort = "is too short: {count} chars expected"
-    assert.equal("is too short: 4 chars expected", length({ min: 4 })(''))
-
-    Object.assign(Validators.messages, {
+    Validators.setMessages({
+      ...defaultMessages,
       presence: {
-        id: "form.errors.presence",
-        defaultMessage: "is missing"
+        id: 'form.errors.presence',
+        defaultMessage: 'is mandatory'
       }
     })
-    assert.equal("is missing", presence()(''))
+    assert.equal('is mandatory', presence()(''))
 
-    Validators.messages = defaultMessages
-    Validators.formatMessage = formatMessage
+    Validators.setMessages({
+      ...Validators.getMessages(),
+      tooShort: 'is too short: {count} chars expected'
+    })
+    assert.equal('is too short: 4 chars expected', length({ min: 4 })(''))
+
+    Validators.setMessages({
+      ...defaultMessages,
+      presence: {
+        id: 'form.errors.presence',
+        defaultMessage: 'is missing'
+      }
+    })
+
+    assert.equal('is missing', presence()(''))
+
+    Validators.setMessages(defaultMessages)
+    Validators.setFormatMessage(formatMessage)
   })
 })
