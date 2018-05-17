@@ -25,7 +25,7 @@ export default {
   getMessages,
   setMessages,
   getFormatSize,
-  setFormatSize,
+  setFormatSize
 }
 
 export {
@@ -45,5 +45,3 @@ export {
   required,
   url
 }
-
-

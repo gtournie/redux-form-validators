@@ -8,9 +8,9 @@ function test (func, value, params) {
   return getErrorId(func(params)(value)) || ''
 }
 
-describe('Validator option: allowBlank', function() {
-  it('should be invalid when `value` is blank', function() {
-    BLANK_STRINGS.forEach(function(blank) {
+describe('Validator option: allowBlank', function () {
+  it('should be invalid when `value` is blank', function () {
+    BLANK_STRINGS.forEach(function (blank) {
       assert.ok(test(email, blank, { allowBlank: false }).indexOf('form.errors') === 0)
       assert.ok(test(date, blank, { format: 'mm/dd/yyyy', allowBlank: false }).indexOf('form.errors') === 0)
       assert.ok(test(exclusion, blank, { in: BLANK_STRINGS, allowBlank: false }).indexOf('form.errors') === 0)
@@ -22,8 +22,8 @@ describe('Validator option: allowBlank', function() {
     })
     assert.ok(test(file, new FileList(), { allowBlank: false }).indexOf('form.errors') === 0)
   })
-  it('should be valid when `value` is blank with allowBlank: true', function() {
-    BLANK_STRINGS.forEach(function(blank) {
+  it('should be valid when `value` is blank with allowBlank: true', function () {
+    BLANK_STRINGS.forEach(function (blank) {
       assert.ok(!test(email, blank, { allowBlank: true }))
       assert.ok(!test(date, blank, { format: 'mm/dd/yyyy', allowBlank: true }))
       assert.ok(!test(exclusion, blank, { in: BLANK_STRINGS, allowBlank: true }))
@@ -35,13 +35,13 @@ describe('Validator option: allowBlank', function() {
     })
     assert.ok(!test(file, new FileList(), { allowBlank: true }))
   })
-  it('should use default allowBlank option', function() {
+  it('should use default allowBlank option', function () {
     let defaultValue = Validators.getOptions().allowBlank
 
-    ;[true, false].forEach(function(allowBlank) {
+    ;[true, false].forEach(function (allowBlank) {
       Validators.setOptions({ allowBlank })
 
-      BLANK_STRINGS.forEach(function(blank) {
+      BLANK_STRINGS.forEach(function (blank) {
         assert.ok(allowBlank !== (test(email, blank).indexOf('form.errors') === 0))
         assert.ok(allowBlank !== (test(date, blank, { format: 'mm/dd/yyyy' }).indexOf('form.errors') === 0))
         assert.ok(allowBlank !== (test(exclusion, blank, { in: BLANK_STRINGS }).indexOf('form.errors') === 0))

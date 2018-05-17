@@ -1,7 +1,6 @@
 import { getFormatMessage, prepareMsg, prepare, memoize, getOptions } from './helpers'
 
-
-let acceptance = memoize(function ({ accept, message, msg, 'if': ifCond, unless }={}) {
+let acceptance = memoize(function ({ accept, message, msg, 'if': ifCond, unless } = {}) {
   msg = msg || message
 
   return prepare(ifCond, unless, false, function (value) {

@@ -15,20 +15,19 @@ import { absence,
   presence,
   url } from '../index'
 
-
 function test (func, options) {
   return options ? func(options) === func(Object.assign(options)) : func() === func()
 }
 
 let fooValidator = addValidator({
-  defaultMessage: { id: "errors.foo", defaultMessage: "Foo" },
+  defaultMessage: { id: 'errors.foo', defaultMessage: 'Foo' },
   validator:
     /* istanbul ignore next */
-    function(options, value) { return value === 'foo' }
+    function (options, value) { return value === 'foo' }
 })
 
 describe('memoize', function () {
-  it('should return the same function when the options are the same', function() {
+  it('should return the same function when the options are the same', function () {
     assert.ok(test(absence))
     assert.ok(test(absence))
     assert.ok(test(absence, { msg: 'foobar' }))
@@ -36,11 +35,11 @@ describe('memoize', function () {
     assert.ok(test(absence, { message: { id: 'errors.test', defaultMessage: 'Test' } }))
     assert.ok(test(absence, { if:
       /* istanbul ignore next */
-      (value, values) => { return '' !== values.name }
+      (value, values) => { return values.name !== '' }
     }))
     assert.ok(test(absence, { unless:
       /* istanbul ignore next */
-      (value, values) => { return '' !== values.name }
+      (value, values) => { return values.name !== '' }
     }))
 
     assert.ok(test(acceptance))
@@ -50,9 +49,11 @@ describe('memoize', function () {
 
     assert.ok(test(date, { format: 'mm/dd/yyyy', '<': 'today' }))
     assert.ok(test(date, { format: 'jj/mm/aaaa', ymd: 'amj', '<=': new Date() }))
-    assert.ok(test(date, { format: 'jj/mm/aaaa', ymd: 'amj', '<=':
+    assert.ok(test(date, { format: 'jj/mm/aaaa',
+      ymd: 'amj',
+      '<=':
       /* istanbul ignore next */
-      function() { return new Date() }
+      function () { return new Date() }
     }))
     assert.ok(test(date, { format: 'jj/mm/aaaa', ymd: 'amj', '<=': new Function('return new Date()') }))
 
