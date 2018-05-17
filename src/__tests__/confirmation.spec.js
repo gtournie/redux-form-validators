@@ -28,24 +28,24 @@ describe('Validator: confirmation', function() {
     assert.ok(!test(123,         { field: 'foo' }, { foo: '123' }))
   })
   it('should use default caseSensitive option', function() {
-    let defaultValue = Validators.defaultOptions.caseSensitive
+    let defaultValue = Validators.getOptions().caseSensitive
 
-    Validators.defaultOptions.caseSensitive = true
+    Validators.setOptions({ caseSensitive: true })
     assert.ok(!test('validator'))
 
-    Validators.defaultOptions.caseSensitive = false
+    Validators.setOptions({ caseSensitive: false })
     assert.ok(!test('VALIDATOR'))
 
-    Validators.defaultOptions.caseSensitive = defaultValue;
+    Validators.setOptions({ caseSensitive: defaultValue })
   })
   it('should use formatMessage', function() {
-    let defaultValue = Validators.formatMessage
+    let defaultValue = Validators.getFormatMessage()
 
-    Validators.formatMessage = function(msg) {
+    Validators.setFormatMessage(function(msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
-    }
+    })
     assert.equal(ERROR_ID + '2', test('val'))
 
-    Validators.formatMessage = defaultValue;
+    Validators.setFormatMessage(defaultValue)
   })
 })

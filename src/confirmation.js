@@ -1,5 +1,4 @@
-import Validators from './index'
-import { prepareMsg, prepare, memoize } from './helpers'
+import { getFormatMessage, prepareMsg, prepare, memoize, getOptions } from './helpers'
 
 
 let confirmation = memoize(function ({
@@ -19,10 +18,10 @@ let confirmation = memoize(function ({
       : allValues[field]
     fieldValue = '' + (fieldValue || '')
 
-    let cs = (null != caseSensitive ? caseSensitive : Validators.defaultOptions.caseSensitive)
+    let cs = (null != caseSensitive ? caseSensitive : getOptions().caseSensitive)
 
     if (cs ? value !== fieldValue : value.toLowerCase() !== fieldValue.toLowerCase()) {
-      return Validators.formatMessage(prepareMsg(msg, 'confirmation', { fieldLabel: fieldLabel || field }))
+      return getFormatMessage()(prepareMsg(msg, 'confirmation', { fieldLabel: fieldLabel || field }))
     }
   })
 })

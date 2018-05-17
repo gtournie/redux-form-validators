@@ -149,11 +149,11 @@ describe('Validator: numericality', function () {
     assert.ok(!test('-1.2',   { odd: true }))
   })
     it('should use formatMessage', function() {
-    let defaultValue = Validators.formatMessage
+    let defaultValue = Validators.getFormatMessage()
 
-    Validators.formatMessage = function(msg) {
+    Validators.setFormatMessage(function(msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
-    }
+    })
     assert.equal(ERROR_NOT_A_NUMBER_ID + '2',       test('foobar'))
     assert.equal(ERROR_EQUAL_TO_ID + '2',           test(1,   { '=': 0 }))
     assert.equal(ERROR_OTHER_THAN_ID + '2',         test(1,   { '!=': 1 }))
@@ -164,6 +164,6 @@ describe('Validator: numericality', function () {
     assert.equal(ERROR_EVEN_ID + '2',               test('1', { even: true }))
     assert.equal(ERROR_ODD_ID + '2',                test('2', { odd: true }))
 
-    Validators.formatMessage = defaultValue;
+    Validators.setFormatMessage(defaultValue)
   })
 })

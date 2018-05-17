@@ -1,5 +1,4 @@
-import Validators from './index'
-import { prepareMsg, prepare, selectNum, memoize, TO_STRING } from './helpers'
+import { getFormatMessage, prepareMsg, prepare, selectNum, memoize, TO_STRING, getOptions, getFormatSize } from './helpers'
 
 
 let ACCEPT_SEP_REG = /\s*,\s*/
@@ -45,20 +44,20 @@ let file = memoize(function ({
     let isAFileList = isFileList(value)
 
     // special blank check
-    if ((null != allowBlank ? allowBlank : Validators.defaultOptions.allowBlank) && isAFileList && 0 === value.length) {
+    if ((null != allowBlank ? allowBlank : getOptions().allowBlank) && isAFileList && 0 === value.length) {
       return
     }
     if (!isAFileList) {
-      return Validators.formatMessage(prepareMsg(msg, 'file'))
+      return getFormatMessage()(prepareMsg(msg, 'file'))
     }
     if (isNaN(value.length)) {
       value = [value]
     }
     if (value.length < minFiles) {
-      return Validators.formatMessage(prepareMsg(msg, 'fileTooFew', { count: minFiles }))
+      return getFormatMessage()(prepareMsg(msg, 'fileTooFew', { count: minFiles }))
     }
     if (null !== maxFiles && value.length > maxFiles) {
-      return Validators.formatMessage(prepareMsg(msg, 'fileTooMany', { count: maxFiles }))
+      return getFormatMessage()(prepareMsg(msg, 'fileTooMany', { count: maxFiles }))
     }
 
     let acceptError   = []
@@ -83,32 +82,28 @@ let file = memoize(function ({
       }
     }
     if (acceptError.length) {
-      return Validators.formatMessage(prepareMsg(msg, 'fileAccept', { files: acceptError, count: acceptError.length }))
+      return getFormatMessage()(prepareMsg(msg, 'fileAccept', { files: acceptError, count: acceptError.length }))
     }
     if (tooSmallError.length) {
       let pair = parse(minSize)
-      return Validators.formatMessage(prepareMsg(msg, 'fileTooSmall', {
+      return getFormatMessage()(prepareMsg(msg, 'fileTooSmall', {
         files: tooSmallError,
         count: tooSmallError.length,
-        size:  Validators.formatSize(pair[1], pair[2] || 'B')
+        size:  getFormatSize()(pair[1], pair[2] || 'B')
       }))
     }
     if (tooBigError.length) {
       let pair = parse(maxSize)
-      return Validators.formatMessage(prepareMsg(msg, 'fileTooBig', {
+      return getFormatMessage()(prepareMsg(msg, 'fileTooBig', {
         files: tooBigError,
         count: tooBigError.length,
-        size:  Validators.formatSize(pair[1], pair[2] || 'B')
+        size:  getFormatSize()(pair[1], pair[2] || 'B')
       }))
     }
   })
 })
 
 export default file
-
-export function formatSize (size, unit) {
-  return size + ' ' + unit
-}
 
 export function isFileList (value) {
   if (('undefined' !== typeof FileList && value instanceof FileList) ||

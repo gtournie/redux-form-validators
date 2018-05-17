@@ -1,6 +1,6 @@
 import assert from 'assert'
 import Validators, { absence } from '../index'
-import getErrorId from './helper'
+import getErrorId, { getFormatMessage } from './helper'
 
 const ERROR_ID = 'form.errors.absence'
 
@@ -27,13 +27,13 @@ describe('Validator: absence', function () {
     assert.ok(!test(new FileList({ length: 0 })))
   })
   it('should use formatMessage', function() {
-    let defaultValue = Validators.formatMessage
+    let defaultValue = Validators.getFormatMessage()
 
-    Validators.formatMessage = function(msg) {
+    Validators.setFormatMessage(function(msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
-    }
+    })
     assert.equal(ERROR_ID + '2', test(1))
 
-    Validators.formatMessage = defaultValue;
+    Validators.setFormatMessage(defaultValue);
   })
 })

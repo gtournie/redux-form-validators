@@ -1,6 +1,5 @@
 import assert from 'assert'
 import Validators, { email, date, exclusion, file, format, inclusion, length, numericality, url } from '../index'
-import { TO_STRING } from '../helpers'
 import getErrorId from './helper'
 
 const BLANK_STRINGS = ['', ' ', ' \n \t ']
@@ -37,10 +36,10 @@ describe('Validator option: allowBlank', function() {
     assert.ok(!test(file, new FileList(), { allowBlank: true }))
   })
   it('should use default allowBlank option', function() {
-    let defaultValue = Validators.defaultOptions.allowBlank
+    let defaultValue = Validators.getOptions().allowBlank
 
     ;[true, false].forEach(function(allowBlank) {
-      Validators.defaultOptions.allowBlank = allowBlank
+      Validators.setOptions({ allowBlank })
 
       BLANK_STRINGS.forEach(function(blank) {
         assert.ok(allowBlank !== (test(email, blank).indexOf('form.errors') === 0))
@@ -54,6 +53,6 @@ describe('Validator option: allowBlank', function() {
       })
     })
 
-    Validators.defaultOptions.allowBlank = defaultValue
+    Validators.setOptions({ allowBlank: defaultValue })
   })
 })
