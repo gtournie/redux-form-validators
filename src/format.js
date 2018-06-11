@@ -1,8 +1,7 @@
-import Validators from './index'
+import Validators from './validators'
 import { prepareMsg, prepare, memoize } from './helpers'
 
-
-let format = memoize(function ({ 'with': wit, without, message, msg, 'if': ifCond, unless, allowBlank }) {
+let format = memoize(function ({ with: wit, without, message, msg, if: ifCond, unless, allowBlank }) {
   msg = msg || message
 
   return prepare(ifCond, unless, allowBlank, function (value) {

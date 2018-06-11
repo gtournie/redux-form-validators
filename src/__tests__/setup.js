@@ -1,7 +1,7 @@
 import Validators from '../index'
 
 global.ValidatorsFormatMessage = Validators.formatMessage
-Validators.formatMessage = function(msg) {
+Validators.formatMessage = function (msg) {
   return msg
 }
 
