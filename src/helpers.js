@@ -77,6 +77,7 @@ export function memoize (func) {
     func.cache = {}
   }
   return function (options) {
+    if (options && options.noMemoize) return func(options)
     let key = stringify(options)
     return HAS_PROP.call(func.cache, key) ? func.cache[key] : (func.cache[key] = func(options))
   }
