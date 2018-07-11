@@ -59,6 +59,14 @@
     wrongLength: ValidatorMessage;
   }
 
+  export interface AddValidatorOptions {
+    validator: Validator;
+    defaultMessage?: string;
+    defaultMsg?: string;
+  }
+
+  export const addValidator: (options: AddValidatorOptions) => Validator;
+
   export const absence: (options?: DefaultValidatorOptions) => Validator;
   export const acceptance: (options?: DefaultValidatorOptions) => Validator;
 
