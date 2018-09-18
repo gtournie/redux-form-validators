@@ -5,7 +5,7 @@ const REG_URL_STRICT = /^(?:(?:(?:https?):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|1
 
 // Uses "format" internally which is already memoized
 let url = regFormat(function (options) {
-  let REG_URL = options.allowLocal ? REG_URL_LOOSE : REG_URL_STRICT;
+  let REG_URL = options.allowLocal ? REG_URL_LOOSE : REG_URL_STRICT
   let protocols = [].concat(options.protocols || options.protocol || Validators.defaultOptions.urlProtocols).join('|')
   return protocols !== 'http|https' ? new RegExp(REG_URL.source.replace('https?', protocols), REG_URL.flags) : REG_URL
 }, 'url')
