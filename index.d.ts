@@ -90,8 +90,13 @@ export interface DateValidatorOptions extends DefaultValidatorOptions {
 }
 
 export const date: (options?: DateValidatorOptions) => Validator
-export const email: (options?: DefaultValidatorOptions) => Validator
 export const exclusion: (options?: DefaultValidatorOptions) => Validator
+
+export interface EmailValidatorOptions extends DefaultValidatorOptions {
+    allowBlank?: boolean
+}
+
+export const email: (options?: EmailValidatorOptions) => Validator
 
 export interface FileValidatorOptions extends DefaultValidatorOptions {
   accept?: string
