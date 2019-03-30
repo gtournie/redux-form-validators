@@ -19,8 +19,9 @@ export interface MessageProps {
 declare type ValidatorMessage = MessageDescriptor | MessageProps | string
 
 export interface DefaultValidatorOptions {
-  if?: (values: any, value: any) => boolean
-  unless?: (values: any, value: any) => boolean
+  if?: (values: any, value: any, props: any, name: string) => boolean
+  unless?: (values: any, value: any, props: any, name: string) => boolean
+  memoize?: any
   message?: ValidatorMessage
   msg?: ValidatorMessage
 }
@@ -93,7 +94,7 @@ export const date: (options?: DateValidatorOptions) => Validator
 export const exclusion: (options?: DefaultValidatorOptions) => Validator
 
 export interface EmailValidatorOptions extends DefaultValidatorOptions {
-    allowBlank?: boolean
+  allowBlank?: boolean
 }
 
 export const email: (options?: EmailValidatorOptions) => Validator
@@ -168,6 +169,16 @@ export const required: (options?: DefaultValidatorOptions) => Validator
 export interface UrlValidatorOptions extends DefaultValidatorOptions {
   protocol?: string
   protocols?: string[]
+  protocolIdentifier?: boolean
+  basicAuth?: boolean
+  local?: boolean
+  ipv4?: boolean
+  ipv6?: boolean
+  host?: boolean
+  port?: boolean
+  path?: boolean
+  search?: boolean
+  hash?: boolean
 }
 
 export const url: (options?: UrlValidatorOptions) => Validator
@@ -176,6 +187,7 @@ declare const Validators: {
   formatMessage: (msg: MessageDescriptor) => string
   formatSize: (size: string, units: string) => string
   defaultOptions: {
+    memoize: any
     allowBlank: boolean
     urlProtocols: string[]
     dateFormat: string

@@ -26,8 +26,8 @@ export function prepare (ifCond, unlessCond, allowBlank, func) {
       }
     }
     if (
-      (typeof ifCond !== 'function' || ifCond(allValues, value)) &&
-      (typeof unlessCond !== 'function' || !unlessCond(allValues, value))
+      (typeof ifCond !== 'function' || ifCond(allValues, value, ...args)) &&
+      (typeof unlessCond !== 'function' || !unlessCond(allValues, value, ...args))
     ) {
       return func(value, allValues, ...args)
     }
@@ -73,11 +73,12 @@ export function toObjectMsg (msg) {
 }
 
 export function memoize (func) {
-  if (!func.cache) {
-    func.cache = {}
-  }
+  if (!func.cache) func.cache = {}
   return function (options) {
-    let key = stringify(options)
+    let memoize = options ? options.memoize : null
+    if (memoize == null) memoize = Validators.defaultOptions.memoize
+    if (memoize != null && !memoize) return func(options)
+    let key = typeof memoize === 'function' ? memoize(options, stringify) : stringify(options)
     return HAS_PROP.call(func.cache, key) ? func.cache[key] : (func.cache[key] = func(options))
   }
 }

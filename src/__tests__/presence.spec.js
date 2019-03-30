@@ -10,15 +10,15 @@ function test (value) {
 
 describe('Validator: presence', function () {
   it('should be invalid when `value` is empty', function () {
-    assert.equal(ERROR_ID, test())
-    assert.equal(ERROR_ID, test(null))
-    assert.equal(ERROR_ID, test(''))
-    assert.equal(ERROR_ID, test('   '))
-    assert.equal(ERROR_ID, test(' \n \t '))
-    assert.equal(ERROR_ID, test(new FileList()))
-    assert.equal(ERROR_ID, test(new FileList({ length: 0 })))
-    assert.equal(ERROR_ID, test(new FileList([])))
-    assert.equal(ERROR_ID, getErrorId(required()(' \n \t '))) // Alias
+    assert.strictEqual(ERROR_ID, test())
+    assert.strictEqual(ERROR_ID, test(null))
+    assert.strictEqual(ERROR_ID, test(''))
+    assert.strictEqual(ERROR_ID, test('   '))
+    assert.strictEqual(ERROR_ID, test(' \n \t '))
+    assert.strictEqual(ERROR_ID, test(new FileList()))
+    assert.strictEqual(ERROR_ID, test(new FileList({ length: 0 })))
+    assert.strictEqual(ERROR_ID, test(new FileList([])))
+    assert.strictEqual(ERROR_ID, getErrorId(required()(' \n \t '))) // Alias
   })
   it('should be valid when `value` is not empty', function () {
     assert.ok(!test(1))
@@ -35,7 +35,7 @@ describe('Validator: presence', function () {
     Validators.formatMessage = function (msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
     }
-    assert.equal(ERROR_ID + '2', test(''))
+    assert.strictEqual(ERROR_ID + '2', test(''))
 
     Validators.formatMessage = defaultValue
   })

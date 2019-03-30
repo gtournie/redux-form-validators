@@ -10,10 +10,10 @@ function test (value, params) {
 
 describe('Validator: email', function () {
   it('should be invalid when `value` is not a valid email', function () {
-    assert.equal(ERROR_ID, test(''))
-    assert.equal(ERROR_ID, test('foo'))
-    assert.equal(ERROR_ID, test('foo@bar'))
-    assert.equal(ERROR_ID, test('f@b.'))
+    assert.strictEqual(ERROR_ID, test(''))
+    assert.strictEqual(ERROR_ID, test('foo'))
+    assert.strictEqual(ERROR_ID, test('foo@bar'))
+    assert.strictEqual(ERROR_ID, test('f@b.'))
   })
   it('should be valid when `value` is a valid email', function () {
     assert.ok(!test('a@b.com'))
@@ -25,7 +25,7 @@ describe('Validator: email', function () {
     Validators.formatMessage = function (msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
     }
-    assert.equal(ERROR_ID + '2', test('foo'))
+    assert.strictEqual(ERROR_ID + '2', test('foo'))
 
     Validators.formatMessage = defaultValue
   })

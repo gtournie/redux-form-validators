@@ -5,8 +5,6 @@
 [![npm version](https://img.shields.io/npm/v/redux-form-validators.svg?style=flat-square)](https://www.npmjs.com/package/redux-form-validators)
 [![npm downloads](https://img.shields.io/npm/dm/redux-form-validators.svg?style=flat-square)](https://www.npmjs.com/package/redux-form-validators)
 
-/!\ Version 2.0.0 is now dependency-free. If you're working with react-intl, look at the [i18n and react-intl](#i18n-and-react-intl) section.
-
 # redux-form-validators
 
 Simple validations with redux-form. Heavily inspired by the rails validations.
@@ -77,29 +75,30 @@ validate = (values) => {
 
 Validators
 
-* [required / presence](#required-alias-presence)
-* [email](#email)
-* [numericality](#numericality)
-* [date](#date)
-* [length](#length)
-* [confirmation](#confirmation)
-* [format](#format)
-* [acceptance](#acceptance)
-* [inclusion](#inclusion)
-* [exclusion](#exclusion)
-* [absence](#absence)
-* [url](#url)
-* [file](#file)
+- [required / presence](#required-alias-presence)
+- [email](#email)
+- [numericality](#numericality)
+- [date](#date)
+- [length](#length)
+- [confirmation](#confirmation)
+- [format](#format)
+- [acceptance](#acceptance)
+- [inclusion](#inclusion)
+- [exclusion](#exclusion)
+- [absence](#absence)
+- [url](#url)
+- [file](#file)
 
 More
 
-* [default options](#default-options)
-* [i18n and react-intl](#i18n-and-react-intl)
-* [default messages override](#default-messages-override)
-* [common validation options](#common-validation-options)
-* [conditional validation](#conditional-validation)
-* [adding a validator](#adding-a-validator)
-* [date helpers](#date-helpers)
+- [default options](#default-options)
+- [i18n and react-intl](#i18n-and-react-intl)
+- [default messages override](#default-messages-override)
+- [common validation options](#common-validation-options)
+- [conditional validation](#conditional-validation)
+- [adding a validator](#adding-a-validator)
+- [date helpers](#date-helpers)
+- [url helper](#url-helper)
 
 ### required (alias: presence)
 
@@ -134,14 +133,14 @@ Validates that your value have only numeric values. By default, it will match an
 
 Besides `int`, this validator also accepts the following options to add constraints to acceptable values:
 
-* `>` (or `greaterThan`) - Specifies the value must be greater than the supplied value. The default error message for this option is "must be greater than ${count}".
-* `>=` (or `greaterThanOrEqualTo`) - Specifies the value must be greater than or equal to the supplied value. The default error message for this option is "must be greater than or equal to ${count}".
-* `=` (or `equalTo`) - Specifies the value must be equal to the supplied value. The default error message for this option is "must be equal to ${count}".
-* `!=` (or `otherThan`) - Specifies the value must be other than the supplied value. The default error message for this option is "must be other than 4{count}".
-* `<` (or `lessThan`) - Specifies the value must be less than the supplied value. The default error message for this option is "must be less than ${count}".
-* `<=` (or `lessThanOrEqualTo`) - Specifies the value must be less than or equal to the supplied value. The default error message for this option is "must be less than or equal to ${count}".
-* `odd` - Specifies the value must be an odd number if set to true. The default error message for this option is "must be odd".
-* `even` - Specifies the value must be an even number if set to true. The default error message for this option is "must be even".
+- `>` (or `greaterThan`) - Specifies the value must be greater than the supplied value. The default error message for this option is "must be greater than \${count}".
+- `>=` (or `greaterThanOrEqualTo`) - Specifies the value must be greater than or equal to the supplied value. The default error message for this option is "must be greater than or equal to \${count}".
+- `=` (or `equalTo`) - Specifies the value must be equal to the supplied value. The default error message for this option is "must be equal to \${count}".
+- `!=` (or `otherThan`) - Specifies the value must be other than the supplied value. The default error message for this option is "must be other than 4{count}".
+- `<` (or `lessThan`) - Specifies the value must be less than the supplied value. The default error message for this option is "must be less than \${count}".
+- `<=` (or `lessThanOrEqualTo`) - Specifies the value must be less than or equal to the supplied value. The default error message for this option is "must be less than or equal to \${count}".
+- `odd` - Specifies the value must be an odd number if set to true. The default error message for this option is "must be odd".
+- `even` - Specifies the value must be an even number if set to true. The default error message for this option is "must be even".
 
 Examples
 
@@ -154,15 +153,15 @@ numericality({ int: true, odd: true })
 
 The default error messages are:
 
-* "is not a number"
-* "must be greater than {number}"
-* "must be greater than or equal to {number}"
-* "must be equal to {number}"
-* "must be other than {number}"
-* "must be less than {number}"
-* "must be less than or equal to {number}"
-* "must be odd"
-* "must be even"
+- "is not a number"
+- "must be greater than {number}"
+- "must be greater than or equal to {number}"
+- "must be equal to {number}"
+- "must be other than {number}"
+- "must be less than {number}"
+- "must be less than or equal to {number}"
+- "must be odd"
+- "must be even"
 
 ### date
 
@@ -175,14 +174,14 @@ Very simple date validator. Limited to year, month and day validation (but it sh
 
 Accepts the following options:
 
-* `format` - Specifies the format that should match the date string. Accepts only the current flags: `y`, `m` & `d`. The number of flags used represents the number of digits expected (e.g. `yyyy` expects 4 digits while `yy` expects 2). Format examples: `mm/dd/yyyy`, `dd/mm/yyyy`, `yyyy-mm-dd`, `mm/dd/yy`, `yyyy/mm`, `mm/dd`...
-* `ymd` - Allows you to customize the format, to be more readable in case you're using i18n. For instance, you could use `{ format: 'jj/mm/aaaa', ymd: 'amj' }` for a French format.
+- `format` - Specifies the format that should match the date string. Accepts only the current flags: `y`, `m` & `d`. The number of flags used represents the number of digits expected (e.g. `yyyy` expects 4 digits while `yy` expects 2). Format examples: `mm/dd/yyyy`, `dd/mm/yyyy`, `yyyy-mm-dd`, `mm/dd/yy`, `yyyy/mm`, `mm/dd`...
+- `ymd` - Allows you to customize the format, to be more readable in case you're using i18n. For instance, you could use `{ format: 'jj/mm/aaaa', ymd: 'amj' }` for a French format.
 
 (See [default options](#default-options) to set `format` and `ymd` globally)
 
 And the comparable options:
 
-* '=', '>', '>=', '<', '<='. All of these options accept either a Date object, a timestamp, or a function (which returns a Date or a timestamp). To avoid syncing issues, don't pass `new Date()` directly but wrap it in a function or just pass the string `'today'`. Note that these options are only available if these flags are present: `y` + `m` + `d` OR `y` + `m` OR just `y`)
+- '=', '>', '>=', '<', '<='. All of these options accept either a Date object, a timestamp, or a function (which returns a Date or a timestamp). To avoid syncing issues, don't pass `new Date()` directly but wrap it in a function or just pass the string `'today'`. Note that these options are only available if these flags are present: `y` + `m` + `d` OR `y` + `m` OR just `y`)
 
 Examples
 
@@ -203,9 +202,9 @@ function twentyYearsAgo () {
 
 The default error messages are:
 
-* "expected format: {format}"
-* "is not a valid date" (e.g. Feb 29 2017)
-* "should be {op} {date}" (e.g. 'should be > 01/14/2017')
+- "expected format: {format}"
+- "is not a valid date" (e.g. Feb 29 2017)
+- "should be {op} {date}" (e.g. 'should be > 01/14/2017')
 
 See also [parseDate](#parsedate) & [formatDate](#formatdate)
 
@@ -220,10 +219,10 @@ Validates the length of the value. It provides a variety of options, so you can 
 
 The possible length constraint options are:
 
-* `min` (or `minimum`) - The value cannot have less than the specified length.
-* `max` (or `maximum`) - The value cannot have more than the specified length.
-* `in` (or `within`) - The value length must be included in a given interval. The value for this option must be an array.
-* `is` (or `=`) - The value length must be equal to the given value.
+- `min` (or `minimum`) - The value cannot have less than the specified length.
+- `max` (or `maximum`) - The value cannot have more than the specified length.
+- `in` (or `within`) - The value length must be included in a given interval. The value for this option must be an array.
+- `is` (or `=`) - The value length must be equal to the given value.
 
 Examples
 
@@ -234,7 +233,7 @@ length({ in: [2, 8] })
 length({ is: 6 })
 ```
 
-The default error messages depend on the type of length validation being performed. You can personalize these messages using the `wrongLength`, `tooLong`, and `tooShort` options and ${count} as a placeholder for the number corresponding to the length constraint being used. You can still use the `msg` (or `message`) option to specify an error message (don't forget to pluralize it).
+The default error messages depend on the type of length validation being performed. You can personalize these messages using the `wrongLength`, `tooLong`, and `tooShort` options and \${count} as a placeholder for the number corresponding to the length constraint being used. You can still use the `msg` (or `message`) option to specify an error message (don't forget to pluralize it).
 
 ### confirmation
 
@@ -256,7 +255,7 @@ confirmation({ field: 'email', fieldLabel: 'Email' })
 confirmation({ field: 'email', fieldLabel: 'Email', caseSensitive: false })
 ```
 
-The default error message for this validator is "doesn't match ${fieldLabel || field}".
+The default error message for this validator is "doesn't match \${fieldLabel || field}".
 
 ### format
 
@@ -340,7 +339,7 @@ exclusion({ in: [1, 2, 3, 4] })
 exclusion({ in: ['apple', 'banana'], caseSensitive: false })
 ```
 
-The default error message is "${value} is reserved".
+The default error message is "\${value} is reserved".
 
 ### absence
 
@@ -355,7 +354,7 @@ The default error message is "must be blank".
 
 ### url
 
-Validates that the specified value is a valid URL. It uses the `url.REG_URL` regexp to check the value.
+Validates that the specified value is a valid URL.
 
 ```
 <Field name="url" type="text" label="URL" component={renderField}
@@ -364,17 +363,55 @@ Validates that the specified value is a valid URL. It uses the `url.REG_URL` reg
 
 The url validator has an option `protocol` (or its alias `protocols`) that receives the set of protocols that will be accepted. This option default to ['http', 'https'] (see [default options](#default-options)).
 
+The other url constraint options are (all true by default):
+
+- `protocolIdentifier` - if set to false your URL doesn't have to start with `{{protocol}}://`
+- `basicAuth` - accepts or not basic authentication
+- `ipv4` - accepts or not an IPv4 address as a host
+- `ipv6` - accepts or not an IPv6 address as a host
+- `host` - accepts or not a domain + TLD as a host
+- `local` - accepts or not 'localhost' as a host
+- `port` - accepts or not a port
+- `path` - accepts or not a path
+- `search` - accepts or not a query string
+- `hash` - accepts or not a hash
+
 Examples
 
 ```
-url({ protocol: 'http' })
-url({ protocol: 'ftp' })
 url({ protocols: ['http', 'https'] })
+url({ protocol: 'http', ipv4: false, ipv6: false })
+url({ protocol: 'ftp', port: false, basicAuth: false, hash: false })
 ```
 
 The default error message is "is not a valid URL".
 
-> Note: As of version 2.0.0, the default protocol value is now: ['http', 'https'] ('ftp' was previously included)
+> Note: As of version 3.0.0, this method doesn't exclude any ip addresses anymore (like private & local networks). To re-implement this feature, you can use the [url.parseURL helper](#url-helper) and [add a custom validator](#adding-a-validator), like this:
+
+```
+// Private and local networks not allowed
+const REG = new RegExp(
+  "^(?!(?:10|127)(?:\\.\\d{1,3}){3})" +
+  "(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})" +
+  "(?!172\\.(?:1[6-9]|2\\d|3[0-1])" +
+  // IPV4
+  "(?:\\.\\d{1,3}){2})(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?|0)\\.){3}" +
+  "(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?|0)$"
+)
+
+const ipValidator = addValidator({
+  validator: function(options, value, allValues) {
+    let info = url.parseURL(value, options)
+    if (!info) return false
+    if (info.ipv4 && !REG.test(info.ipv4)) {
+      return {
+        id: "form.errors.private_url",
+        defaultMessage: "Private and local networks are not allowed"
+      }
+    }
+  }
+})
+```
 
 ### file
 
@@ -387,11 +424,11 @@ Validates that the specified value is a valid File or FileList.
 
 The possible file constraint options are:
 
-* `accept` - The value is a file (or a list of files) that match a comma-separated list of allowed file extensions or MIME types
-* `minSize` - The value is a file (or a list of files) that cannot be smaller than the specified size
-* `maxSize` - The value is a file (or a list of files) that cannot be bigger than the specified size
-* `minFiles` - The value is a list of files that cannot be smaller than the specified length
-* `maxFiles` - The value is a list of files that cannot be bigger than the specified length
+- `accept` - The value is a file (or a list of files) that match a comma-separated list of allowed file extensions or MIME types
+- `minSize` - The value is a file (or a list of files) that cannot be smaller than the specified size
+- `maxSize` - The value is a file (or a list of files) that cannot be bigger than the specified size
+- `minFiles` - The value is a list of files that cannot be smaller than the specified length
+- `maxFiles` - The value is a list of files that cannot be bigger than the specified length
 
 Examples
 
@@ -406,12 +443,12 @@ file({ minFiles: 2, maxFiles: 5 })
 
 The default error messages are:
 
-* "is not a file"
-* "invalid file type" / "invalid file types ({count})"
-* "is too small (minimum is {size})" / "{count} files are too small (minimum is {size} each)"
-* "is too big (maximum is {size})" / "{count} files are too big (maximum is {size} each)"
-* "invalid number of files (minimum is {count})"
-* "invalid number of files (maximum is {count})"
+- "is not a file"
+- "invalid file type" / "invalid file types ({count})"
+- "is too small (minimum is {size})" / "{count} files are too small (minimum is {size} each)"
+- "is too big (maximum is {size})" / "{count} files are too big (maximum is {size} each)"
+- "invalid number of files (minimum is {count})"
+- "invalid number of files (maximum is {count})"
 
 > Note: size units supported: B, KB, MB, GB, TB, PB, EB
 
@@ -423,6 +460,7 @@ redux-form-validators comes with default options:
 
 ```
 {
+  memoize:       true,
   allowBlank:    false,
   urlProtocols:  ['http', 'https'],
   dateFormat:    'yyyy-mm-dd',
@@ -591,14 +629,46 @@ length({ msg: { tooShort: 'min {count, number} characters' }, min: 2, max: 8 })
 
 ### Conditional validation
 
+#### Memoization
+
+Since version 7.0 of Redux-form, memoization is needed for inline validation. In some cases, you might want to disable it though. To do so:
+
+- set Validators.defaultOptions.memoize to false
+- OR set `memoize` valdator's option to false (e.g. presence({ memoize: false }))
+
+And if you want to keep the memoization but want to override it:
+
+```
+// Global memoization
+// This function usually returns a unique key depending on the options passed
+// $super represents the default memoize function
+Validators.defaultOptions.memoize = (options, $super) => {
+  return ... // string key
+}
+
+// Specific validation (inline-validation)
+length({
+  min: 2,
+  if: () => this.state.foo,
+  memoize: (opts, $super) => $super(opts) + this.state.foo
+})
+
+// General validation
+const validLen = length({ min: 2, if: () => ..., memoize: false })
+
+<Field name="test" type="text" label="Test" component={renderField} validate={validLen} />
+```
+
 #### Using a function with `if` and `unless`
 
 Finally, it's possible to associate `if` and `unless` with a function which will be called. Using a function gives you the ability to write an inline condition instead of a separate method. This option is best suited for one-liners.
 
 ```
 <Field name="surname" type="text" label="Surname" component={renderField}
-    validate={presence({ if: (values, value) => { return '' !== values.name } })} />
+    validate={presence({ if: (values, value, props, name) => { return '' !== values.name } })} />
 ```
+
+> Note: In some cases, the memoization can mess with `if` and `unless` methods which can refer to out-of-the-scope variables. See [memoization](#memoization) for further information.
 
 ### Adding a validator
 
@@ -634,7 +704,7 @@ const digitValidator = addValidator({
 
 > Note: As of version 2.0.0, you can now return a message directly if invalid (allowing things like pluralization). For backward compatibility, if you return a boolean, the validator will return the defaultMessage if invalid.
 
-> Note: you'll still be able to use the common options (`message` & `allowBlank`) and the conditional validation (`if` and `unless`).
+> Note: you'll still be able to use the common options (`message`, `allowBlank` & `memoize`) and the conditional validation (`if` and `unless`).
 
 ### Date helpers
 
@@ -684,4 +754,38 @@ formatDate(new Date(2017, 11, 31), 'mm/jj/aaaa', 'amj') => '12/31/2017'
 formatDate(new Date(NaN), 'mm/dd/yyyy')                 => null
 formatDate(null,          'mm/dd/yyyy')                 => null
 formatDate({},            'mm/dd/yyyy')                 => null
+```
+
+### URL helper
+
+#### parseURL
+
+parser used to validate URLs
+
+Signature: `parseURL(url[, options])`
+
+- options are the same as described for [url](#url)
+- returns null if invalid
+- otherwise returns an object filled with the elements found
+
+Examples:
+
+```
+import { url } from 'redux-form-validators'
+let parseURL = url.parseURL
+
+parseURL('http://example.com/stuff')
+// { protocol: 'http', host: 'example.com', path: 'stuff' }
+
+parseURL('http://localhost:8080')
+// { protocol: 'http', host: 'localhost', port: 8080 }
+
+parseURL('//212.78.3.17:4000')
+// { ipv4: '212.78.3.17', port: 4000 }
+
+parseURL('http://[::1]:3000')
+// { ipv6: '::1', port: 3000, protocol: 'http' }
+
+parseURL('http://userid:pass@example.com')
+// { basicAuth: { username: 'userid', password: 'pass' }, ... }
 ```

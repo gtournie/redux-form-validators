@@ -26,23 +26,23 @@ function testFormat (strDate, date, format, ymd) {
 
 describe('Validator: date', function () {
   it('should be invalid', function () {
-    assert.equal(ERROR_FORMAT_ID, test('', { format: 'mm/dd/yyyy' }))
-    assert.equal(ERROR_FORMAT_ID, test('12122016', { format: 'mm/dd/yyyy' }))
-    assert.equal(ERROR_FORMAT_ID, test('12-12-2016', { format: 'mm/dd/yyyy' }))
-    assert.equal(ERROR_FORMAT_ID, test('12/12//2016', { format: 'mm/dd/yyyy' }))
-    assert.equal(ERROR_FORMAT_ID, test('12/12//16', { format: 'mm/dd/yyyy' }))
-    assert.equal(ERROR_FORMAT_ID, test('12/12//16', { format: 'mm/dd' }))
+    assert.strictEqual(ERROR_FORMAT_ID, test('', { format: 'mm/dd/yyyy' }))
+    assert.strictEqual(ERROR_FORMAT_ID, test('12122016', { format: 'mm/dd/yyyy' }))
+    assert.strictEqual(ERROR_FORMAT_ID, test('12-12-2016', { format: 'mm/dd/yyyy' }))
+    assert.strictEqual(ERROR_FORMAT_ID, test('12/12//2016', { format: 'mm/dd/yyyy' }))
+    assert.strictEqual(ERROR_FORMAT_ID, test('12/12//16', { format: 'mm/dd/yyyy' }))
+    assert.strictEqual(ERROR_FORMAT_ID, test('12/12//16', { format: 'mm/dd' }))
 
-    assert.equal(ERROR_INVALID_ID, test('02/29/2015', { format: 'mm/dd/yyyy' }))
-    assert.equal(ERROR_INVALID_ID, test('13/20/2015', { format: 'mm/dd/yyyy' }))
-    assert.equal(ERROR_INVALID_ID, test('00/10/2015', { format: 'mm/dd/yyyy' }))
-    assert.equal(ERROR_INVALID_ID, test('01/00/2015', { format: 'mm/dd/yyyy' }))
+    assert.strictEqual(ERROR_INVALID_ID, test('02/29/2015', { format: 'mm/dd/yyyy' }))
+    assert.strictEqual(ERROR_INVALID_ID, test('13/20/2015', { format: 'mm/dd/yyyy' }))
+    assert.strictEqual(ERROR_INVALID_ID, test('00/10/2015', { format: 'mm/dd/yyyy' }))
+    assert.strictEqual(ERROR_INVALID_ID, test('01/00/2015', { format: 'mm/dd/yyyy' }))
 
-    assert.equal(ERROR_RANGE_ID, test('01/01/2017', { format: 'mm/dd/yyyy', '=': new Date(2017, 0, 2) }))
-    assert.equal(ERROR_RANGE_ID, test('01/01/2017', { format: 'mm/dd/yyyy', '!=': new Date(2017, 0, 1) }))
-    assert.equal(ERROR_RANGE_ID, test('01/01/2017', { format: 'mm/dd/yyyy', '>': new Date(2017, 0) }))
-    assert.equal(ERROR_RANGE_ID, test('01/01/0001', { format: 'mm/dd/yyyy', '>': 'today' }))
-    assert.equal(
+    assert.strictEqual(ERROR_RANGE_ID, test('01/01/2017', { format: 'mm/dd/yyyy', '=': new Date(2017, 0, 2) }))
+    assert.strictEqual(ERROR_RANGE_ID, test('01/01/2017', { format: 'mm/dd/yyyy', '!=': new Date(2017, 0, 1) }))
+    assert.strictEqual(ERROR_RANGE_ID, test('01/01/2017', { format: 'mm/dd/yyyy', '>': new Date(2017, 0) }))
+    assert.strictEqual(ERROR_RANGE_ID, test('01/01/0001', { format: 'mm/dd/yyyy', '>': 'today' }))
+    assert.strictEqual(
       ERROR_RANGE_ID,
       test('01/01/0001', {
         format: 'mm/dd/yyyy',
@@ -51,15 +51,15 @@ describe('Validator: date', function () {
         }
       })
     )
-    assert.equal(ERROR_RANGE_ID, test('12/31/2016', { format: 'mm/dd/yyyy', '>=': new Date(2017, 0) }))
-    assert.equal(ERROR_RANGE_ID, test('01/01/2017', { format: 'mm/dd/yyyy', '<': new Date(2016, 11, 31) }))
-    assert.equal(ERROR_RANGE_ID, test('01/02/2017', { format: 'mm/dd/yyyy', '<=': new Date(2017, 0) }))
+    assert.strictEqual(ERROR_RANGE_ID, test('12/31/2016', { format: 'mm/dd/yyyy', '>=': new Date(2017, 0) }))
+    assert.strictEqual(ERROR_RANGE_ID, test('01/01/2017', { format: 'mm/dd/yyyy', '<': new Date(2016, 11, 31) }))
+    assert.strictEqual(ERROR_RANGE_ID, test('01/02/2017', { format: 'mm/dd/yyyy', '<=': new Date(2017, 0) }))
 
-    assert.equal(
+    assert.strictEqual(
       ERROR_RANGE_ID,
       test('01/01/2018', { format: 'mm/dd/yyyy', '>': new Date(2016, 0), '<=': new Date(2017, 0) })
     )
-    assert.equal(
+    assert.strictEqual(
       ERROR_RANGE_ID,
       test('01/01/2015', { format: 'mm/dd/yyyy', '>': new Date(2016, 0), '<=': new Date(2017, 0) })
     )
@@ -223,9 +223,9 @@ describe('format date', function () {
     Validators.formatMessage = function (msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
     }
-    assert.equal(ERROR_FORMAT_ID + '2', test('', { format: 'mm/dd/yyyy' }))
-    assert.equal(ERROR_INVALID_ID + '2', test('01/00/2015', { format: 'mm/dd/yyyy' }))
-    assert.equal(ERROR_RANGE_ID + '2', test('01/01/2017', { format: 'mm/dd/yyyy', '=': new Date(2017, 0, 2) }))
+    assert.strictEqual(ERROR_FORMAT_ID + '2', test('', { format: 'mm/dd/yyyy' }))
+    assert.strictEqual(ERROR_INVALID_ID + '2', test('01/00/2015', { format: 'mm/dd/yyyy' }))
+    assert.strictEqual(ERROR_RANGE_ID + '2', test('01/01/2017', { format: 'mm/dd/yyyy', '=': new Date(2017, 0, 2) }))
 
     Validators.formatMessage = defaultValue
   })

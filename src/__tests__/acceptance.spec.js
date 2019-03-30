@@ -10,11 +10,11 @@ function test (value, params) {
 
 describe('Validator: acceptance', function () {
   it('should be invalid when `value` is not included in default values', function () {
-    assert.equal(ERROR_ID, test())
-    assert.equal(ERROR_ID, test(false))
-    assert.equal(ERROR_ID, test(''))
-    assert.equal(ERROR_ID, test('foo'))
-    assert.equal(ERROR_ID, test('false'))
+    assert.strictEqual(ERROR_ID, test())
+    assert.strictEqual(ERROR_ID, test(false))
+    assert.strictEqual(ERROR_ID, test(''))
+    assert.strictEqual(ERROR_ID, test('foo'))
+    assert.strictEqual(ERROR_ID, test('false'))
   })
   it('should be valid when `value` is included in default values', function () {
     assert.ok(!test(1))
@@ -30,9 +30,9 @@ describe('Validator: acceptance', function () {
     assert.ok(!test('2', { accept: ['foo', 2] }))
   })
   it('should be invalid when `value` is not included in custom values', function () {
-    assert.equal(ERROR_ID, test(null, { accept: '1' }))
-    assert.equal(ERROR_ID, test('2', { accept: '1' }))
-    assert.equal(ERROR_ID, test('2', { accept: ['foo', 3] }))
+    assert.strictEqual(ERROR_ID, test(null, { accept: '1' }))
+    assert.strictEqual(ERROR_ID, test('2', { accept: '1' }))
+    assert.strictEqual(ERROR_ID, test('2', { accept: ['foo', 3] }))
   })
   it('should use default accept option', function () {
     let defaultValue = Validators.defaultOptions.accept
@@ -51,7 +51,7 @@ describe('Validator: acceptance', function () {
     Validators.formatMessage = function (msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
     }
-    assert.equal(ERROR_ID + '2', test())
+    assert.strictEqual(ERROR_ID + '2', test())
 
     Validators.formatMessage = defaultValue
   })

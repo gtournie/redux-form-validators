@@ -11,13 +11,13 @@ function test (value, params, allValues) {
 
 describe('Validator: confirmation', function () {
   it('should be invalid when `value` != confirmation', function () {
-    assert.equal(ERROR_ID, test('val'))
-    assert.equal(ERROR_ID, test('val', { caseSensitive: false }))
-    assert.equal(ERROR_ID, test('VALIDATOR', { caseSensitive: true }))
-    assert.equal(ERROR_ID, test('valiDator', { caseSensitive: true }))
+    assert.strictEqual(ERROR_ID, test('val'))
+    assert.strictEqual(ERROR_ID, test('val', { caseSensitive: false }))
+    assert.strictEqual(ERROR_ID, test('VALIDATOR', { caseSensitive: true }))
+    assert.strictEqual(ERROR_ID, test('valiDator', { caseSensitive: true }))
   })
   it("should be invalid when confirmation field doesn't exists", function () {
-    assert.equal(ERROR_ID, test('validator', { field: 'passwordconfirmation' }))
+    assert.strictEqual(ERROR_ID, test('validator', { field: 'passwordconfirmation' }))
   })
   it('should be valid when `value` = confirmation', function () {
     assert.ok(!test('', { field: 'foo' }, {}))
@@ -43,7 +43,7 @@ describe('Validator: confirmation', function () {
     Validators.formatMessage = function (msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
     }
-    assert.equal(ERROR_ID + '2', test('val'))
+    assert.strictEqual(ERROR_ID + '2', test('val'))
 
     Validators.formatMessage = defaultValue
   })

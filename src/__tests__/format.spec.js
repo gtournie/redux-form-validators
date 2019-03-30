@@ -10,14 +10,14 @@ function test (value, params) {
 
 describe('Validator: format', function () {
   it("should be invalid when `value` doesn't match the with option", function () {
-    assert.equal(ERROR_ID, test('', { with: /123/ }))
-    assert.equal(ERROR_ID, test(12, { with: /123/ }))
-    assert.equal(ERROR_ID, test('foo', { with: /bar/ }))
+    assert.strictEqual(ERROR_ID, test('', { with: /123/ }))
+    assert.strictEqual(ERROR_ID, test(12, { with: /123/ }))
+    assert.strictEqual(ERROR_ID, test('foo', { with: /bar/ }))
   })
   it("should be invalid when `value` doesn't match the without option", function () {
-    assert.equal(ERROR_ID, test('', { without: /.?/ }))
-    assert.equal(ERROR_ID, test(123, { without: /\d+/ }))
-    assert.equal(ERROR_ID, test('foo', { without: /\w+/ }))
+    assert.strictEqual(ERROR_ID, test('', { without: /.?/ }))
+    assert.strictEqual(ERROR_ID, test(123, { without: /\d+/ }))
+    assert.strictEqual(ERROR_ID, test('foo', { without: /\w+/ }))
   })
   it('should be valid when `value` match the with option', function () {
     assert.ok(!test('', { with: /.?/ }))
@@ -35,7 +35,7 @@ describe('Validator: format', function () {
     Validators.formatMessage = function (msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
     }
-    assert.equal(ERROR_ID + '2', test(123, { without: /\d+/ }))
+    assert.strictEqual(ERROR_ID + '2', test(123, { without: /\d+/ }))
 
     Validators.formatMessage = defaultValue
   })

@@ -10,11 +10,11 @@ function test (value, params) {
 
 describe('Validator: inclusion', function () {
   it('should be invalid when `value` is not in the list', function () {
-    assert.equal(ERROR_ID, test(1, { in: [] }))
-    assert.equal(ERROR_ID, test('1', { in: [2, 3, 4] }))
-    assert.equal(ERROR_ID, test('foo', { within: 'foobar' }))
-    assert.equal(ERROR_ID, test('FOO', { within: ['foobar'], caseSensitive: false }))
-    assert.equal(ERROR_ID, test('FOO', { within: ['foo'], caseSensitive: true }))
+    assert.strictEqual(ERROR_ID, test(1, { in: [] }))
+    assert.strictEqual(ERROR_ID, test('1', { in: [2, 3, 4] }))
+    assert.strictEqual(ERROR_ID, test('foo', { within: 'foobar' }))
+    assert.strictEqual(ERROR_ID, test('FOO', { within: ['foobar'], caseSensitive: false }))
+    assert.strictEqual(ERROR_ID, test('FOO', { within: ['foo'], caseSensitive: true }))
   })
   it('should be valid when `value` is in the list', function () {
     assert.ok(!test(1, { in: [9, 8, '1'] }))
@@ -41,7 +41,7 @@ describe('Validator: inclusion', function () {
     Validators.formatMessage = function (msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
     }
-    assert.equal(ERROR_ID + '2', test('1', { in: [2, 3, 4] }))
+    assert.strictEqual(ERROR_ID + '2', test('1', { in: [2, 3, 4] }))
 
     Validators.formatMessage = defaultValue
   })

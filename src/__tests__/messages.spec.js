@@ -30,20 +30,20 @@ describe('Validator option: message', function () {
   it('should return a custom message', function () {
     let blank = ''
     ;['msg', 'message'].forEach(function (key) {
-      assert.equal('foobar', test(key, 'foobar', absence, 'foo'))
-      assert.equal('foobar', test(key, 'foobar', acceptance))
-      assert.equal('foobar', test(key, 'foobar', confirmation, 'foo', { field: 'bar' }))
-      assert.equal('foobar', test(key, 'foobar', email, blank))
-      assert.equal('foobar', test(key, 'foobar', date, blank, { format: 'mm/dd/yyyy' }))
-      assert.equal('foobar', test(key, 'foobar', exclusion, blank, { in: [blank] }))
-      assert.equal('foobar', test(key, 'foobar', file))
-      assert.equal('foobar', test(key, 'foobar', format, blank, { with: /^foo$/ }))
-      assert.equal('foobar', test(key, 'foobar', inclusion, blank, { in: [] }))
-      assert.equal('foobar', test(key, 'foobar', length, blank, { is: 300 }))
-      assert.equal('foobar', test(key, 'foobar', numericality, blank))
-      assert.equal('foobar', test(key, 'foobar', presence, blank))
-      assert.equal('foobar', test(key, 'foobar', url, blank))
-      assert.equal('foobar', test(key, { id: 'foobar', defaultMessage: 'foo' }, presence, blank))
+      assert.strictEqual('foobar', test(key, 'foobar', absence, 'foo'))
+      assert.strictEqual('foobar', test(key, 'foobar', acceptance))
+      assert.strictEqual('foobar', test(key, 'foobar', confirmation, 'foo', { field: 'bar' }))
+      assert.strictEqual('foobar', test(key, 'foobar', email, blank))
+      assert.strictEqual('foobar', test(key, 'foobar', date, blank, { format: 'mm/dd/yyyy' }))
+      assert.strictEqual('foobar', test(key, 'foobar', exclusion, blank, { in: [blank] }))
+      assert.strictEqual('foobar', test(key, 'foobar', file))
+      assert.strictEqual('foobar', test(key, 'foobar', format, blank, { with: /^foo$/ }))
+      assert.strictEqual('foobar', test(key, 'foobar', inclusion, blank, { in: [] }))
+      assert.strictEqual('foobar', test(key, 'foobar', length, blank, { is: 300 }))
+      assert.strictEqual('foobar', test(key, 'foobar', numericality, blank))
+      assert.strictEqual('foobar', test(key, 'foobar', presence, blank))
+      assert.strictEqual('foobar', test(key, 'foobar', url, blank))
+      assert.strictEqual('foobar', test(key, { id: 'foobar', defaultMessage: 'foo' }, presence, blank))
     })
   })
 
@@ -51,29 +51,29 @@ describe('Validator option: message', function () {
     let blank = ''
     ;['msg', 'message'].forEach(function (key) {
       // React Intl element
-      assert.equal('foobar', test(key, <FormattedMessage id="foobar" />, absence, 'foo'))
+      assert.strictEqual('foobar', test(key, <FormattedMessage id="foobar" />, absence, 'foo'))
 
       // Other formats
-      assert.equal('foobar', test(key, { absence: 'foobar' }, absence, 'foo'))
-      assert.equal('foobar', test(key, { absence: { id: 'foobar' } }, absence, 'foo'))
-      assert.equal(
+      assert.strictEqual('foobar', test(key, { absence: 'foobar' }, absence, 'foo'))
+      assert.strictEqual('foobar', test(key, { absence: { id: 'foobar' } }, absence, 'foo'))
+      assert.strictEqual(
         'foobar',
         test(key, { wrongLength: { id: 'foobar' }, tooShort: { id: 'min' } }, length, blank, { is: 300 })
       )
-      assert.equal(
+      assert.strictEqual(
         'foobar',
         test(key, { wrongLength: { id: 'is' }, tooShort: { id: 'foobar' } }, length, blank, { min: 1 })
       )
-      assert.equal('foobar', test(key, { wrongLength: 'foobar', tooShort: 'min' }, length, blank, { is: 300 }))
-      assert.equal('foobar', test(key, { wrongLength: 'is', tooShort: 'foobar' }, length, blank, { min: 1 }))
+      assert.strictEqual('foobar', test(key, { wrongLength: 'foobar', tooShort: 'min' }, length, blank, { is: 300 }))
+      assert.strictEqual('foobar', test(key, { wrongLength: 'is', tooShort: 'foobar' }, length, blank, { min: 1 }))
     })
   })
 
   it('should fallback to default message', function () {
     let blank = ''
     ;['msg', 'message'].forEach(function (key) {
-      assert.equal('form.errors.tooShort', test(key, { wrongLength: { id: 'is' } }, length, blank, { min: 1 }))
-      assert.equal('form.errors.tooShort', test(key, { wrongLength: { id: 'is' } }, length, blank, { is: 0, min: 1 }))
+      assert.strictEqual('form.errors.tooShort', test(key, { wrongLength: { id: 'is' } }, length, blank, { min: 1 }))
+      assert.strictEqual('form.errors.tooShort', test(key, { wrongLength: { id: 'is' } }, length, blank, { is: 0, min: 1 }))
     })
   })
 
@@ -82,15 +82,15 @@ describe('Validator option: message', function () {
     Validators.formatMessage = global.ValidatorsFormatMessage
 
     let defaultMessages = Validators.messages
-    assert.equal(defaultMessages.presence.defaultMessage, presence()(''))
+    assert.strictEqual(defaultMessages.presence.defaultMessage, presence()(''))
 
     Validators.messages.presence = {
       id: 'form.errors.presence',
       defaultMessage: 'is mandatory'
     }
-    assert.equal('is mandatory', presence()(''))
+    assert.strictEqual('is mandatory', presence()(''))
     Validators.messages.tooShort = 'is too short: {count} chars expected'
-    assert.equal('is too short: 4 chars expected', length({ min: 4 })(''))
+    assert.strictEqual('is too short: 4 chars expected', length({ min: 4 })(''))
 
     Object.assign(Validators.messages, {
       presence: {
@@ -98,7 +98,7 @@ describe('Validator option: message', function () {
         defaultMessage: 'is missing'
       }
     })
-    assert.equal('is missing', presence()(''))
+    assert.strictEqual('is missing', presence()(''))
 
     Validators.messages = defaultMessages
     Validators.formatMessage = formatMessage

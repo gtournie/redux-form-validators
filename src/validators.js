@@ -1,6 +1,7 @@
 import messages from './messages'
 
 var DEFAULT_OPTIONS = {
+  memoize: true,
   allowBlank: false,
   urlProtocols: ['http', 'https'],
   dateFormat: 'yyyy-mm-dd', // ISO

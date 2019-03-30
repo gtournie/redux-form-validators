@@ -25,28 +25,28 @@ function test (value, params) {
 
 describe('Validator: file', function () {
   it('should be invalid when `value` is not a valid file', function () {
-    assert.equal(ERROR_FILE, test(''))
-    assert.equal(ERROR_FILE, test({}))
-    assert.equal(ERROR_FILE, test([]))
+    assert.strictEqual(ERROR_FILE, test(''))
+    assert.strictEqual(ERROR_FILE, test({}))
+    assert.strictEqual(ERROR_FILE, test([]))
   })
   it('should be invalid when `value` is a File with a bad type', function () {
-    assert.equal(ERROR_ACCEPT, test(new File({ type: 'audio/mp3', name: 'foo.bar' }), { accept: 'mp3,bar' }))
-    assert.equal(ERROR_ACCEPT, test(new File({ type: 'audio/mp3', name: '.htaccess' }), { accept: '.htaccess' }))
-    assert.equal(ERROR_ACCEPT, test(new FileList([{ type: 'video/mp4', name: 'foo.bar' }]), { accept: '.mp4' }))
-    assert.equal(ERROR_ACCEPT, test(new FileList([{ type: 'video/mp4', name: 'foo.jpeg' }]), { accept: '.jp*g' }))
-    assert.equal(
+    assert.strictEqual(ERROR_ACCEPT, test(new File({ type: 'audio/mp3', name: 'foo.bar' }), { accept: 'mp3,bar' }))
+    assert.strictEqual(ERROR_ACCEPT, test(new File({ type: 'audio/mp3', name: '.htaccess' }), { accept: '.htaccess' }))
+    assert.strictEqual(ERROR_ACCEPT, test(new FileList([{ type: 'video/mp4', name: 'foo.bar' }]), { accept: '.mp4' }))
+    assert.strictEqual(ERROR_ACCEPT, test(new FileList([{ type: 'video/mp4', name: 'foo.jpeg' }]), { accept: '.jp*g' }))
+    assert.strictEqual(
       ERROR_ACCEPT,
       test(new FileList([{ type: 'jpeg', name: 'foo.bar' }, { type: 'imag/png', name: 'foo.zip' }]), {
         accept: 'audio/*, .foo'
       })
     )
-    assert.equal(
+    assert.strictEqual(
       ERROR_ACCEPT,
       test(new FileList([{ type: 'jpeg', name: 'foo.bar' }, { type: 'imag/png', name: 'foo.zip' }]), {
         accept: 'audio/*, .zip'
       })
     )
-    assert.equal(
+    assert.strictEqual(
       ERROR_ACCEPT,
       test(new FileList([{ type: 'application/zip', name: 'foo.bar' }]), {
         accept: '.application,foo.bar,.zip,application/gzip'
@@ -54,15 +54,15 @@ describe('Validator: file', function () {
     )
   })
   it("should be invalid when `value` doesn't contain the right amount of files", function () {
-    assert.equal(ERROR_TOO_FEW, test(new File(), { minFiles: 2 }))
-    assert.equal(ERROR_TOO_FEW, test(new File({ name: 'foo' }), { minFiles: 2 }))
-    assert.equal(ERROR_TOO_FEW, test(new FileList({ length: 0 })))
-    assert.equal(ERROR_TOO_FEW, test(new FileList({ length: 0 }), { minFiles: 1 }))
-    assert.equal(ERROR_TOO_FEW, test(new FileList({ length: 1 }), { minFiles: 2 }))
-    assert.equal(ERROR_TOO_FEW, test(new FileList([{}]), { minFiles: 2 }))
+    assert.strictEqual(ERROR_TOO_FEW, test(new File(), { minFiles: 2 }))
+    assert.strictEqual(ERROR_TOO_FEW, test(new File({ name: 'foo' }), { minFiles: 2 }))
+    assert.strictEqual(ERROR_TOO_FEW, test(new FileList({ length: 0 })))
+    assert.strictEqual(ERROR_TOO_FEW, test(new FileList({ length: 0 }), { minFiles: 1 }))
+    assert.strictEqual(ERROR_TOO_FEW, test(new FileList({ length: 1 }), { minFiles: 2 }))
+    assert.strictEqual(ERROR_TOO_FEW, test(new FileList([{}]), { minFiles: 2 }))
 
-    assert.equal(ERROR_TOO_MANY, test(new File(), { maxFiles: 0 }))
-    assert.equal(ERROR_TOO_MANY, test(new FileList([{ name: 'foo' }, {}]), { maxFiles: 1 }))
+    assert.strictEqual(ERROR_TOO_MANY, test(new File(), { maxFiles: 0 }))
+    assert.strictEqual(ERROR_TOO_MANY, test(new FileList([{ name: 'foo' }, {}]), { maxFiles: 1 }))
   })
   it('should be invalid when `value` is a File with a bad size', function () {
     assert.ok(!test(new File({ size: 1024 }), { minSize: 512 }))
@@ -71,22 +71,22 @@ describe('Validator: file', function () {
       let size = SIZE_UNITS[unit]
 
       let size1 = size - (size > 1125899906842624 ? 1000 : 1)
-      assert.equal(ERROR_TOO_SMALL, test(new File({ size: size1 }), { minSize: size }))
-      assert.equal(ERROR_TOO_SMALL, test(new FileList([{ size: size1 }]), { minSize: size }))
-      assert.equal(ERROR_TOO_SMALL, test(new FileList([{ size: size1 }]), { minSize: '1' + unit }))
-      assert.equal(ERROR_TOO_SMALL, test(new FileList([{ size: size1 }]), { minSize: '1 ' + unit }))
-      assert.equal(ERROR_TOO_SMALL, test(new FileList([{ size: size1 }]), { minSize: '1. ' + unit }))
-      assert.equal(ERROR_TOO_SMALL, test(new FileList([{ size: size1 }]), { minSize: '1.0001 ' + unit }))
-      assert.equal(ERROR_TOO_SMALL, test(new FileList([{ size: size1 }]), { minSize: '1.0001' + unit }))
+      assert.strictEqual(ERROR_TOO_SMALL, test(new File({ size: size1 }), { minSize: size }))
+      assert.strictEqual(ERROR_TOO_SMALL, test(new FileList([{ size: size1 }]), { minSize: size }))
+      assert.strictEqual(ERROR_TOO_SMALL, test(new FileList([{ size: size1 }]), { minSize: '1' + unit }))
+      assert.strictEqual(ERROR_TOO_SMALL, test(new FileList([{ size: size1 }]), { minSize: '1 ' + unit }))
+      assert.strictEqual(ERROR_TOO_SMALL, test(new FileList([{ size: size1 }]), { minSize: '1. ' + unit }))
+      assert.strictEqual(ERROR_TOO_SMALL, test(new FileList([{ size: size1 }]), { minSize: '1.0001 ' + unit }))
+      assert.strictEqual(ERROR_TOO_SMALL, test(new FileList([{ size: size1 }]), { minSize: '1.0001' + unit }))
 
       let size2 = size + (size > 1125899906842624 ? 1000 : 1)
-      assert.equal(ERROR_TOO_BIG, test(new File({ size: size2 }), { maxSize: size }))
-      assert.equal(ERROR_TOO_BIG, test(new FileList([{ size: size2 }]), { maxSize: size }))
-      assert.equal(ERROR_TOO_BIG, test(new FileList([{ size: size2 }]), { maxSize: '1' + unit }))
-      assert.equal(ERROR_TOO_BIG, test(new FileList([{ size: size2 }]), { maxSize: '1 ' + unit }))
-      assert.equal(ERROR_TOO_BIG, test(new FileList([{ size: size2 }]), { maxSize: '1. ' + unit }))
-      assert.equal(ERROR_TOO_BIG, test(new FileList([{ size: size2 }]), { maxSize: '0.9999 ' + unit }))
-      assert.equal(ERROR_TOO_BIG, test(new FileList([{ size: size2 }]), { maxSize: '0.9999' + unit }))
+      assert.strictEqual(ERROR_TOO_BIG, test(new File({ size: size2 }), { maxSize: size }))
+      assert.strictEqual(ERROR_TOO_BIG, test(new FileList([{ size: size2 }]), { maxSize: size }))
+      assert.strictEqual(ERROR_TOO_BIG, test(new FileList([{ size: size2 }]), { maxSize: '1' + unit }))
+      assert.strictEqual(ERROR_TOO_BIG, test(new FileList([{ size: size2 }]), { maxSize: '1 ' + unit }))
+      assert.strictEqual(ERROR_TOO_BIG, test(new FileList([{ size: size2 }]), { maxSize: '1. ' + unit }))
+      assert.strictEqual(ERROR_TOO_BIG, test(new FileList([{ size: size2 }]), { maxSize: '0.9999 ' + unit }))
+      assert.strictEqual(ERROR_TOO_BIG, test(new FileList([{ size: size2 }]), { maxSize: '0.9999' + unit }))
     })
   })
   it('should be valid when `value` is a valid FileList/File', function () {
@@ -167,9 +167,9 @@ describe('Validator: file', function () {
       return size + ' ' + unitMap[unit]
     }
 
-    assert.equal('2 octets', file({ msg: '{size}', minSize: '2B' })(new File({ size: 1 })))
-    assert.equal('1 Ko', file({ msg: '{size}', minSize: '1KB' })(new File({ size: 1 })))
-    assert.equal('1024 octets', file({ msg: '{size}', minSize: 1024 })(new File({ size: 1 })))
+    assert.strictEqual('2 octets', file({ msg: '{size}', minSize: '2B' })(new File({ size: 1 })))
+    assert.strictEqual('1 Ko', file({ msg: '{size}', minSize: '1KB' })(new File({ size: 1 })))
+    assert.strictEqual('1024 octets', file({ msg: '{size}', minSize: 1024 })(new File({ size: 1 })))
 
     Validators.formatSize = defaultValue
     Validators.formatMessage = formatMessage
@@ -180,12 +180,12 @@ describe('Validator: file', function () {
     Validators.formatMessage = function (msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
     }
-    assert.equal(ERROR_FILE + '2', test({}))
-    assert.equal(ERROR_ACCEPT + '2', test(new FileList([{ type: 'video/mp4', name: 'foo' }]), { accept: '.zip' }))
-    assert.equal(ERROR_TOO_BIG + '2', test(new FileList([{ size: 2 }]), { maxSize: 1 }))
-    assert.equal(ERROR_TOO_FEW + '2', test(new FileList([{}]), { minFiles: 2 }))
-    assert.equal(ERROR_TOO_MANY + '2', test(new FileList([{}, {}]), { maxFiles: 1 }))
-    assert.equal(ERROR_TOO_SMALL + '2', test(new FileList([{ size: 1 }]), { minSize: 2 }))
+    assert.strictEqual(ERROR_FILE + '2', test({}))
+    assert.strictEqual(ERROR_ACCEPT + '2', test(new FileList([{ type: 'video/mp4', name: 'foo' }]), { accept: '.zip' }))
+    assert.strictEqual(ERROR_TOO_BIG + '2', test(new FileList([{ size: 2 }]), { maxSize: 1 }))
+    assert.strictEqual(ERROR_TOO_FEW + '2', test(new FileList([{}]), { minFiles: 2 }))
+    assert.strictEqual(ERROR_TOO_MANY + '2', test(new FileList([{}, {}]), { maxFiles: 1 }))
+    assert.strictEqual(ERROR_TOO_SMALL + '2', test(new FileList([{ size: 1 }]), { minSize: 2 }))
 
     Validators.formatMessage = defaultValue
   })

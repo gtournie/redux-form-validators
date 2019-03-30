@@ -1,6 +1,6 @@
 import assert from 'assert'
 
-import {
+import Validators, {
   absence,
   acceptance,
   addValidator,
@@ -121,5 +121,68 @@ describe('memoize', function () {
           }
       })
     )
+  })
+
+  it('should return the same function when memoize is true', function () {
+    assert.ok(test(absence, { memoize: true }))
+
+    let defaultValue = Validators.defaultOptions.memoize
+    Validators.defaultOptions.memoize = false
+    assert.ok(test(absence, { memoize: true }))
+    Validators.defaultOptions.memoize = defaultValue
+  })
+
+  it("shouldn't return the same function when memoize is false", function () {
+    assert.ok(!test(absence, { memoize: false }))
+
+    let defaultValue = Validators.defaultOptions.memoize
+    Validators.defaultOptions.memoize = false
+    assert.ok(!test(absence))
+    assert.ok(!test(absence, { memoize: false }))
+    Validators.defaultOptions.memoize = defaultValue
+  })
+
+  it('should use the memoize function', function () {
+    let key = ''
+    let memoize = options => (key = 'memoKey')
+    assert.ok(test(absence, { memoize: memoize }))
+    assert.strictEqual(key, 'memoKey')
+    assert.ok(absence({ memoize: () => 'memo1' }) !== absence({ memoize: () => 'memo2' }))
+    assert.ok(length({ min: 2, memoize: () => 'memo' }) === length({ memoize: () => 'memo' }))
+
+    let defaultValue = Validators.defaultOptions.memoize
+    Validators.defaultOptions.memoize = false
+    memoize = () => (key = 'memo')
+    assert.ok(test(absence, { memoize: memoize }))
+    Validators.defaultOptions.memoize = defaultValue
+  })
+
+  it('should use the general memoize function', function () {
+    let defaultValue = Validators.defaultOptions.memoize
+
+    let key = ''
+    Validators.defaultOptions.memoize = () => (key = 'memoKey')
+    assert.ok(test(absence))
+    assert.strictEqual(key, 'memoKey')
+    assert.ok(length({ min: 2 }) === length({ max: 4 }))
+
+    Validators.defaultOptions.memoize = (opts, $super) => $super(opts)
+    assert.ok(test(absence))
+    assert.ok(test(absence, { memoize: (opts, $super) => $super(opts) }))
+
+    Validators.defaultOptions.memoize = defaultValue
+  })
+
+  it("shouldn't use the general memoize function", function () {
+    let defaultValue = Validators.defaultOptions.memoize
+
+    let key = ''
+    /* istanbul ignore next */
+    Validators.defaultOptions.memoize = () => (key = 'memoKey1')
+    let memoize = () => (key = 'memoKey2')
+    assert.ok(test(absence, { memoize: memoize }))
+    assert.strictEqual(key, 'memoKey2')
+
+    Validators.defaultOptions.memoize = defaultValue
   })
 })

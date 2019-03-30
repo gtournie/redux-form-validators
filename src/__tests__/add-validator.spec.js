@@ -35,10 +35,10 @@ function test (validator, value, params, allValues, props, name) {
 
 describe('Validator: addValidator', function () {
   it('should be invalid', function () {
-    assert.equal('form.errors.foo', test(fooValidator, 'bar'))
-    assert.equal('form.errors.bar', test(barValidator, 'foo', { msg: 'form.errors.bar' }, { bar: 'foo' }))
-    assert.equal('form.errors.invalid', test(invalidValidator, '', { invalid: 'invalid' }))
-    assert.equal('form.errors.digits', test(digitValidator, '1 23', { digits: 4 }))
+    assert.strictEqual('form.errors.foo', test(fooValidator, 'bar'))
+    assert.strictEqual('form.errors.bar', test(barValidator, 'foo', { msg: 'form.errors.bar' }, { bar: 'foo' }))
+    assert.strictEqual('form.errors.invalid', test(invalidValidator, '', { invalid: 'invalid' }))
+    assert.strictEqual('form.errors.digits', test(digitValidator, '1 23', { digits: 4 }))
   })
   it('should be valid', function () {
     assert.ok(!test(fooValidator, 'foo'))
@@ -79,7 +79,7 @@ describe('Validator: addValidator', function () {
     Validators.formatMessage = function (msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
     }
-    assert.equal('form.errors.foo2', test(fooValidator, 'bar'))
+    assert.strictEqual('form.errors.foo2', test(fooValidator, 'bar'))
 
     Validators.formatMessage = defaultValue
   })

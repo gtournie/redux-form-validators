@@ -10,12 +10,12 @@ function test (value) {
 
 describe('Validator: absence', function () {
   it('should be invalid when `value` is not empty', function () {
-    assert.equal(ERROR_ID, test(1))
-    assert.equal(ERROR_ID, test('str'))
-    assert.equal(ERROR_ID, test(' abc '))
-    assert.equal(ERROR_ID, test(new File()))
-    assert.equal(ERROR_ID, test(new FileList({ length: 1 })))
-    assert.equal(ERROR_ID, test(new FileList([{}])))
+    assert.strictEqual(ERROR_ID, test(1))
+    assert.strictEqual(ERROR_ID, test('str'))
+    assert.strictEqual(ERROR_ID, test(' abc '))
+    assert.strictEqual(ERROR_ID, test(new File()))
+    assert.strictEqual(ERROR_ID, test(new FileList({ length: 1 })))
+    assert.strictEqual(ERROR_ID, test(new FileList([{}])))
   })
   it('should be valid when `value` is empty', function () {
     assert.ok(!test())
@@ -32,7 +32,7 @@ describe('Validator: absence', function () {
     Validators.formatMessage = function (msg) {
       return Object.assign({}, msg, { id: msg.id + '2' })
     }
-    assert.equal(ERROR_ID + '2', test(1))
+    assert.strictEqual(ERROR_ID + '2', test(1))
 
     Validators.formatMessage = defaultValue
   })
