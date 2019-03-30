@@ -92,6 +92,7 @@ Validators
 More
 
 - [default options](#default-options)
+- [memoization](#memoization)
 - [i18n and react-intl](#i18n-and-react-intl)
 - [default messages override](#default-messages-override)
 - [common validation options](#common-validation-options)
@@ -486,6 +487,36 @@ Object.assign(Validators.defaultOptions, {
 })
 ```
 
+### Memoization
+
+Since version 7.0 of Redux-form, memoization is needed for inline validation. In some cases, you might want to disable it though. To do so:
+
+- set Validators.defaultOptions.memoize to false
+- OR set `memoize` valdator's option to false (e.g. presence({ memoize: false }))
+
+And if you want to keep the memoization but want to override it:
+
+```
+// Global memoization
+// This function usually returns a unique key depending on the options passed
+// $super represents the default memoize function
+Validators.defaultOptions.memoize = (options, $super) => {
+  return ... // string key
+}
+
+// Specific validation (inline-validation)
+length({
+  min: 2,
+  if: () => this.state.foo,
+  memoize: (opts, $super) => $super(opts) + this.state.foo
+})
+
+// General validation
+const validLen = length({ min: 2, if: () => ..., memoize: false })
+
+<Field name="test" type="text" label="Test" component={renderField} validate={validLen} />
+```
+
 ### i18n and react-intl
 
 By default, all errors messages are in english and are pluralized if needed (basic support) but you can use [react-intl](https://github.com/yahoo/react-intl) to support different languages. All you need to do is to insert the following lines:
@@ -629,36 +660,6 @@ length({ msg: { tooShort: 'min {count, number} characters' }, min: 2, max: 8 })
 
 ### Conditional validation
 
-#### Memoization
-
-Since version 7.0 of Redux-form, memoization is needed for inline validation. In some cases, you might want to disable it though. To do so:
-
-- set Validators.defaultOptions.memoize to false
-- OR set `memoize` valdator's option to false (e.g. presence({ memoize: false }))
-
-And if you want to keep the memoization but want to override it:
-
-```
-// Global memoization
-// This function usually returns a unique key depending on the options passed
-// $super represents the default memoize function
-Validators.defaultOptions.memoize = (options, $super) => {
-  return ... // string key
-}
-
-// Specific validation (inline-validation)
-length({
-  min: 2,
-  if: () => this.state.foo,
-  memoize: (opts, $super) => $super(opts) + this.state.foo
-})
-
-// General validation
-const validLen = length({ min: 2, if: () => ..., memoize: false })
-
-<Field name="test" type="text" label="Test" component={renderField} validate={validLen} />
-```
-
 #### Using a function with `if` and `unless`
 
 Finally, it's possible to associate `if` and `unless` with a function which will be called. Using a function gives you the ability to write an inline condition instead of a separate method. This option is best suited for one-liners.
@@ -775,7 +776,7 @@ import { url } from 'redux-form-validators'
 let parseURL = url.parseURL
 
 parseURL('http://example.com/stuff')
-// { protocol: 'http', host: 'example.com', path: 'stuff' }
+// { protocol: 'http', host: 'example.com', path: '/stuff' }
 
 parseURL('http://localhost:8080')
 // { protocol: 'http', host: 'localhost', port: 8080 }

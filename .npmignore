@@ -5,4 +5,5 @@ test
 .idea
 .npmignore
 .travis.yml
+.history
 webpack
