@@ -31,7 +31,7 @@ If you're already familiar with [redux-form](http://redux-form.com/) it should b
 [This example](http://redux-form.com/7.0.3/examples/fieldLevelValidation/) shows you how to set a field level validation with redux-form.
 Thanks to `redux-form-validators`, you'll only have to pass the validators needed:
 
-```
+```js
 import { required, email } from 'redux-form-validators'
 
 <Field name="email" type="email" label="Email" component={renderField}
@@ -44,7 +44,7 @@ That's it! =)
 
 Now let's replace the validate function of [this redux-form example](http://redux-form.com/7.0.3/examples/syncValidation/):
 
-```
+```js
 validations = {
   username: [required(), length({ max: 15 })],
   email:    [required(), email()],
@@ -105,7 +105,7 @@ More
 
 Validates that the specified value is not empty. It uses the `trim()` method to check if the value is a blank string, that is, a string that is either empty or consists of whitespace.
 
-```
+```js
 <Field name="login" type="text" label="Login" component={renderField}
     validate={required()} />
 ```
@@ -116,7 +116,7 @@ The default error message is "is required". You can also pass custom message via
 
 Validates that the specified value is a valid email address. It uses the `email.REG_EMAIL` regexp to check the value.
 
-```
+```js
 <Field name="email" type="email" label="Email" component={renderField}
     validate={email()} />
 ```
@@ -127,7 +127,7 @@ The default error message is "is not a valid email".
 
 Validates that your value have only numeric values. By default, it will match an optional sign followed by an integral or floating point number. To specify that only integral numbers are allowed set `int` (or `integer`) to true.
 
-```
+```js
 <Field name="lat" type="text" label="Latitude" component={renderField}
     validate={numericality()} />
 ```
@@ -145,7 +145,7 @@ Besides `int`, this validator also accepts the following options to add constrai
 
 Examples
 
-```
+```js
 numericality({ int: true })
 numericality({ '>': 6 })
 numericality({ '>': 6, '<=': 20 })
@@ -168,7 +168,7 @@ The default error messages are:
 
 Very simple date validator. Limited to year, month and day validation (but it should mostly match your needs). Feel free to use a date manipulation lib to write a better date validator (see [add a validator](#adding-a-validator)).
 
-```
+```js
 <Field name="date" type="text" label="Date" component={renderField}
     validate={date({ format: 'mm/dd/yyyy' })} />
 ```
@@ -186,7 +186,7 @@ And the comparable options:
 
 Examples
 
-```
+```js
 date({ format: 'mm/dd/yyyy' })
 date({ format: 'mm/yyyy' })
 date({ format: 'YYYY-MM-DD', ymd: 'YMD' })
@@ -213,7 +213,7 @@ See also [parseDate](#parsedate) & [formatDate](#formatdate)
 
 Validates the length of the value. It provides a variety of options, so you can specify length constraints in different ways:
 
-```
+```js
 <Field name="name" type="text" label="Name" component={renderField}
     validate={length({ min: 2 })} />
 ```
@@ -227,7 +227,7 @@ The possible length constraint options are:
 
 Examples
 
-```
+```js
 length({ minimum: 2 })
 length({ min: 2, max: 8 })
 length({ in: [2, 8] })
@@ -240,7 +240,7 @@ The default error messages depend on the type of length validation being perform
 
 You should use this validator when you have two text fields that should receive exactly the same content. For example, you may want to confirm an email address or a password.
 
-```
+```js
 <Field name="pass" type="password" label="Password" component={renderField} />
 <Field name="confirmation" type="password" label="Confirmation" component={renderField}
     validate={confirmation({ field: 'pass', fieldLabel: 'Password' })} />
@@ -250,7 +250,7 @@ There is also a `caseSensitive` option that you can use to define whether the co
 
 Examples
 
-```
+```js
 confirmation({ field: 'email' })
 confirmation({ field: 'email', fieldLabel: 'Email' })
 confirmation({ field: 'email', fieldLabel: 'Email', caseSensitive: false })
@@ -262,7 +262,7 @@ The default error message for this validator is "doesn't match \${fieldLabel || 
 
 Validates the value by testing whether it match a given regular expression, which is specified using the `with` option.
 
-```
+```js
 <Field name="legacyCode" type="text" label="Legacy Code" component={renderField}
     validate={format({ with: /^[a-z]+$/i, message: "Only allows letters" })} />
 ```
@@ -271,7 +271,7 @@ Alternatively, you can require that the specified value does not match the regul
 
 Examples
 
-```
+```js
 format({ with: /[a-z0-9]/i })
 format({ without: /#@%&\!\:\?\+\=/i }) // doesn't allow these chars: '#@%&!:?+='
 ```
@@ -282,7 +282,7 @@ The default error message is "is invalid".
 
 This method validates that a checkbox on the user interface was checked. This is typically used when the user needs to agree to your application's terms of service, confirm that some text is read, or any similar concept.
 
-```
+```js
 <Field name="terms" type="checkbox" label="I accept the terms of service"
     component={renderField} validate={acceptance()} />
 ```
@@ -291,7 +291,7 @@ It can also receive an `accept` option, which determines the allowed values that
 
 Examples
 
-```
+```js
 acceptance({ accept: 'yes' })
 acceptance({ accept: ['TRUE', 'accepted'] })
 ```
@@ -302,7 +302,7 @@ The default error message for this validator is "must be accepted".
 
 Validates that the value is included in a given set.
 
-```
+```js
 <Field name="size" type="text" label="Size" component={renderField}
     validate={inclusion({ in: ['small', 'medium', 'large'] })} />
 ```
@@ -313,7 +313,7 @@ There is also a `caseSensitive` option that you can use to define whether the ma
 
 Examples
 
-```
+```js
 inclusion({ in: [1, 2, 3, 4] })
 inclusion({ in: ['blue', 'white', 'red'], caseSensitive: false })
 ```
@@ -324,7 +324,7 @@ The default error message for this validator is "is not included in the list".
 
 Validates that the value is not included in a given set.
 
-```
+```js
 <Field name="subdomain" type="text" label="Subdomain" component={renderField}
     validate={exclusion({ in: ['www', 'us', 'ca'] })} />
 ```
@@ -335,7 +335,7 @@ There is also a `caseSensitive` option that you can use to define whether the ma
 
 Examples
 
-```
+```js
 exclusion({ in: [1, 2, 3, 4] })
 exclusion({ in: ['apple', 'banana'], caseSensitive: false })
 ```
@@ -346,7 +346,7 @@ The default error message is "\${value} is reserved".
 
 Validates that the specified value are absent. It uses the `trim()` method to check if the value is not a blank string, that is, a string that is either empty or consists of whitespace.
 
-```
+```js
 <Field name="name" type="text" label="Name" component={renderField}
     validate={absence()} />
 ```
@@ -357,7 +357,7 @@ The default error message is "must be blank".
 
 Validates that the specified value is a valid URL.
 
-```
+```js
 <Field name="url" type="text" label="URL" component={renderField}
     validate={url()} />
 ```
@@ -379,7 +379,7 @@ The other url constraint options are (all true by default):
 
 Examples
 
-```
+```js
 url({ protocols: ['http', 'https'] })
 url({ protocol: 'http', ipv4: false, ipv6: false })
 url({ protocol: 'ftp', port: false, basicAuth: false, hash: false })
@@ -389,7 +389,7 @@ The default error message is "is not a valid URL".
 
 > Note: As of version 3.0.0, this method doesn't exclude any ip addresses anymore (like private & local networks). To re-implement this feature, you can use the [url.parseURL helper](#url-helper) and [add a custom validator](#adding-a-validator), like this:
 
-```
+```js
 // Private and local networks not allowed
 const REG = new RegExp(
   "^(?!(?:10|127)(?:\\.\\d{1,3}){3})" +
@@ -418,7 +418,7 @@ const ipValidator = addValidator({
 
 Validates that the specified value is a valid File or FileList.
 
-```
+```js
 <Field name="file" type="file" label="File" component={renderFileField}
     validate={file()} />
 ```
@@ -433,7 +433,7 @@ The possible file constraint options are:
 
 Examples
 
-```
+```js
 file()
 file({ accept: 'image/png, image/jpeg' })
 file({ accept: '.png, .jpg, .jpeg' })
@@ -459,7 +459,7 @@ The default error messages are:
 
 redux-form-validators comes with default options:
 
-```
+```js
 {
   memoize:       true,
   allowBlank:    false,
@@ -477,7 +477,7 @@ redux-form-validators comes with default options:
 
 But you can easily change them:
 
-```
+```js
 import Validators from 'redux-validators'
 
 // Override dateFormat & urlProtocols
@@ -496,7 +496,7 @@ Since version 7.0 of Redux-form, memoization is needed for inline validation. In
 
 And if you want to keep the memoization but want to override it:
 
-```
+```js
 // Global memoization
 // This function usually returns a unique key depending on the options passed
 // $super represents the default memoize function
@@ -521,7 +521,7 @@ const validLen = length({ min: 2, if: () => ..., memoize: false })
 
 By default, all errors messages are in english and are pluralized if needed (basic support) but you can use [react-intl](https://github.com/yahoo/react-intl) to support different languages. All you need to do is to insert the following lines:
 
-```
+```js
 import Validators from 'redux-form-validators'
 import { FormattedMessage } from 'react-intl'
 
@@ -532,7 +532,7 @@ Validators.formatMessage = function(msg) {
 
 > Note: You can also implement your own i18n/pluralization module by overriding `Validators.formatMessage`. The first argument is a javascript object compatible with react-intl:
 
-```
+```js
 {
   id: "form.errors.greaterThan",
   defaultMessage: "must be greater than {count, number}",
@@ -542,7 +542,7 @@ Validators.formatMessage = function(msg) {
 
 > Note: You can also change the default plural rules or file size formats:
 
-```
+```js
 // Plural rules
 Validators.pluralRules = {
   1: 'one', 5: 'one', 7: 'one', 8: 'one', 9: 'one', 10: 'one',
@@ -567,7 +567,7 @@ file({ minSize: 500 })   // -> is too small (minimum is 500 octets)
 
 And if you're using [babel-plugin-react-intl](https://github.com/yahoo/babel-plugin-react-intl) to extract your application messages, you'll need to **add** a new plugin entry in your webpack config ([example](https://github.com/gtournie/redux-form-validators/blob/master/webpack/example.js)):
 
-```
+```js
 ["react-intl", {
   "messagesDir": ...,
   "languages": ...,
@@ -580,7 +580,7 @@ And if you're using [babel-plugin-react-intl](https://github.com/yahoo/babel-plu
 
 To override the default messages globally:
 
-```
+```js
 Object.assign(Validators.messages, {
   email: {
     id: "form.errors.email",
@@ -600,7 +600,7 @@ Object.assign(Validators.messages, {
 
 OR even simpler if you don't override formatMessage (and don't need ids):
 
-```
+```js
 Object.assign(Validators.messages, {
   email:    "is not a valid email address",
   presence: "is missing",
@@ -619,7 +619,7 @@ Object.assign(Validators.messages, {
 
 This option will let validation pass if the value is blank, like an empty string for example.
 
-```
+```js
 <Field name="name" type="text" label="Name" component={renderField}
     validate={length({ '=': 5, allowBlank: true })} />
 ```
@@ -632,7 +632,7 @@ Not available for: required, absence, acceptance & confirmation.
 
 As you've already seen, the `message` option lets you specify the message that will be added to the errors collection when validation fails. When this option is not used, `redux-form-validators` will use the respective default error message for each validator. The `message` option accepts a String, a Hash or a [FormattedMessage](https://github.com/yahoo/react-intl/wiki/Components#string-formatting-components).
 
-```
+```js
 format({ with: /^[a-z]+$/i, message: 'Letters only' })
 format({ with: /^[a-z]+$/i, message: { defaultMessage: 'Letters only' } })
 
@@ -664,7 +664,7 @@ length({ msg: { tooShort: 'min {count, number} characters' }, min: 2, max: 8 })
 
 Finally, it's possible to associate `if` and `unless` with a function which will be called. Using a function gives you the ability to write an inline condition instead of a separate method. This option is best suited for one-liners.
 
-```
+```js
 <Field name="surname" type="text" label="Surname" component={renderField}
     validate={presence({ if: (values, value, props, name) => { return '' !== values.name } })} />
 ```
@@ -673,7 +673,7 @@ Finally, it's possible to associate `if` and `unless` with a function which will
 
 ### Adding a validator
 
-```
+```js
 const alphaValidator = addValidator({
   defaultMessage: "Letters only",
   validator: function(options, value, allValues) {
@@ -717,7 +717,7 @@ Signature: `parseDate(dateString, format[, ymd])`
 
 Examples:
 
-```
+```js
 import { date } from 'redux-form-validators'
 let parseDate = date.parseDate
 
@@ -740,7 +740,7 @@ Signature: `formatDate(date, format[, ymd])`
 
 Examples:
 
-```
+```js
 import { date } from 'redux-form-validators'
 let formatDate = date.formatDate
 
@@ -771,7 +771,7 @@ Signature: `parseURL(url[, options])`
 
 Examples:
 
-```
+```js
 import { url } from 'redux-form-validators'
 let parseURL = url.parseURL
 
