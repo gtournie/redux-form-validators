@@ -57,6 +57,7 @@ const SEARCH = '(?:[?][^\\s#]*)?'
 const HASH = '(?:[#]\\S*)?'
 
 const DEFAULT_OPTIONS = {
+  emptyProtocol: true,
   protocolIdentifier: true,
   basicAuth: true,
   local: true,
@@ -132,7 +133,13 @@ function group (option, regPart, capture) {
 function buildReg (options, capture) {
   return new RegExp(
     '^' +
-      group(true, `(?:(?:(?:${options.protocols}):)?\\/\\/)${options.protocolIdentifier ? '' : '?'}`, capture) +
+      group(
+        true,
+        `(?:(?:(?:${options.protocols}):)${options.emptyProtocol ? '?' : ''}\\/\\/)${
+          options.protocolIdentifier ? '' : '?'
+        }`,
+        capture
+      ) +
       group(options.basicAuth, BASIC_AUTH, capture) +
       `(?:${[
         group(options.ipv4, IPV4, capture),

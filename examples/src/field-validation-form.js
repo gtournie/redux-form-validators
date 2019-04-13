@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import { reduxForm, Field } from 'redux-form'
+import { reduxForm, Field, FormSection } from 'redux-form'
 import { connect } from 'react-redux'
 import { FormattedMessage } from 'react-intl'
 import Validators, {
@@ -110,26 +110,28 @@ class FieldValidationForm extends Component {
               />
             </Col>
           </Row>
-          <Row>
-            <Col sm="6">
-              <Field
-                name="password"
-                type="password"
-                label="Password"
-                component={renderInputField}
-                validate={[required(), length({ min: 8 })]}
-              />
-            </Col>
-            <Col sm="6">
-              <Field
-                name="password_confirmation"
-                type="password"
-                label="Password confirmation"
-                component={renderInputField}
-                validate={[confirmation({ field: 'password', fieldLabel: 'Password' })]}
-              />
-            </Col>
-          </Row>
+          <FormSection name="pass">
+            <Row>
+              <Col sm="6">
+                <Field
+                  name="password"
+                  type="password"
+                  label="Password"
+                  component={renderInputField}
+                  validate={[required(), length({ min: 8 })]}
+                />
+              </Col>
+              <Col sm="6">
+                <Field
+                  name="password_confirmation"
+                  type="password"
+                  label="Password confirmation"
+                  component={renderInputField}
+                  validate={[confirmation({ field: 'pass.password', fieldLabel: 'Password' })]}
+                />
+              </Col>
+            </Row>
+          </FormSection>
           <Row>
             <Col sm="6">
               <Field

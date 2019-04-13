@@ -85,6 +85,11 @@ describe('Validator: url', function () {
     assert.ok(!test('http://a.b-c.de'))
     assert.ok(!test('http://223.255.255.254'))
     assert.ok(!test('https://foo_bar.example.com/'))
+    assert.ok(!test('//example.net'))
+  })
+  it('should be invalid if the protocol is empty', function () {
+    assert.strictEqual(ERROR_ID, test('//google.com', { emptyProtocol: false }))
+    assert.strictEqual(ERROR_ID, test('//foo:bar@128.193.1.32:3000/foo?foo=bar', { emptyProtocol: false }))
   })
   it("should be invalid if the protocols don't match", function () {
     assert.strictEqual(ERROR_ID, test('http://google.com', { protocol: 'ftp' }))
@@ -111,7 +116,10 @@ describe('Validator: url', function () {
   it('should be invalid if basic auth not allowed', function () {
     assert.strictEqual(ERROR_ID, test('http://userid:password@google.com', { basicAuth: false }))
     assert.strictEqual(ERROR_ID, test('http://userid@google.com', { basicAuth: false }))
-    assert.strictEqual(ERROR_ID, test('http://userid:password@217.64.0.1:3838/path?search=foo#stuff', { basicAuth: false }))
+    assert.strictEqual(
+      ERROR_ID,
+      test('http://userid:password@217.64.0.1:3838/path?search=foo#stuff', { basicAuth: false })
+    )
   })
   it('should be invalid if ipv4 not allowed', function () {
     assert.strictEqual(ERROR_ID, test('http://217.64.0.1', { ipv4: false }))
@@ -149,7 +157,10 @@ describe('Validator: url', function () {
   it('should be invalid if search not allowed', function () {
     assert.strictEqual(ERROR_ID, test('http://localhost?search', { search: false }))
     assert.strictEqual(ERROR_ID, test('http://217.64.0.1:3000/?search', { search: false }))
-    assert.strictEqual(ERROR_ID, test('http://userid:password@google.com:8080/path?search=foo#stuff', { search: false }))
+    assert.strictEqual(
+      ERROR_ID,
+      test('http://userid:password@google.com:8080/path?search=foo#stuff', { search: false })
+    )
   })
   it('should be invalid if hash not allowed', function () {
     assert.strictEqual(ERROR_ID, test('http://localhost#hash', { hash: false }))

@@ -25,6 +25,8 @@ describe('Validator: confirmation', function () {
     assert.ok(!test('VALIDATOR', { caseSensitive: false }))
     assert.ok(!test('valiDator', { caseSensitive: false }))
     assert.ok(!test(123, { field: 'foo' }, { foo: '123' }))
+    assert.ok(!test(123, { field: 'foo.bar' }, { foo: { bar: '123' } }))
+    assert.ok(!test(123, { field: 'foo.bar.stuff' }, { foo: { bar: { stuff: '123' } } }))
   })
   it('should use default caseSensitive option', function () {
     let defaultValue = Validators.defaultOptions.caseSensitive
