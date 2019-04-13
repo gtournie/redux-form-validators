@@ -8,3 +8,4 @@ coverage
 .travis.yml
 .history
 webpack
+yarn-error.log

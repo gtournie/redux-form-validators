@@ -34,7 +34,9 @@ Thanks to `redux-form-validators`, you'll only have to pass the validators neede
 
 ```javascript
 import { required, email } from 'redux-form-validators'
-;<Field name="email" type="email" label="Email" component={renderField} validate={[required(), email()]} />
+
+<Field name="email" type="email" label="Email"
+  component={renderField} validate={[required(), email()]} />
 ```
 
 That's it! =)
@@ -44,7 +46,7 @@ That's it! =)
 Now let's replace the validate function of [this redux-form example](http://redux-form.com/7.0.3/examples/syncValidation/):
 
 ```javascript
-validations = {
+const validations = {
   username: [required(), length({ max: 15 })],
   email: [required(), email()],
   age: [
@@ -58,7 +60,7 @@ validations = {
 }
 
 // Reusable with any other form
-validate = values => {
+const validate = values => {
   const errors = {}
   for (let field in validations) {
     let value = values[field]
@@ -107,7 +109,8 @@ More
 Validates that the specified value is not empty. It uses the `trim()` method to check if the value is a blank string, that is, a string that is either empty or consists of whitespace.
 
 ```javascript
-<Field name="login" type="text" label="Login" component={renderField} validate={required()} />
+<Field name="login" type="text" label="Login"
+  component={renderField} validate={required()} />
 ```
 
 The default error message is "is required". You can also pass custom message via the [message option](#common-validation-options).
@@ -117,7 +120,8 @@ The default error message is "is required". You can also pass custom message via
 Validates that the specified value is a valid email address. It uses the `email.REG_EMAIL` regexp to check the value.
 
 ```javascript
-<Field name="email" type="email" label="Email" component={renderField} validate={email()} />
+<Field name="email" type="email" label="Email"
+  component={renderField} validate={email()} />
 ```
 
 The default error message is "is not a valid email".
@@ -127,7 +131,8 @@ The default error message is "is not a valid email".
 Validates that your value have only numeric values. By default, it will match an optional sign followed by an integral or floating point number. To specify that only integral numbers are allowed set `int` (or `integer`) to true.
 
 ```javascript
-<Field name="lat" type="text" label="Latitude" component={renderField} validate={numericality()} />
+<Field name="lat" type="text" label="Latitude"
+  component={renderField} validate={numericality()} />
 ```
 
 Besides `int`, this validator also accepts the following options to add constraints to acceptable values:
@@ -167,7 +172,8 @@ The default error messages are:
 Very simple date validator. Limited to year, month and day validation (but it should mostly match your needs). Feel free to use a date manipulation lib to write a better date validator (see [add a validator](#adding-a-validator)).
 
 ```javascript
-<Field name="date" type="text" label="Date" component={renderField} validate={date({ format: 'mm/dd/yyyy' })} />
+<Field name="date" type="text" label="Date"
+  component={renderField} validate={date({ format: 'mm/dd/yyyy' })} />
 ```
 
 Accepts the following options:
@@ -211,7 +217,8 @@ See also [parseDate](#parsedate) & [formatDate](#formatdate)
 Validates the length of the value. It provides a variety of options, so you can specify length constraints in different ways:
 
 ```javascript
-<Field name="name" type="text" label="Name" component={renderField} validate={length({ min: 2 })} />
+<Field name="name" type="text" label="Name"
+  component={renderField} validate={length({ min: 2 })} />
 ```
 
 The possible length constraint options are:
@@ -267,13 +274,8 @@ The default error message for this validator is "doesn't match \${fieldLabel || 
 Validates the value by testing whether it match a given regular expression, which is specified using the `with` option.
 
 ```javascript
-<Field
-  name="legacyCode"
-  type="text"
-  label="Legacy Code"
-  component={renderField}
-  validate={format({ with: /^[a-z]+$/i, message: 'Only allows letters' })}
-/>
+<Field name="legacyCode" type="text" label="Legacy Code" component={renderField}
+  validate={format({ with: /^[a-z]+$/i, message: 'Only allows letters' })} />
 ```
 
 Alternatively, you can require that the specified value does not match the regular expression by using the `without` option.
@@ -292,13 +294,8 @@ The default error message is "is invalid".
 This method validates that a checkbox on the user interface was checked. This is typically used when the user needs to agree to your application's terms of service, confirm that some text is read, or any similar concept.
 
 ```javascript
-<Field
-  name="terms"
-  type="checkbox"
-  label="I accept the terms of service"
-  component={renderField}
-  validate={acceptance()}
-/>
+<Field name="terms" type="checkbox" label="I accept the terms of service"
+  component={renderField} validate={acceptance()} />
 ```
 
 It can also receive an `accept` option, which determines the allowed values that will be considered as accepted. It defaults to ['1', 'true'] (see [default options](#default-options)).
@@ -317,13 +314,8 @@ The default error message for this validator is "must be accepted".
 Validates that the value is included in a given set.
 
 ```javascript
-<Field
-  name="size"
-  type="text"
-  label="Size"
-  component={renderField}
-  validate={inclusion({ in: ['small', 'medium', 'large'] })}
-/>
+<Field name="size" type="text" label="Size" component={renderField}
+  validate={inclusion({ in: ['small', 'medium', 'large'] })} />
 ```
 
 The inclusion validator has an option `in` that receives the set of values that will be accepted. The `in` option has an alias called `within` that you can use for the same purpose, if you'd like to.
@@ -344,13 +336,8 @@ The default error message for this validator is "is not included in the list".
 Validates that the value is not included in a given set.
 
 ```javascript
-<Field
-  name="subdomain"
-  type="text"
-  label="Subdomain"
-  component={renderField}
-  validate={exclusion({ in: ['www', 'us', 'ca'] })}
-/>
+<Field name="subdomain" type="text" label="Subdomain"
+  component={renderField} validate={exclusion({ in: ['www', 'us', 'ca'] })} />
 ```
 
 The exclusion validator has an option `in` that receives the set of values that will not be accepted for the validated attributes. The `in` option has an alias called `within` that you can use for the same purpose, if you'd like to.
@@ -371,7 +358,8 @@ The default error message is "\${value} is reserved".
 Validates that the specified value are absent. It uses the `trim()` method to check if the value is not a blank string, that is, a string that is either empty or consists of whitespace.
 
 ```javascript
-<Field name="name" type="text" label="Name" component={renderField} validate={absence()} />
+<Field name="name" type="text" label="Name"
+  component={renderField} validate={absence()} />
 ```
 
 The default error message is "must be blank".
@@ -381,7 +369,8 @@ The default error message is "must be blank".
 Validates that the specified value is a valid URL.
 
 ```javascript
-<Field name="url" type="text" label="URL" component={renderField} validate={url()} />
+<Field name="url" type="text" label="URL"
+  component={renderField} validate={url()} />
 ```
 
 The url validator has an option `protocol` (or its alias `protocols`) that receives the set of protocols that will be accepted. This option default to ['http', 'https'] (see [default options](#default-options)).
@@ -442,7 +431,8 @@ const ipValidator = addValidator({
 Validates that the specified value is a valid File or FileList.
 
 ```javascript
-<Field name="file" type="file" label="File" component={renderFileField} validate={file()} />
+<Field name="file" type="file" label="File"
+  component={renderFileField} validate={file()} />
 ```
 
 The possible file constraint options are:
@@ -536,8 +526,8 @@ length({
 // General validation
 const validLen = length({ min: 2, if: () => ..., memoize: false })
 
-<Field name="test" type="text" label="Test" component={renderField}
-  validate={validLen} />
+<Field name="test" type="text" label="Test"
+  component={renderField} validate={validLen} />
 ```
 
 ### i18n and react-intl
@@ -643,7 +633,8 @@ Object.assign(Validators.messages, {
 This option will let validation pass if the value is blank, like an empty string for example.
 
 ```javascript
-<Field name="name" type="text" label="Name" component={renderField} validate={length({ '=': 5, allowBlank: true })} />
+<Field name="name" type="text" label="Name" component={renderField}
+  validate={length({ '=': 5, allowBlank: true })} />
 ```
 
 Not available for: required, absence, acceptance & confirmation.
@@ -656,18 +647,23 @@ As you've already seen, the `message` option lets you specify the message that w
 
 ```javascript
 format({ with: /^[a-z]+$/i, message: 'Letters only' })
-format({ with: /^[a-z]+$/i, message: { defaultMessage: 'Letters only' } })
+format({ with: /^[a-z]+$/i, message: {
+  defaultMessage: 'Letters only' } })
 
 // I18n with react-intl
-format({ with: /^[a-z]+$/i, message: { id: 'form.errors.alpha', defaultMessage: 'Letters only' } })
-format({ with: /^[a-z]+$/i, message: <FormattedMessage id="form.errors.alpha" defaultMessage="Letters only" /> })
+format({ with: /^[a-z]+$/i, message: { id: 'form.errors.alpha',
+  defaultMessage: 'Letters only' } })
+format({ with: /^[a-z]+$/i, message: <FormattedMessage id="form.errors.alpha"
+  defaultMessage="Letters only" /> })
 
 // Version >= 2.1.0 only
 length({ msg: { tooShort: 'too short', tooLong: 'too long' }, in: [2, 8] })
-length({ msg: { tooShort: { id: 'errors.length.min', defaultMessage: 'too short' } }, min: 2 })
-length({ msg: { tooShort: <FormattedMessage id="errors.length.min" defaultMessage="too short" /> }, min: 2 })
+length({ msg: { tooShort: { id: 'errors.length.min',
+  defaultMessage: 'too short' } }, min: 2 })
+length({ msg: { tooShort: <FormattedMessage id="errors.length.min"
+  defaultMessage="too short" /> }, min: 2 })
 length({ msg: { tooShort: 'min {count, number} characters' }, min: 2, max: 8 })
-//=> tooLong message remains the default message
+  //=> tooLong message remains the default message
 ```
 
 > Note: As of version 2.1.0, you can also override just certain messages, and/or use interpolation.
@@ -683,17 +679,8 @@ length({ msg: { tooShort: 'min {count, number} characters' }, min: 2, max: 8 })
 Finally, it's possible to associate `if` and `unless` with a function which will be called. Using a function gives you the ability to write an inline condition instead of a separate method. This option is best suited for one-liners.
 
 ```javascript
-<Field
-  name="surname"
-  type="text"
-  label="Surname"
-  component={renderField}
-  validate={presence({
-    if: (values, value, props, name) => {
-      return '' !== values.name
-    },
-  })}
-/>
+<Field name="surname" type="text" label="Surname" component={renderField}
+  validate={presence({ if: (values, value, props, name) => '' !== values.name })} />
 ```
 
 > Note: In some cases, the memoization can mess with `if` and `unless` methods which can refer to out-of-the-scope variables. See [memoization](#memoization) for further information.
@@ -724,8 +711,8 @@ const digitValidator = addValidator({
   }
 })
 
-<Field name="digits" type="text" label="4 digits" component={renderField}
-    validate={digitValidator({ digits: 4 })} />
+<Field name="digits" type="text" label="4 digits"
+  component={renderField} validate={digitValidator({ digits: 4 })} />
 ```
 
 `defaultMessage` accepts a String, a Hash or a [FormattedMessage](https://github.com/yahoo/react-intl/wiki/Components#string-formatting-components). See the `message` option. Its default value is `is not valid`.
