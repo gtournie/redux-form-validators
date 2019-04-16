@@ -163,6 +163,5 @@ function checkFlags (date, flags) {
 }
 
 function currentCentury (add) {
-  let century = trunc(new Date().getFullYear() / 100)
-  return century < 0 ? century - add : century + add
+  return trunc(new Date().getFullYear() / 100) + add
 }

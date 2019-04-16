@@ -73,7 +73,7 @@ export function toObjectMsg (msg) {
 }
 
 export function memoize (func) {
-  if (!func.cache) func.cache = {}
+  func.cache = {}
   return function (options) {
     let memoize = options ? options.memoize : null
     if (memoize == null) memoize = Validators.defaultOptions.memoize
@@ -93,6 +93,7 @@ function stringify (options) {
   let arr = []
   let value
   for (var k in options) {
+    /* istanbul ignore else */
     if (HAS_PROP.call(options, k)) {
       value = options[k]
       arr.push(

@@ -31,7 +31,7 @@ function formatMessage (msg) {
   if (msg.props) {
     msg = msg.props
   }
-  let text = msg.defaultMessage || msg.id || ''
+  let text = msg.defaultMessage || msg.id || /* istanbul ignore next */ ''
   let rules = Validators.pluralRules
   return !msg.values
     ? text

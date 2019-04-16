@@ -14,3 +14,13 @@ global.FileList = function (params) {
 global.File = function (params) {
   Object.assign(this, params)
 }
+
+console.error = function () {
+  console.__lastError = arguments
+  console.__lastErrorIncludes = txt =>
+    [].slice
+      .call(arguments)
+      .join(' ')
+      .indexOf(txt) >= 0
+}
+console.error(null)

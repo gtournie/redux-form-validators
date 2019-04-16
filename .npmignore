@@ -9,3 +9,4 @@ coverage
 .history
 webpack
 yarn-error.log
+.nyc_output

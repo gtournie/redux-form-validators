@@ -4,6 +4,10 @@ import getErrorId from './helper'
 
 const ERROR_ID = 'form.errors.confirmation'
 
+function getIn (keys) {
+  return keys.reduce((h, k) => (h || {})[k], this)
+}
+
 function test (value, params, allValues) {
   params = Object.assign({ field: 'password_confirmation' }, params || {})
   return getErrorId(confirmation(params)(value, allValues || { password_confirmation: 'validator' }))
@@ -18,6 +22,7 @@ describe('Validator: confirmation', function () {
   })
   it("should be invalid when confirmation field doesn't exists", function () {
     assert.strictEqual(ERROR_ID, test('validator', { field: 'passwordconfirmation' }))
+    assert.strictEqual(ERROR_ID, test(123, { field: 'foobar' }, { foo: { bar: '123' } }))
   })
   it('should be valid when `value` = confirmation', function () {
     assert.ok(!test('', { field: 'foo' }, {}))
@@ -27,6 +32,7 @@ describe('Validator: confirmation', function () {
     assert.ok(!test(123, { field: 'foo' }, { foo: '123' }))
     assert.ok(!test(123, { field: 'foo.bar' }, { foo: { bar: '123' } }))
     assert.ok(!test(123, { field: 'foo.bar.stuff' }, { foo: { bar: { stuff: '123' } } }))
+    assert.ok(!test(123, { field: 'foo.bar.stuff' }, { getIn: getIn, foo: { bar: { stuff: '123' } } }))
   })
   it('should use default caseSensitive option', function () {
     let defaultValue = Validators.defaultOptions.caseSensitive

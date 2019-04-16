@@ -12,7 +12,10 @@ describe('formatMessage', function () {
     assert.strictEqual('foo', formatMessage({ props: { defaultMessage: 'foo', id: 'bar' } }))
   })
   it('should replace the vars', function () {
-    assert.strictEqual('foo 1 2', formatMessage({ defaultMessage: 'foo {bar} {foobar}', values: { bar: 1, foobar: 2 } }))
+    assert.strictEqual(
+      'foo 1 2',
+      formatMessage({ defaultMessage: 'foo {bar} {foobar}', values: { bar: 1, foobar: 2 } })
+    )
     assert.strictEqual('foo 1', formatMessage({ defaultMessage: 'foo {count, number}', values: { count: 1 } }))
     assert.strictEqual('foo 1', formatMessage({ defaultMessage: 'foo {count}', values: { count: 1 } }))
   })
@@ -29,6 +32,10 @@ describe('formatMessage', function () {
     msg = '{count, number} {count, plural, one {one} other {{size, number} chars}}'
     assert.strictEqual('1 one', formatMessage({ defaultMessage: msg, values: { count: 1, size: 28 } }))
     assert.strictEqual('2 28 chars', formatMessage({ defaultMessage: msg, values: { count: 2, size: 28 } }))
+  })
+  it("doesn't know how to pluralize", function () {
+    let msg = '{count, number} {count, plural, one {} other {chars}}'
+    assert.strictEqual(' chars', formatMessage({ defaultMessage: msg, values: {} }))
   })
   it('should pluralize with given pluralRules', function () {
     let defaultPluralRules = Validators.pluralRules

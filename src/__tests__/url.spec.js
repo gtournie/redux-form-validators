@@ -205,6 +205,32 @@ describe('Validator: url', function () {
     assert.strictEqual(h.search, '?search=foo')
     assert.strictEqual(h.hash, '#stuff')
 
+    h = url.parseURL('http://userid@google.com')
+    assert.strictEqual(h.basicAuth.username, 'userid')
+    assert.strictEqual(h.basicAuth.password, void 0)
+
+    assert.deepStrictEqual(
+      url.parseURL('http://google.com', {
+        basicAuth: false,
+        ipv4: false,
+        ipv6: false,
+        local: false,
+        port: false,
+        path: false,
+        search: false,
+        hash: false
+      }),
+      {
+        protocol: 'http',
+        host: 'google.com'
+      }
+    )
+
+    assert.deepStrictEqual(url.parseURL('https://localhost', { host: false }), {
+      protocol: 'https',
+      host: 'localhost'
+    })
+
     h = url.parseURL('http://userid:password@localhost:8080/path?search=foo#stuff')
     assert.strictEqual(h.host, 'localhost')
 

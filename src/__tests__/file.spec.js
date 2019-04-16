@@ -89,6 +89,12 @@ describe('Validator: file', function () {
       assert.strictEqual(ERROR_TOO_BIG, test(new FileList([{ size: size2 }]), { maxSize: '0.9999' + unit }))
     })
   })
+  it('should output an error if an error occurs parsing minSize or maxSize', function () {
+    test(new File(), { minSize: 'abc' })
+    assert.ok(console.__lastErrorIncludes('size') && console.__lastErrorIncludes('unknown'))
+    test(new File(), { maxSize: '5MKB' })
+    assert.ok(console.__lastErrorIncludes('size') && console.__lastErrorIncludes('unknown'))
+  })
   it('should be valid when `value` is a valid FileList/File', function () {
     assert.ok(!test(new FileList([new File()])))
     assert.ok(!test(new FileList([{}])))

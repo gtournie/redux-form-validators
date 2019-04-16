@@ -14,28 +14,34 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/,
-        query: {
-          presets: ['react', 'es2015', 'stage-2'],
-          plugins: [
-            [
-              'react-intl',
-              {
-                messagesDir: './examples/src/locales/extracted',
-                languages: ['en'],
-              },
+        test: /\.(es6|js|jsx)$/,
+        exclude: /(node_modules|vendor)/,
+        use: {
+          loader: 'babel-loader',
+          query: {
+            plugins: [
+              [
+                'react-intl',
+                {
+                  messagesDir: './examples/src/locales/extracted',
+                  languages: ['en'],
+                },
+                'react-intl',
+              ],
+              [
+                'react-intl',
+                {
+                  messagesDir: './examples/src/locales/extracted',
+                  moduleSourceName: './redux-form-validators',
+                  languages: ['en'],
+                },
+                'redux-form-validators',
+              ],
+              ['@babel/plugin-proposal-class-properties', { loose: true }],
+              '@babel/plugin-proposal-function-bind',
+              '@babel/plugin-transform-runtime',
             ],
-            [
-              'react-intl',
-              {
-                messagesDir: './examples/src/locales/extracted',
-                moduleSourceName: './redux-form-validators',
-                languages: ['en'],
-              },
-            ],
-          ],
+          },
         },
       },
       {
@@ -47,7 +53,7 @@ module.exports = {
   plugins: [new webpack.HotModuleReplacementPlugin(), new webpack.optimize.ModuleConcatenationPlugin()],
   resolve: {
     alias: { 'redux-form-validators': path.join(process.cwd(), 'src/index.js') },
-    extensions: ['.js', '.jsx', '.es6', '.scss', '.css'],
+    extensions: ['.js', '.scss', '.css'],
     modules: [path.join(process.cwd(), 'examples'), 'examples', 'node_modules'],
   },
   devServer: {

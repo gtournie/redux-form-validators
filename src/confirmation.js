@@ -23,5 +23,6 @@ let confirmation = memoize(function ({ field, fieldLabel, caseSensitive, message
 export default confirmation
 
 function getIn (h, keys) {
+  /* istanbul ignore next */
   return keys.reduce((h, k) => (h || {})[k], h)
 }

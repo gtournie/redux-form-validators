@@ -467,6 +467,8 @@ The default error messages are:
 
 > Note: file inputs are only compatible with `file`, `required` or `absence` validators
 
+> Note: incorrect `minSize` or `maxSize` options will display an error in the console
+
 ### Default options
 
 redux-form-validators comes with default options:
@@ -585,8 +587,8 @@ And if you're using [babel-plugin-react-intl](https://github.com/yahoo/babel-plu
   "messagesDir": ...,
   "languages": ...,
   // /!\ it's important to keep a relative path here
-  "moduleSourceName": "./redux-form-validators"
-}
+  "moduleSourceName": "./redux-form-validators",
+}, 'redux-form-validators']
 ```
 
 ### Default messages override
@@ -807,4 +809,7 @@ parseURL('http://userid:pass@example.com')
 
 ## Send some love:
 
+You like this package?
+
 [![Buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/jCk0aHycU)
+

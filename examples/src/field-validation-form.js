@@ -141,7 +141,6 @@ class FieldValidationForm extends Component {
                 component={renderInputField}
                 placeholder="mm/dd/yy"
                 validate={[
-                  date({ format: 'mm/dd/yy' }),
                   date({
                     format: 'mm/dd/yy',
                     '<=': twentyYearsAgo,

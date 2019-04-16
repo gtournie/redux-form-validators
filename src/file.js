@@ -72,8 +72,8 @@ let file = memoize(function ({
     for (let i = 0, len = value.length, val, ftype, fext; i < len; ++i) {
       val = value[i]
       if (accept) {
-        ftype = val.type || ''
-        fext = fileExt(val.name || '')
+        ftype = val.type || /* istanbul ignore next */ ''
+        fext = fileExt(val.name || /* istanbul ignore next */ '')
         if (
           !accept.some(function (type) {
             return typeof type === 'string' ? type === (type.charAt(0) === '.' ? fext : ftype) : type.test(ftype)
@@ -147,7 +147,12 @@ function parse (size) {
 
 function sizeToInt (size) {
   let pair = parse(size)
-  return pair ? pair[1] * (SIZE_UNITS[pair[2]] || 1) : null
+  if (pair) return pair[1] * (SIZE_UNITS[pair[2]] || 1)
+  /* istanbul ignore else */
+  if (typeof console !== 'undefined') {
+    console.error(`file validator: size "${size}" unknown`)
+  }
+  return null
 }
 
 function fileExt (filename) {
