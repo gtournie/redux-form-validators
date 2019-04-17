@@ -1,10 +1,7 @@
 import Validators from './validators'
-import { prepareMsg, prepare, selectNum, memoize, TO_STRING } from './helpers'
+import { prepareMsg, prepare, selectNum, memoize, TO_STRING, stringToReg } from './helpers'
 
 let ACCEPT_SEP_REG = /\s*,\s*/
-// eslint-disable-next-line no-useless-escape
-let ESCAPE_REG = /([.+?^=!:${}()|[\]\/\\])/g // Removed star char
-let ANY_REG = /\*/g
 
 let file = memoize(function ({
   message,
@@ -34,11 +31,7 @@ let file = memoize(function ({
       .trim()
       .toLowerCase()
       .split(ACCEPT_SEP_REG)
-      .map(function (type) {
-        return type.charAt(0) === '.' || type.indexOf('*') < 0
-          ? type
-          : new RegExp('^' + type.replace(ESCAPE_REG, '\\$1').replace(ANY_REG, '.*') + '$', 'i')
-      })
+      .map(type => (type.charAt(0) === '.' || type.indexOf('*') < 0 ? type : stringToReg(type)))
   } else {
     accept = null
   }

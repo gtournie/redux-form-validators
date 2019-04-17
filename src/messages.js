@@ -29,6 +29,10 @@ let messages = defineMessages({
     id: 'form.errors.email',
     defaultMessage: 'is not a valid email'
   },
+  emailDomain: {
+    id: 'form.errors.emailDomain',
+    defaultMessage: '{domain} is not an accepted domain'
+  },
   equalTo: {
     id: 'form.errors.equalTo',
     defaultMessage: 'must be equal to {count, number}'

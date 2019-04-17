@@ -3,6 +3,15 @@ import Validators from './validators'
 export const HAS_PROP = {}.hasOwnProperty
 export const TO_STRING = {}.toString
 
+// eslint-disable-next-line no-useless-escape
+let ESCAPE_REG = /([.+?^=!:${}()|[\]\/\\])/g // Removed star char
+let ANY_REG = /\*/g
+
+// string with "*" => RegExp
+export function stringToReg (str) {
+  return new RegExp('^' + str.replace(ESCAPE_REG, '\\$1').replace(ANY_REG, '.*') + '$', 'i')
+}
+
 export function regFormat (func, messageType) {
   return memoize(function (options) {
     options = options || {}

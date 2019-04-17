@@ -12,9 +12,7 @@ export function inclusionExclusion (
   { in: inc, within, caseSensitive, message, msg, if: ifCond, unless, allowBlank }
 ) {
   msg = msg || message
-  within = [].concat(within || inc).map(function (val) {
-    return '' + val
-  })
+  within = [].concat(within || inc).map(val => '' + val)
 
   return prepare(ifCond, unless, allowBlank, function (value) {
     let cs = caseSensitive != null ? caseSensitive : Validators.defaultOptions.caseSensitive
@@ -22,9 +20,7 @@ export function inclusionExclusion (
 
     if (!cs) {
       value = value.toLowerCase()
-      array = array.map(function (val) {
-        return val.toLowerCase()
-      })
+      array = array.map(val => val.toLowerCase())
     }
     if (inclusion) {
       if (array.indexOf(value) < 0) {

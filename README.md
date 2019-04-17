@@ -8,8 +8,9 @@
 # redux-form-validators
 
 Simple validations with redux-form. Heavily inspired by the rails validations.
+Works also with [react-final-form](https://github.com/final-form/react-final-form) :)
 
-[Installation](#installation) | [Demo](#demo) | [Documentation](#documentation) | [Send some love](#send-some-love)
+[Installation](#installation) | [Demo](#demo) | [Documentation](#documentation) | [☕️Send some love ❤️](#send-some-love)
 
 ## Installation
 
@@ -29,7 +30,7 @@ If you're already familiar with [redux-form](http://redux-form.com/) it should b
 
 ### Field validation
 
-[This example](http://redux-form.com/7.0.3/examples/fieldLevelValidation/) shows you how to set a field level validation with redux-form.
+[This example](https://redux-form.com/8.2.0/examples/fieldlevelvalidation/) shows you how to set a field level validation with redux-form.
 Thanks to `redux-form-validators`, you'll only have to pass the validators needed:
 
 ```javascript
@@ -43,7 +44,7 @@ That's it! =)
 
 ### Sync validation
 
-Now let's replace the validate function of [this redux-form example](http://redux-form.com/7.0.3/examples/syncValidation/):
+Now let's replace the validate function of [this redux-form example](https://redux-form.com/8.2.0/examples/syncvalidation/):
 
 ```javascript
 const validations = {
@@ -124,7 +125,24 @@ Validates that the specified value is a valid email address. It uses the `email.
   component={renderField} validate={email()} />
 ```
 
-The default error message is "is not a valid email".
+This validator also provides 2 options to check (case insensitive) the domain:
+- `domainWhitelist` - Specifies a list of domains allowed
+- `domainBlacklist` - Specifies a list of domains not allowed
+
+Examples
+
+```javascript
+email({ domainWhitelist: ['GOOGLE.COM', 'outlook.*'] })
+email({ domainWhitelist: ['*.fr'] })
+
+// Disposable email addresses
+email({ domainBlacklist: ['yopmail.com', 'guerrillamail.*'] })
+```
+
+The default error messages are:
+
+- "is not a valid email"
+- "{domain} is not an accepted domain"
 
 ### numericality
 
