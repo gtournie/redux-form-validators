@@ -1,7 +1,7 @@
 import Validators from './validators'
 import { prepareMsg, prepare, selectNum, memoize, TO_STRING, stringToReg } from './helpers'
 
-let ACCEPT_SEP_REG = /\s*,\s*/
+let ACCEPT_SEP_REG = ','
 
 let file = memoize(function ({
   message,
@@ -31,7 +31,10 @@ let file = memoize(function ({
       .trim()
       .toLowerCase()
       .split(ACCEPT_SEP_REG)
-      .map(type => (type.charAt(0) === '.' || type.indexOf('*') < 0 ? type : stringToReg(type)))
+      .map(function (type) {
+        type = type.trim()
+        return type.charAt(0) === '.' || type.indexOf('*') < 0 ? type : stringToReg(type)
+      })
   } else {
     accept = null
   }

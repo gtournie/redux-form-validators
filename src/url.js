@@ -1,5 +1,5 @@
 import Validators from './validators'
-import { regFormat } from './helpers'
+import { regFormat, assign } from './helpers'
 
 // user:pass BasicAuth (optional)
 const BASIC_AUTH = '(?:\\S+(?::\\S*)?@)?'
@@ -72,7 +72,7 @@ const DEFAULT_OPTIONS = {
 
 const STRIP_PROTOCOL_REG = /:?\/\/$/
 
-const CLEAN_UP_PROPS = 'protocol ipv4 host path search hash'.split(' ')
+const CLEAN_UP_PROPS = ['protocol', 'ipv4', 'host', 'path', 'search', 'hash']
 
 function parseURL (url, options) {
   options = defaultOptions(options)
@@ -119,7 +119,7 @@ url.parseURL = parseURL
 export default url
 
 function defaultOptions (options) {
-  options = Object.assign({}, DEFAULT_OPTIONS, options)
+  options = assign({}, DEFAULT_OPTIONS, options)
   options.protocols = []
     .concat(options.protocol || options.protocols || Validators.defaultOptions.urlProtocols)
     .join('|')

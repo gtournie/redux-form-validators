@@ -1,5 +1,5 @@
 import Validators from './validators'
-import { prepareMsg, prepare, trunc, memoize } from './helpers'
+import { prepareMsg, prepare, trunc, memoize, assign } from './helpers'
 
 const DATE_METHODS = {
   y: function (d) {
@@ -147,7 +147,7 @@ function normParseDate (value, format, parse) {
       flags[token] = +match[index + 1]
     })
     let comparable = flags.y != null ? (flags.m != null ? true : flags.d == null) : false
-    flags = Object.assign({ y: 1970, m: 1, d: 1 }, flags)
+    flags = assign({ y: 1970, m: 1, d: 1 }, flags)
     if (flags.y < 100) {
       flags.y = currentCentury(flags.y >= 69 ? -1 : 0) * 100 + flags.y
     }

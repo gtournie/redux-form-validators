@@ -43,10 +43,23 @@ export function prepare (ifCond, unlessCond, allowBlank, func) {
   }
 }
 
-export function trunc (num) {
+export const trunc =
+  Math.trunc ||
   /* istanbul ignore next */
-  return Math.trunc ? Math.trunc(num) : num < 0 ? Math.ceil(num) : Math.floor(num)
-}
+  function trunc (num) {
+    return num < 0 ? Math.ceil(num) : Math.floor(num)
+  }
+
+export const assign =
+  Object.assign ||
+  /* istanbul ignore next */
+  function (obj) {
+    for (let i = 1, len = arguments.length; i < len; ++i) {
+      let source = arguments[i]
+      if (source != null) for (let key in source) if (HAS_PROP.call(source, key)) obj[key] = source[key]
+    }
+    return obj
+  }
 
 export function selectNum (var1, var2) {
   return isNumber(var1) ? +var1 : arguments.length > 1 && isNumber(var2) ? +var2 : null
@@ -69,7 +82,7 @@ export function prepareMsg (msg, type, values) {
   }
   if (isObject(msg)) {
     if (HAS_PROP.call(msg, 'id') || HAS_PROP.call(msg, 'defaultMessage')) {
-      return Object.assign({}, msg, { values: values })
+      return assign({}, msg, { values: values })
     }
     return defaultMessage(type, values)
   }
@@ -95,7 +108,7 @@ export function memoize (func) {
 // private
 function defaultMessage (type, values) {
   let msg = Validators.messages[type]
-  return typeof msg === 'string' ? { defaultMessage: msg, values: values } : Object.assign({}, msg, { values: values })
+  return typeof msg === 'string' ? { defaultMessage: msg, values: values } : assign({}, msg, { values: values })
 }
 
 function stringify (options) {
