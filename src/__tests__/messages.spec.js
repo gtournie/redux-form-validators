@@ -55,6 +55,12 @@ describe('Validator option: message', function () {
 
       // Other formats
       assert.strictEqual('foobar', test(key, { absence: 'foobar' }, absence, 'foo'))
+      assert.strictEqual('foobar', test(key, { format: 'foobar' }, date, blank, { format: 'mm/dd/yyyy' }))
+      assert.strictEqual('foobar', test(key, { range: 'foobar' }, date, '2000-01-01', { '<': new Date(1999, 0, 1) }))
+      assert.strictEqual(
+        'foobar',
+        test(key, { '<': 'foobar', range: 'foo' }, date, '2000-01-01', { '<': new Date(1999, 0, 1) })
+      )
       assert.strictEqual('foobar', test(key, { absence: { id: 'foobar' } }, absence, 'foo'))
       assert.strictEqual(
         'foobar',
@@ -73,7 +79,10 @@ describe('Validator option: message', function () {
     let blank = ''
     ;['msg', 'message'].forEach(function (key) {
       assert.strictEqual('form.errors.tooShort', test(key, { wrongLength: { id: 'is' } }, length, blank, { min: 1 }))
-      assert.strictEqual('form.errors.tooShort', test(key, { wrongLength: { id: 'is' } }, length, blank, { is: 0, min: 1 }))
+      assert.strictEqual(
+        'form.errors.tooShort',
+        test(key, { wrongLength: { id: 'is' } }, length, blank, { is: 0, min: 1 })
+      )
     })
   })
 
@@ -89,8 +98,10 @@ describe('Validator option: message', function () {
       defaultMessage: 'is mandatory'
     }
     assert.strictEqual('is mandatory', presence()(''))
+    let tooShort = Validators.messages.tooShort
     Validators.messages.tooShort = 'is too short: {count} chars expected'
     assert.strictEqual('is too short: 4 chars expected', length({ min: 4 })(''))
+    Validators.messages.tooShort = tooShort
 
     Object.assign(Validators.messages, {
       presence: {

@@ -12,6 +12,8 @@ import length from './length'
 import numericality from './numericality'
 import presence from './presence'
 import url from './url'
+import combine from './combine'
+import validateForm from './validate-form'
 
 import Validators from './validators'
 
@@ -34,5 +36,7 @@ export {
   numericality,
   presence,
   required,
-  url
+  url,
+  combine,
+  validateForm
 }

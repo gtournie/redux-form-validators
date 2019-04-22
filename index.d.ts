@@ -4,6 +4,7 @@
 // TypeScript Version: 2.6
 
 export type Validator = (value: any, allValues?: any, props?: any) => any
+export type FormValidator = (allValues?: any) => any
 
 export interface MessageDescriptor {
   id?: string
@@ -60,12 +61,16 @@ export interface ValidatorMessages {
   wrongLength: ValidatorMessage
 }
 
+export const validateForm: (validations: object) => FormValidator
+
 export interface AddValidatorOptions {
   validator: Validator
   defaultMessage?: string
   defaultMsg?: string
 }
 export const addValidator: (options: AddValidatorOptions) => Validator
+
+export const combine: (...validators: Validator[]) => Validator
 
 export const absence: (options?: DefaultValidatorOptions) => Validator
 export const acceptance: (options?: DefaultValidatorOptions) => Validator
@@ -169,6 +174,7 @@ export const required: (options?: DefaultValidatorOptions) => Validator
 export interface UrlValidatorOptions extends DefaultValidatorOptions {
   protocol?: string
   protocols?: string[]
+  emptyProtocol?: boolean
   protocolIdentifier?: boolean
   basicAuth?: boolean
   local?: boolean

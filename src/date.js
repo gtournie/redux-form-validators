@@ -38,30 +38,30 @@ let date = memoize(function ({
     let normFormat = normalizeFormat(format, ymd)
     let date = normParseDate(value, normFormat, false)
     if (date === 'wrongFormat') {
-      return Validators.formatMessage(prepareMsg(msg, 'dateFormat', { format: format }))
+      return Validators.formatMessage(prepareMsg(msg, 'dateFormat', 'format', { format: format }))
     }
     if (date === 'invalid') {
-      return Validators.formatMessage(prepareMsg(msg, 'dateInvalid'))
+      return Validators.formatMessage(prepareMsg(msg, 'dateInvalid', 'invalid'))
     }
     if (date) {
       let date2
       if (eq && +date !== +(date2 = getDate(eq))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('=', date2, normFormat)))
+        return Validators.formatMessage(prepareMsg(msg, 'dateRange', 'range', '=', values('=', date2, normFormat)))
       }
       if (diff && +date === +(date2 = getDate(diff))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('!=', date2, normFormat)))
+        return Validators.formatMessage(prepareMsg(msg, 'dateRange', 'range', '!=', values('!=', date2, normFormat)))
       }
       if (gt && date <= (date2 = getDate(gt))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('>', date2, normFormat)))
+        return Validators.formatMessage(prepareMsg(msg, 'dateRange', 'range', '>', values('>', date2, normFormat)))
       }
       if (gte && date < (date2 = getDate(gte))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('>=', date2, normFormat)))
+        return Validators.formatMessage(prepareMsg(msg, 'dateRange', 'range', '>=', values('>=', date2, normFormat)))
       }
       if (lt && date >= (date2 = getDate(lt))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('<', date2, normFormat)))
+        return Validators.formatMessage(prepareMsg(msg, 'dateRange', 'range', '<', values('<', date2, normFormat)))
       }
       if (lte && date > (date2 = getDate(lte))) {
-        return Validators.formatMessage(prepareMsg(msg, 'dateRange', values('<=', date2, normFormat)))
+        return Validators.formatMessage(prepareMsg(msg, 'dateRange', 'range', '<=', values('<=', date2, normFormat)))
       }
     }
   })
@@ -120,7 +120,10 @@ function normalizeFormat (format, ymd) {
   if (!ymd || ymd === 'ymd') {
     return format
   }
-  let reverseMapping = { [ymd.charAt(0)]: 'y', [ymd.charAt(1)]: 'm', [ymd.charAt(2)]: 'd' }
+  let reverseMapping = {}
+  reverseMapping[ymd.charAt(0)] = 'y'
+  reverseMapping[ymd.charAt(1)] = 'm'
+  reverseMapping[ymd.charAt(2)] = 'd'
   return format.replace(new RegExp(`[${ymd}]`, 'g'), function (sym) {
     return reverseMapping[sym]
   })

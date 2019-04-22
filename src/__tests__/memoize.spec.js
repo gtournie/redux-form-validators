@@ -14,7 +14,8 @@ import Validators, {
   length,
   numericality,
   presence,
-  url
+  url,
+  combine
 } from '../index'
 
 function test (func, options) {
@@ -121,6 +122,14 @@ describe('memoize', function () {
           }
       })
     )
+
+    assert.strictEqual(combine(presence(), email()), combine(presence(), email()))
+    assert.strictEqual(combine(presence(), email()), combine(presence({}), email({})))
+    assert.strictEqual(combine(presence(), email()), combine(email(), presence()))
+    assert.strictEqual(
+      combine(length({ min: 2 }), email(), format({ without: /z/ })),
+      combine(email(), length({ min: 2 }), format({ without: /z/ }))
+    )
   })
 
   it('should return the same function when memoize is true', function () {
@@ -139,6 +148,10 @@ describe('memoize', function () {
     Validators.defaultOptions.memoize = false
     assert.ok(!test(absence))
     assert.ok(!test(absence, { memoize: false }))
+    // eslint-disable-next-line no-self-compare
+    assert.ok(combine(presence(), email()) !== combine(presence(), email()))
+    assert.ok(combine(presence(), email()) !== combine(presence({}), email({})))
+    assert.ok(combine(presence(), email()) !== combine(email(), presence()))
     Validators.defaultOptions.memoize = defaultValue
   })
 

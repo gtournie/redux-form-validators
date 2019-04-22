@@ -56,10 +56,10 @@ let file = memoize(function ({
       value = [value]
     }
     if (value.length < minFiles) {
-      return Validators.formatMessage(prepareMsg(msg, 'fileTooFew', { count: minFiles }))
+      return Validators.formatMessage(prepareMsg(msg, 'fileTooFew', 'tooFew', 'minFiles', { count: minFiles }))
     }
     if (maxFiles !== null && value.length > maxFiles) {
-      return Validators.formatMessage(prepareMsg(msg, 'fileTooMany', { count: maxFiles }))
+      return Validators.formatMessage(prepareMsg(msg, 'fileTooMany', 'tooMany', 'maxFiles', { count: maxFiles }))
     }
 
     let acceptError = []
@@ -86,12 +86,14 @@ let file = memoize(function ({
       }
     }
     if (acceptError.length) {
-      return Validators.formatMessage(prepareMsg(msg, 'fileAccept', { files: acceptError, count: acceptError.length }))
+      return Validators.formatMessage(
+        prepareMsg(msg, 'fileAccept', 'accept', { files: acceptError, count: acceptError.length })
+      )
     }
     if (tooSmallError.length) {
       let pair = parse(minSize)
       return Validators.formatMessage(
-        prepareMsg(msg, 'fileTooSmall', {
+        prepareMsg(msg, 'fileTooSmall', 'tooSmall', 'minSize', {
           files: tooSmallError,
           count: tooSmallError.length,
           size: Validators.formatSize(pair[1], pair[2] || 'B')
@@ -101,7 +103,7 @@ let file = memoize(function ({
     if (tooBigError.length) {
       let pair = parse(maxSize)
       return Validators.formatMessage(
-        prepareMsg(msg, 'fileTooBig', {
+        prepareMsg(msg, 'fileTooBig', 'tooBig', 'maxSize', {
           files: tooBigError,
           count: tooBigError.length,
           size: Validators.formatSize(pair[1], pair[2] || 'B')

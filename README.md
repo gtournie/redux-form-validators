@@ -7,8 +7,7 @@
 
 # redux-form-validators
 
-Simple validations with redux-form. Heavily inspired by the rails validations.
-Works also with [react-final-form](https://github.com/final-form/react-final-form) :)
+Simple validations with redux-form / [react-final-form](https://github.com/final-form/react-final-form). Heavily inspired by the rails validations.
 
 [Installation](#installation) | [Demo](#demo) | [Documentation](#documentation) | [☕️Send some love ❤️](#send-some-love)
 
@@ -47,7 +46,7 @@ That's it! =)
 Now let's replace the validate function of [this redux-form example](https://redux-form.com/8.2.0/examples/syncvalidation/):
 
 ```javascript
-const validations = {
+const validate = validateForm({
   username: [required(), length({ max: 15 })],
   email: [required(), email()],
   age: [
@@ -55,24 +54,10 @@ const validations = {
     numericality({
       int: true,
       '>=': 18,
-      msg: { greaterThanOrEqualTo: 'You must be at least 18 years old' },
+      msg: { '>=': 'You must be at least 18 years old' },
     }),
   ],
-}
-
-// Reusable with any other form
-const validate = values => {
-  const errors = {}
-  for (let field in validations) {
-    let value = values[field]
-    errors[field] = validations[field]
-      .map(validateField => {
-        return validateField(value, values)
-      })
-      .find(x => x)
-  }
-  return errors
-}
+})
 ```
 
 ## Documentation
@@ -92,6 +77,11 @@ Validators
 - [absence](#absence)
 - [url](#url)
 - [file](#file)
+
+Form
+
+- [validateForm](#validateform)
+- [combine](#combine)
 
 More
 
@@ -417,30 +407,29 @@ url({ protocol: 'ftp', port: false, basicAuth: false, hash: false })
 
 The default error message is "is not a valid URL".
 
+See also [parseURL](#parseurl)
+
 > Note: As of version 3.0.0, this method doesn't exclude any ip addresses anymore (like private & local networks). To re-implement this feature, you can use the [url.parseURL helper](#url-helper) and [add a custom validator](#adding-a-validator), like this:
 
 ```javascript
 // Private and local networks not allowed
 const REG = new RegExp(
-  '^(?!(?:10|127)(?:\\.\\d{1,3}){3})' +
-    '(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})' +
-    '(?!172\\.(?:1[6-9]|2\\d|3[0-1])' +
-    // IPV4
-    '(?:\\.\\d{1,3}){2})(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?|0)\\.){3}' +
-    '(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]?|0)$',
+  '^(?:(?:10|127)(?:\\.\\d{1,3}){3})|' +
+    '(?:(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})|' +
+    '(?:172\\.(?:1[6-9]|2\\d|3[0-1]))'
 )
 
 const ipValidator = addValidator({
   validator: function(options, value, allValues) {
     let info = url.parseURL(value, options)
     if (!info) return false
-    if (info.ipv4 && !REG.test(info.ipv4)) {
+    if (info.ipv4 && REG.test(info.ipv4)) {
       return {
         id: 'form.errors.private_url',
         defaultMessage: 'Private and local networks are not allowed',
       }
     }
-  },
+  }
 })
 ```
 
@@ -486,6 +475,54 @@ The default error messages are:
 > Note: file inputs are only compatible with `file`, `required` or `absence` validators
 
 > Note: incorrect `minSize` or `maxSize` options will display an error in the console
+
+
+### validateForm
+
+Helper that turns a validation object into a validate function.
+
+Examples
+
+```javascript
+import { required, length, validateForm } from 'redux-form-validators'
+
+const validate = validateForm({
+  firstName: required(),
+  lastName: required(),
+  // FormSection
+  secureSection: {
+    password: [required(), length({ min: 8 }),
+    confirmation: confirmation({ field: 'secureSection.password' })
+  }
+})
+
+...
+
+export default reduxForm({
+  form: 'validationFormExample',
+  validate,
+})(ValidationFormExample)
+```
+
+> Note: For performance reasons, `validateForm` is not memoized. Use it always outside of the render function to avoid problems.
+
+### combine
+
+Combine several validators. This helper exists for 2 reasons:
+
+- when validators are combined using an array, it sometimes forces the component to be re-rendered (thank you @futpib for pointing it out). This is due to the way [React handle properties comparison](https://reactjs.org/docs/react-api.html#reactpurecomponent). [This demo](https://codesandbox.io/s/nwxm2w3544) shows the issue (see how the email field is forced to be re-rendered).
+- react-final-form doesn't support arrays of validators.
+
+Examples
+```javascript
+<Field name="email" type="email" label="Email"
+  component={renderField} validate={combine(required(), email())} />
+
+<Field name="password" type="password" label="Password"
+  component={renderField} validate={combine(required(), length({ min: 8 }))} />
+```
+
+> Note: You don't need to use `combine` with `validateForm`
 
 ### Default options
 
@@ -676,7 +713,7 @@ format({ with: /^[a-z]+$/i, message: { id: 'form.errors.alpha',
 format({ with: /^[a-z]+$/i, message: <FormattedMessage id="form.errors.alpha"
   defaultMessage="Letters only" /> })
 
-// Version >= 2.1.0 only
+// Redefine only certain messages and use interpolation
 length({ msg: { tooShort: 'too short', tooLong: 'too long' }, in: [2, 8] })
 length({ msg: { tooShort: { id: 'errors.length.min',
   defaultMessage: 'too short' } }, min: 2 })
@@ -684,9 +721,46 @@ length({ msg: { tooShort: <FormattedMessage id="errors.length.min"
   defaultMessage="too short" /> }, min: 2 })
 length({ msg: { tooShort: 'min {count, number} characters' }, min: 2, max: 8 })
   //=> tooLong message remains the default message
+
+// Version >= 3.3.0 (aliases)
+length({ msg: { min: 'too short', max: 'too long' }, in: [2, 8] })
+numericality({ msg: { '>=': 'must be at least {count, number} years old' }, '>=': 18 })
+date({ msg: { '>': 'must be in the future' }, '>': 'today' })
 ```
 
-> Note: As of version 2.1.0, you can also override just certain messages, and/or use interpolation.
+##### Message key aliases
+
+Date
+- 'dateFormat', 'format'
+- 'dateInvalid', 'invalid'
+- 'dateRange', 'range', '=', '!=', '>', '>=', '<', '<=' (operators only match with their specific validation)
+
+Email
+- 'email', 'invalid'
+- 'emailDomain', 'domain'
+
+File
+- 'fileTooFew', 'tooFew', 'minFiles'
+- 'fileTooMany', 'tooMany', 'maxFiles'
+- 'fileAccept', 'accept'
+- 'fileTooSmall', 'tooSmall', 'minSize'
+- 'fileTooBig', 'tooBig', 'maxSize'
+
+Length
+- 'wrongLength', 'is', '='
+- 'tooLong', 'maximum', 'max'
+- 'tooShort', 'minimum', 'min'
+
+Numericality
+- 'notANumber', 'NaN'
+- 'notAnInteger', 'int'
+- 'equalTo', '='
+- 'otherThan', '!='
+- 'greaterThan', '>'
+- 'greaterThanOrEqualTo', '>='
+- 'lessThan', '<'
+- 'lessThanOrEqualTo', '<='
+
 
 > Note: all messages are internally converted into javascript objects (see [i18n and react-intl](#i18n-and-react-intl)), so if you pass a FormattedMessage as an argument, don't expect it to be returned as it.
 

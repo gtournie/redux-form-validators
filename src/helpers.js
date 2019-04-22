@@ -29,7 +29,6 @@ export function prepare (ifCond, unlessCond, allowBlank, func) {
   return function (value, allValues = {}, ...args) {
     if (!value || typeof value !== 'object') {
       value = value == null ? '' : '' + value
-
       if ((allowBlank != null ? allowBlank : Validators.defaultOptions.allowBlank) && !value.trim()) {
         return
       }
@@ -70,15 +69,37 @@ export function isNumber (num) {
   return !isNaN(num) && (0 != num || '' !== ('' + num).trim())
 }
 
-export function prepareMsg (msg, type, values) {
+export function isObject (obj) {
+  return typeof obj === 'object' && TO_STRING.call(obj) === '[object Object]' && obj !== null
+}
+
+// Immutable.js compatibility
+export function getIn (h, keys) {
+  /* istanbul ignore next */
+  if (typeof h.getIn === 'function') return h.getIn(keys)
+  for (let i = 0, len = keys.length; i < len; ++i) h = (h || /* istanbul ignore next */ {})[keys[i]]
+  return h
+}
+
+export function prepareMsg (msg, type) {
+  let args = arguments
+  let lastIndex = args.length - 1
+  let values = args[lastIndex]
+  if (typeof values === 'string') {
+    values = void 0
+    ++lastIndex
+  }
   if (msg == null) {
     return defaultMessage(type, values)
   }
   if (HAS_PROP.call(msg, 'props') && isReactElement(msg)) {
     msg = msg.props
   }
-  if (msg[type] != null) {
-    msg = msg[type]
+  for (let i = lastIndex - 1; i >= 1; --i) {
+    if (msg[args[i]] != null) {
+      msg = msg[args[i]]
+      break
+    }
   }
   if (isObject(msg)) {
     if (HAS_PROP.call(msg, 'id') || HAS_PROP.call(msg, 'defaultMessage')) {
@@ -129,8 +150,4 @@ function stringify (options) {
 
 function isReactElement (object) {
   return typeof object === 'object' && object !== null && '$$typeof' in object
-}
-
-function isObject (obj) {
-  return typeof obj === 'object' && TO_STRING.call(obj) === '[object Object]' && obj !== null
 }

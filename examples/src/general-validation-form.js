@@ -1,9 +1,18 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import { reduxForm, Field } from 'redux-form'
+import { reduxForm, Field, FormSection } from 'redux-form'
 import { connect } from 'react-redux'
 import { FormattedMessage } from 'react-intl'
-import { acceptance, date, required, email, length, numericality, confirmation } from 'redux-form-validators'
+import {
+  acceptance,
+  date,
+  required,
+  email,
+  length,
+  numericality,
+  confirmation,
+  validateForm,
+} from 'redux-form-validators'
 
 import { Col, Row, Button, Input, Form, FormFeedback, FormGroup, FormText, Label } from 'reactstrap'
 
@@ -55,11 +64,13 @@ const TOO_YOUNG_ERROR = (
   <FormattedMessage id="form.errors.tooYoung" defaultMessage="Sorry, you must be at least 18 years old" />
 )
 
-let validations = {
+let validate = validateForm({
   name: [required(), length({ in: [6, 20] })],
   email: [required(), email()],
-  password: [required(), length({ min: 8 })],
-  password_confirmation: [confirmation({ field: 'password', fieldLabel: 'Password' })],
+  pass: {
+    password: [required(), length({ min: 8 })],
+    password_confirmation: [confirmation({ field: 'pass.password', fieldLabel: 'Password' })],
+  },
   bday: [
     date({ format: 'mm/dd/yy' }),
     date({
@@ -79,17 +90,7 @@ let validations = {
     }),
   ],
   age: [required(), numericality({ int: true, msg: 'int only' }), numericality({ '>=': 18, msg: TOO_YOUNG_ERROR })],
-}
-
-// Reusable with any other form
-let validate = values => {
-  const errors = {}
-  for (let field in validations) {
-    let value = values[field]
-    errors[field] = validations[field].map(validateField => validateField(value, values)).find(x => x)
-  }
-  return errors
-}
+})
 
 class GeneralValidationForm extends Component {
   handleSubmit(e) {
@@ -108,19 +109,21 @@ class GeneralValidationForm extends Component {
               <Field name="email" type="email" label="Email" component={renderInputField} />
             </Col>
           </Row>
-          <Row>
-            <Col sm="6">
-              <Field name="password" type="password" label="Password" component={renderInputField} />
-            </Col>
-            <Col sm="6">
-              <Field
-                name="password_confirmation"
-                type="password"
-                label="Password confirmation"
-                component={renderInputField}
-              />
-            </Col>
-          </Row>
+          <FormSection name="pass">
+            <Row>
+              <Col sm="6">
+                <Field name="password" type="password" label="Password" component={renderInputField} />
+              </Col>
+              <Col sm="6">
+                <Field
+                  name="password_confirmation"
+                  type="password"
+                  label="Password confirmation"
+                  component={renderInputField}
+                />
+              </Col>
+            </Row>
+          </FormSection>
           <Row>
             <Col sm="6">
               <Field name="bday" type="text" label="Birthday" component={renderInputField} placeholder="mm/dd/yy" />

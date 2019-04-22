@@ -1,5 +1,5 @@
 import Validators from './validators'
-import { prepareMsg, prepare, memoize } from './helpers'
+import { prepareMsg, prepare, memoize, getIn } from './helpers'
 
 let confirmation = memoize(function ({ field, fieldLabel, caseSensitive, message, msg, if: ifCond, unless }) {
   msg = msg || message
@@ -7,10 +7,7 @@ let confirmation = memoize(function ({ field, fieldLabel, caseSensitive, message
   fieldLabel = fieldLabel || fieldKeys[fieldKeys.length - 1]
 
   return prepare(ifCond, unless, false, function (value, allValues) {
-    // Immutable.js compatibility
-    let fieldValue = typeof allValues.getIn === 'function' ? allValues.getIn(fieldKeys) : getIn(allValues, fieldKeys)
-
-    fieldValue = '' + (fieldValue || '')
+    let fieldValue = '' + (getIn(allValues, fieldKeys) || '')
 
     let cs = caseSensitive != null ? caseSensitive : Validators.defaultOptions.caseSensitive
 
@@ -21,8 +18,3 @@ let confirmation = memoize(function ({ field, fieldLabel, caseSensitive, message
 })
 
 export default confirmation
-
-function getIn (h, keys) {
-  /* istanbul ignore next */
-  return keys.reduce((h, k) => (h || {})[k], h)
-}

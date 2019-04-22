@@ -15,12 +15,12 @@ global.File = function (params) {
   Object.assign(this, params)
 }
 
+console.__lastErrors = []
 console.error = function () {
-  console.__lastError = arguments
+  console.__lastErrors.push(arguments)
   console.__lastErrorIncludes = txt =>
     [].slice
       .call(arguments)
       .join(' ')
       .indexOf(txt) >= 0
 }
-console.error(null)

@@ -10,3 +10,4 @@ coverage
 webpack
 yarn-error.log
 .nyc_output
+console.d.ts

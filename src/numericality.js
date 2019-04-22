@@ -36,28 +36,28 @@ let numericality = memoize(function ({
 
   return prepare(ifCond, unless, allowBlank, function (value) {
     if (!isNumber(value)) {
-      return Validators.formatMessage(prepareMsg(msg, 'notANumber'))
+      return Validators.formatMessage(prepareMsg(msg, 'notANumber', 'NaN'))
     }
     if (int && +value % 1) {
-      return Validators.formatMessage(prepareMsg(msg, 'notAnInteger'))
+      return Validators.formatMessage(prepareMsg(msg, 'notAnInteger', 'int'))
     }
     if (equal !== null && +value !== equal) {
-      return Validators.formatMessage(prepareMsg(msg, 'equalTo', { count: equal }))
+      return Validators.formatMessage(prepareMsg(msg, 'equalTo', '=', { count: equal }))
     }
     if (diff !== null && +value === diff) {
-      return Validators.formatMessage(prepareMsg(msg, 'otherThan', { count: diff }))
+      return Validators.formatMessage(prepareMsg(msg, 'otherThan', '!=', { count: diff }))
     }
     if (greater !== null && +value <= greater) {
-      return Validators.formatMessage(prepareMsg(msg, 'greaterThan', { count: greater }))
+      return Validators.formatMessage(prepareMsg(msg, 'greaterThan', '>', { count: greater }))
     }
     if (greaterOrEqual !== null && +value < greaterOrEqual) {
-      return Validators.formatMessage(prepareMsg(msg, 'greaterThanOrEqualTo', { count: greaterOrEqual }))
+      return Validators.formatMessage(prepareMsg(msg, 'greaterThanOrEqualTo', '>=', { count: greaterOrEqual }))
     }
     if (less !== null && +value >= less) {
-      return Validators.formatMessage(prepareMsg(msg, 'lessThan', { count: less }))
+      return Validators.formatMessage(prepareMsg(msg, 'lessThan', '<', { count: less }))
     }
     if (lessOrEqual !== null && +value > lessOrEqual) {
-      return Validators.formatMessage(prepareMsg(msg, 'lessThanOrEqualTo', { count: lessOrEqual }))
+      return Validators.formatMessage(prepareMsg(msg, 'lessThanOrEqualTo', '<=', { count: lessOrEqual }))
     }
     if (even && trunc(+value) % 2) {
       return Validators.formatMessage(prepareMsg(msg, 'even'))

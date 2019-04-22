@@ -6,8 +6,9 @@ logs
 pids
 *.pid
 *.seed
-*.history
 
+*.history
+console.d.ts
 lib/
 dist/
 examples/src/locales/extracted

@@ -12,14 +12,14 @@ let email = memoize(function ({ domainWhitelist, domainBlacklist, message, msg, 
   return prepare(ifCond, unless, allowBlank, function (value) {
     let match = value.match(REG_EMAIL)
     if (!match) {
-      return Validators.formatMessage(prepareMsg(msg, 'email'))
+      return Validators.formatMessage(prepareMsg(msg, 'email', 'invalid'))
     }
     let domain = match[1].toLowerCase()
     if (
       (domainWhitelist && !domainInList(domain, domainWhitelist)) ||
       (domainBlacklist && domainInList(domain, domainBlacklist))
     ) {
-      return Validators.formatMessage(prepareMsg(msg, 'emailDomain', { domain: domain }))
+      return Validators.formatMessage(prepareMsg(msg, 'emailDomain', 'domain', { domain: domain }))
     }
   })
 })

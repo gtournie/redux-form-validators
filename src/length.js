@@ -30,13 +30,13 @@ let length = memoize(function ({
 
   return prepare(ifCond, unless, allowBlank, function (value) {
     if (equal !== null && value.length !== equal) {
-      return Validators.formatMessage(prepareMsg(msg, 'wrongLength', { count: equal }))
+      return Validators.formatMessage(prepareMsg(msg, 'wrongLength', 'is', '=', { count: equal }))
     }
     if (max !== null && value.length > max) {
-      return Validators.formatMessage(prepareMsg(msg, 'tooLong', { count: max }))
+      return Validators.formatMessage(prepareMsg(msg, 'tooLong', 'maximum', 'max', { count: max }))
     }
     if (min !== null && value.length < min) {
-      return Validators.formatMessage(prepareMsg(msg, 'tooShort', { count: min }))
+      return Validators.formatMessage(prepareMsg(msg, 'tooShort', 'minimum', 'min', { count: min }))
     }
   })
 })

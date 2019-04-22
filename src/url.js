@@ -85,7 +85,8 @@ function parseURL (url, options) {
   if (options.basicAuth) {
     let auth = parts[group++]
     if (auth) {
-      let [username, ...password] = auth.slice(0, -1).split(':')
+      let password = auth.slice(0, -1).split(':')
+      let username = password.shift()
       h.basicAuth = { username, password: password.length ? password.join(':') : void 0 }
     }
   }
