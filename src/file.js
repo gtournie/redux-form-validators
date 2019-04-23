@@ -46,7 +46,10 @@ let file = memoize(function ({
     let isAFileList = isFileList(value)
 
     // special blank check
-    if ((allowBlank != null ? allowBlank : Validators.defaultOptions.allowBlank) && isAFileList && value.length === 0) {
+    if (
+      (allowBlank != null ? allowBlank : Validators.defaultOptions.allowBlank) &&
+      (typeof value === 'string' ? value.trim() === '' : isAFileList && value.length === 0)
+    ) {
       return
     }
     if (!isAFileList) {

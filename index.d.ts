@@ -35,6 +35,7 @@ export interface ValidatorMessages {
   dateInvalid: ValidatorMessage
   dateRange: ValidatorMessage
   email: ValidatorMessage
+  emailDomain: ValidatorMessage
   equalTo: ValidatorMessage
   even: ValidatorMessage
   exclusion: ValidatorMessage

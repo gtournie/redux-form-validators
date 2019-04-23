@@ -476,6 +476,8 @@ The default error messages are:
 
 > Note: incorrect `minSize` or `maxSize` options will display an error in the console
 
+> Note: for an optional file input, don't forget to pass `allowBlank: true`
+
 
 ### validateForm
 

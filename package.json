@@ -1,6 +1,6 @@
 {
   "name": "redux-form-validators",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "Simple validations with redux-form / react-final-form",
   "module": "lib/index.js",
   "main": "lib/index.js",

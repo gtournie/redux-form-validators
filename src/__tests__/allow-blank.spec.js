@@ -19,6 +19,7 @@ describe('Validator option: allowBlank', function () {
       assert.ok(test(length, blank, { is: 300, allowBlank: false }).indexOf('form.errors') === 0)
       assert.ok(test(numericality, blank, { allowBlank: false }).indexOf('form.errors') === 0)
       assert.ok(test(url, blank, { allowBlank: false }).indexOf('form.errors') === 0)
+      assert.ok(test(file, blank, { allowBlank: false }).indexOf('form.errors') === 0)
     })
     assert.ok(test(file, new FileList(), { allowBlank: false }).indexOf('form.errors') === 0)
   })
@@ -32,6 +33,7 @@ describe('Validator option: allowBlank', function () {
       assert.ok(!test(length, blank, { is: 300, allowBlank: true }))
       assert.ok(!test(numericality, blank, { allowBlank: true }))
       assert.ok(!test(url, blank, { allowBlank: true }))
+      assert.ok(!test(file, blank, { allowBlank: true }))
     })
     assert.ok(!test(file, new FileList(), { allowBlank: true }))
   })
@@ -49,6 +51,7 @@ describe('Validator option: allowBlank', function () {
         assert.ok(allowBlank !== (test(length, blank, { is: 300 }).indexOf('form.errors') === 0))
         assert.ok(allowBlank !== (test(numericality, blank).indexOf('form.errors') === 0))
         assert.ok(allowBlank !== (test(url, blank).indexOf('form.errors') === 0))
+        assert.ok(allowBlank !== (test(file, blank).indexOf('form.errors') === 0))
       })
     })
 

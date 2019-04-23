@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { reduxForm, Field, FormSection } from 'redux-form'
-import { connect } from 'react-redux'
 import { FormattedMessage } from 'react-intl'
 import Validators, {
   acceptance,
