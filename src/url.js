@@ -147,7 +147,9 @@ function buildReg (options, capture) {
         group(options.ipv6, IPV6, capture),
         group(options.host, HOST, capture),
         group(options.local, 'localhost', capture)
-      ].join('|')})` +
+      ]
+        .filter(g => g)
+        .join('|')})` +
       group(options.port, PORT, capture) +
       group(options.path, PATH, capture) +
       group(options.search, SEARCH, capture) +
