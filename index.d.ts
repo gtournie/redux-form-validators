@@ -188,7 +188,25 @@ export interface UrlValidatorOptions extends DefaultValidatorOptions {
   hash?: boolean
 }
 
-export const url: (options?: UrlValidatorOptions) => Validator
+interface URL {
+  protocol?: string;
+  hash?: string;
+  host?: string;
+  ipv4?: string;
+  ipv6?: string;
+  port?: number;
+  search?: string;
+  path?: string;
+  basicAuth?: {
+    username: string;
+    password?: string;
+  };
+}
+
+export const url : {
+  (options?: UrlValidatorOptions): Validator;
+  parseURL: (url: string, options?: UrlValidatorOptions) => URL | null;
+}
 
 declare const Validators: {
   formatMessage: (msg: MessageDescriptor) => string
