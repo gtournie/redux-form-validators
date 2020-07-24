@@ -799,9 +799,9 @@ const digitValidator = addValidator({
   validator: function(options, value, allValues) {
     if (options.digits !== value.replace(/[^0-9]/g, '').length) {
       return {
-        id: "form.errors.custom"
-        defaultMessage: "must contain {count, number} {count, plural, one {digit} other {digits}})"
-        values: { count: options.digits }
+        id: "form.errors.custom",
+        defaultMessage: "must contain {count, number} {count, plural, one {digit} other {digits}})",
+        values: { count: options.digits },
       }
     }
   }
