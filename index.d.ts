@@ -186,6 +186,7 @@ export interface UrlValidatorOptions extends DefaultValidatorOptions {
   path?: boolean
   search?: boolean
   hash?: boolean
+  allowBlank?: boolean
 }
 
 interface URL {
