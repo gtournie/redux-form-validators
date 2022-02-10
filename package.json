@@ -80,7 +80,7 @@
     "expect": "24.7.1",
     "html-loader": "0.5.5",
     "mocha": "6.1.4",
-    "node-sass": "4.11.0",
+    "node-sass": "7.0.0",
     "nyc": "14.0.0",
     "postcss-loader": "3.0.0",
     "prop-types": "15.7.2",
